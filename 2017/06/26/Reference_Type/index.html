@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>참조 타입 (Reference Type) | nakjunizm&#39;s dev note</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="java,reference type" />
+    
+    <meta name="description" content="JAVA의 자료형에는 흔히 기본형 또는 원시타입 이라고 부르는 Primitive type 과 참조형 또는 래퍼클래스 라고 부르는Reference Type 두 종류가 있습니다.  라고 원시타입 (Primitive Type) 에서 이야기 했었습니다. 이 포스트 에서는 Reference type 에 대하서 알아보겠습니다.  # 객체원시타입을 제외한 다른 모든">
+<meta name="keywords" content="java,reference type">
+<meta property="og:type" content="article">
+<meta property="og:title" content="참조 타입 (Reference Type)">
+<meta property="og:url" content="http://nakjunizm.github.io/2017/06/26/Reference_Type/index.html">
+<meta property="og:site_name" content="nakjunizm&#39;s dev note">
+<meta property="og:description" content="JAVA의 자료형에는 흔히 기본형 또는 원시타입 이라고 부르는 Primitive type 과 참조형 또는 래퍼클래스 라고 부르는Reference Type 두 종류가 있습니다.  라고 원시타입 (Primitive Type) 에서 이야기 했었습니다. 이 포스트 에서는 Reference type 에 대하서 알아보겠습니다.  # 객체원시타입을 제외한 다른 모든">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://nakjunizm.github.io/2017/06/26/Reference_Type/reference1.jpg">
+<meta property="og:updated_time" content="2018-01-13T11:53:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="참조 타입 (Reference Type)">
+<meta name="twitter:description" content="JAVA의 자료형에는 흔히 기본형 또는 원시타입 이라고 부르는 Primitive type 과 참조형 또는 래퍼클래스 라고 부르는Reference Type 두 종류가 있습니다.  라고 원시타입 (Primitive Type) 에서 이야기 했었습니다. 이 포스트 에서는 Reference type 에 대하서 알아보겠습니다.  # 객체원시타입을 제외한 다른 모든">
+<meta name="twitter:image" content="https://nakjunizm.github.io/2017/06/26/Reference_Type/reference1.jpg">
+    
+
+    
+        <link rel="alternate" href="/" title="nakjunizm&#39;s dev note" type="application/atom+xml" />
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-112395863-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">dev note</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/">Development</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/java/">java</a></li></ul></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Development/java/">java</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-Reference_Type" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        참조 타입 (Reference Type)
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2017/06/26/Reference_Type/" class="article-date">
+            <time datetime="2017-06-26T11:16:00.000Z" itemprop="datePublished">2017-06-26</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/java/">java</a>, <a class="tag-link" href="/tags/reference-type/">reference type</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <blockquote>
+<p>JAVA의 자료형에는 흔히 기본형 또는 원시타입 이라고 부르는 Primitive type 과 참조형 또는 래퍼클래스 라고 부르는<br>Reference Type 두 종류가 있습니다.</p>
+</blockquote>
+<p>라고 <a href="/2017/06/25/Primitive_Type/" title="원시타입 (Primitive Type)">원시타입 (Primitive Type)</a> 에서 이야기 했었습니다.<br><strong> 이 포스트 에서는 Reference type 에 대하서 알아보겠습니다. </strong></p>
+<h3 id="객체"><a href="#객체" class="headerlink" title="# 객체"></a># 객체</h3><p>원시타입을 제외한 다른 모든 타입은 참조타입 입니다. 그리고 그들을 우리는 <code>객체</code> 라는 이름으로 부르기도 합니다.</p>
+<p>원시타입과 객체의 가장 중요한 차이점은 객체는 null을 참조할 수 있다는 점 입니다.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> primitiveInt = <span class="keyword">null</span>; <span class="comment">//컴파일 에러 발생</span></span><br><span class="line">Integer referenceInt = <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure></p>
+<p>위의 첫번째 예에서와 같이 원시타입의 <code>int</code>로 선언된  primitiveInt를 null로 초기화 시키는 코드를 작성하면 컴파일 에러가 발생 합니다.</p>
+<p>두번째처럼 <code>int</code>의 Wrapper class인 <code>Integer</code>타입으로 선언된 referenceInt는 null 로 초기화가 가능 합니다.</p>
+<p>원시타입은 int a = 100; 이라고 선언되면 100이라는 값이 메모리에 할당 됩니다.<br><a href="/2017/06/25/Primitive_Type/" title="원시타입 (Primitive Type)">원시타입 (Primitive Type)</a> 에서 열심히 설명 했듯이 a는 <code>int</code>이기때문에 32 bits의 크기를 메모리에 고정 크기로 갖고 그 메모리 주소에 100이라는 값이 할당 된다는 말 입니다.</p>
+<p>그럼 이 때 int b = a; 와같이 b에 a를 할당한 이후 a의 값을 변경하게 되면 어떤일이 일어날까요?<br>물론 100이 b에 할당 될것인데 이쯤되면 저를 포함해서 그냥 대충 되는대로 변수 선언하고 고민없이 사용하셨던 개발자 분들은 <del>학교에서 배웠던것 같은 Call by reference, Call by value 이런것들이 머릿속을 돌아다니면서</del> 헷갈리기 시작합니다.</p>
+<p>오늘 다시 개념을 잡고 가는게 좋을것 같습니다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testEntity</span><span class="params">()</span> </span>&#123;		</span><br><span class="line">	<span class="keyword">int</span> a = <span class="number">100</span>;</span><br><span class="line">	<span class="keyword">int</span> b = a;		</span><br><span class="line">	a++;		</span><br><span class="line">	assertEquals(a, b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>위 테스트의 결과는 fail 입니다. a는 101, b는 100으로 다르기 때문 입니다. int b =a; 는 결국 학교에서 배웠던 call by value 의 개념이라고 봐도 무방하겠네요.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testEntity2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	Integer a = <span class="keyword">new</span> Integer(<span class="number">100</span>);</span><br><span class="line">	Integer b = a;</span><br><span class="line">	a++;</span><br><span class="line">	assertEquals(a, b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>위 테스트 역시 fail 입니다. 그 이유는 <code>Integer</code> class는 immutable(값이 변하지 않는)로 만들어져 있습니다. Long, Double, Float 등 숫자를 wrapping 한 클래스들은 모두 immutable 입니다.</p>
+<p>그럼 imutable 이 아닌 List 로 다시 테스트 해보겠습니다.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testEntity2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	List&lt;String&gt; list1 = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="number">20</span>);</span><br><span class="line"></span><br><span class="line">	list1.add(<span class="string">"a"</span>);</span><br><span class="line">	assertTrue(list1.size() == <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">	List&lt;String&gt; list2 = list1;</span><br><span class="line">	list2.add(<span class="string">"b"</span>);</span><br><span class="line">	assertTrue(list1.size() == <span class="number">2</span>);</span><br><span class="line">	assertTrue(list1.contains(<span class="string">"b"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>list1</code> 을 만들고 “a”를넣었습니다.<br><code>list2</code> 를 만들어서 새로운 객체를 생성 하지 않고 <code>list1</code>을 참조하게 만들었고, <code>list2</code>에다가 “b”를 넣었습니다.</p>
+<p><code>list2</code> 에다가 “b”를 넣었음에도 불구하고 <code>list1</code> 의 길이도 2로 바뀌었고 “b”를 포함하고 있습니다.</p>
+<p>개발 하면서 가끔 하는 실수중에 하나가<br>값을 복사해서 새로운 리스트를 만들고, 그 값을 변경하려는 의도로 위처럼 그냥 할당해 버린 후 변경하는 코드를 작성하는 경우가 있습니다. 이런 경우 의도치 않게 원래 객체의 값도 변경되어 버리니 주의해야 합니다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testEntity2</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	List&lt;String&gt; list1 = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">	list1.add(<span class="string">"a"</span>);</span><br><span class="line">	assertTrue(list1.size() == <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">	List&lt;String&gt; list2 = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">	list2.addAll(list1);</span><br><span class="line">	list2.add(<span class="string">"b"</span>);</span><br><span class="line">	assertTrue(list1.size() == <span class="number">2</span>);</span><br><span class="line">	assertTrue(list1.contains(<span class="string">"b"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>위의 예에서 처럼 새로운 객체를 만들고 모든 객체를 다 추가 시켜주는 식으로 만들어야 원하는대로 한쪽의 수정이 다른 한쪽에 영향을 미치지 않게 됩니다.</p>
+<h3 id="JAVA는-항상-Call-by-value"><a href="#JAVA는-항상-Call-by-value" class="headerlink" title="#JAVA는 항상 Call by value"></a>#JAVA는 항상 Call by value</h3><p>마지막의 list 예를 보고 call by reference 라고 착각 할 수 있는데 java는 <strong>무조건</strong> 값을 던져줍니다.<br><a href="https://stackoverflow.com/questions/40480/is-java-pass-by-reference-or-pass-by-value" target="_blank" rel="noopener">Stack overflow</a> 에 이 질문에 대한 훌륭한 답변들이 많이 달려있으니 한번 확인 해 보시면 많은 도움이 될 것 입니다.</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="http://nakjunizm.github.io/2017/06/26/Reference_Type/" data-id="cjcd9recq0000g695plpbuznl" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+    
+    </section>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="instagram" href="https://www.instagram.com/nakjunizm" target="_blank">
+                        <i class="icon fa fa-instagram"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="https://www.facebook.com/nakjunizm" target="_blank">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/nakjunizm" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2017/06/25/Primitive_Type/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">원시타입 (Primitive Type)</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/06/26/Reference_Type/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/06/26/Reference_Type/reference1.jpg)" alt="참조 타입 (Reference Type)" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Development/java/">java</a></p>
+                            <p class="item-title"><a href="/2017/06/26/Reference_Type/" class="title">참조 타입 (Reference Type)</a></p>
+                            <p class="item-date"><time datetime="2017-06-26T11:16:00.000Z" itemprop="datePublished">2017-06-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/06/25/Primitive_Type/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/02/11/Comparable_And_Comparator/java.jpg)" alt="원시타입 (Primitive Type)" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Development/java/">java</a></p>
+                            <p class="item-title"><a href="/2017/06/25/Primitive_Type/" class="title">원시타입 (Primitive Type)</a></p>
+                            <p class="item-date"><time datetime="2017-06-25T06:26:00.000Z" itemprop="datePublished">2017-06-25</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/04/21/Map_And_Set/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/02/11/Comparable_And_Comparator/java.jpg)" alt="Map 과 Set" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Development/java/">java</a></p>
+                            <p class="item-title"><a href="/2017/04/21/Map_And_Set/" class="title">Map 과 Set</a></p>
+                            <p class="item-date"><time datetime="2017-04-21T07:48:00.000Z" itemprop="datePublished">2017-04-21</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/02/24/Queue_And_Deque/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/02/24/Queue_And_Deque/queue1.png)" alt="Queue 와 Deque(Double ended queue)" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Development/java/">java</a></p>
+                            <p class="item-title"><a href="/2017/02/24/Queue_And_Deque/" class="title">Queue 와 Deque(Double ended queue)</a></p>
+                            <p class="item-date"><time datetime="2017-02-24T11:53:00.000Z" itemprop="datePublished">2017-02-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/02/19/ArrayList_And_LinkedList/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/02/19/ArrayList_And_LinkedList/LinkedList3.png)" alt="ArrayList 와 LinkedList +@" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Development/java/">java</a></p>
+                            <p class="item-title"><a href="/2017/02/19/ArrayList_And_LinkedList/" class="title">ArrayList 와 LinkedList +@</a></p>
+                            <p class="item-date"><time datetime="2017-02-19T09:19:00.000Z" itemprop="datePublished">2017-02-19</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">categories</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Development/">Development</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Development/java/">java</a><span class="category-list-count">6</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">3</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">tags</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ArrayList/">ArrayList</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collections/">Collections</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Deque/">Deque</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinkedList/">LinkedList</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Map/">Map</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Queue/">Queue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Set/">Set</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/comparable/">comparable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/comparator/">comparator</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/primitive-type/">primitive type</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reference-type/">reference type</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/ArrayList/" style="font-size: 10px;">ArrayList</a> <a href="/tags/Collections/" style="font-size: 10px;">Collections</a> <a href="/tags/Deque/" style="font-size: 10px;">Deque</a> <a href="/tags/LinkedList/" style="font-size: 10px;">LinkedList</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/Queue/" style="font-size: 10px;">Queue</a> <a href="/tags/Set/" style="font-size: 10px;">Set</a> <a href="/tags/comparable/" style="font-size: 10px;">comparable</a> <a href="/tags/comparator/" style="font-size: 10px;">comparator</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/primitive-type/" style="font-size: 10px;">primitive type</a> <a href="/tags/reference-type/" style="font-size: 10px;">reference type</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="https://github.com/nakjunizm">github</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2018 NAKJUN SUNG</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_shortname = 'nakjunizm';
+    
+    
+    var disqus_url = 'http://nakjunizm.github.io/2017/06/26/Reference_Type/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
