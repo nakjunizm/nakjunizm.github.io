@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Tag: volatile | nakjunizm&#39;s dev note</title>
+    <title>Tag: tuning | nakjunizm&#39;s dev note</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="description" content="you know.... for dev!!!">
 <meta property="og:type" content="website">
 <meta property="og:title" content="nakjunizm&#39;s dev note">
-<meta property="og:url" content="http://nakjunizm.github.io/tags/volatile/index.html">
+<meta property="og:url" content="http://nakjunizm.github.io/tags/tuning/index.html">
 <meta property="og:site_name" content="nakjunizm&#39;s dev note">
 <meta property="og:description" content="you know.... for dev!!!">
 <meta property="og:locale" content="en">
@@ -140,7 +140,7 @@ ga('send', 'pageview');
                         <div class="main-body-header">
     <h1 class="header">
     
-    <i class="icon fa fa-tag"></i>Tag: <em>volatile</em>
+    <i class="icon fa fa-tag"></i>Tag: <em>tuning</em>
     </h1>
 </div>
                         <div class="main-body-content">
@@ -163,17 +163,17 @@ ga('send', 'pageview');
         <article class="article article-summary">
     <div class="article-summary-inner">
         
-        <a href="/2017/12/23/Thread_And_Synchronized/" class="thumbnail">
+        <a href="/2017/03/07/Thread_Pool/" class="thumbnail">
     
     
-        <span style="background-image:url(https://nakjunizm.github.io/2017/12/23/Thread_And_Synchronized/thread1.jpg)" alt="쓰레드와 동기화" class="thumbnail-image"></span>
+        <span style="background-image:url(https://nakjunizm.github.io/2017/03/07/Thread_Pool/threadpool1.jpg)" alt="Thread pool (tuning point!)" class="thumbnail-image"></span>
     
     
         
 <span class="comment-counter">
     <i class="fa fa-comments-o"></i>
     
-        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="http://nakjunizm.github.io/2017/12/23/Thread_And_Synchronized/">0</span>
+        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="http://nakjunizm.github.io/2017/03/07/Thread_Pool/">0</span>
     
 </span>
 
@@ -184,22 +184,25 @@ ga('send', 'pageview');
         
         <div class="article-meta">
             <div class="category">
-            <a class="article-category-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Development/java/">java</a>
+            <a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a>
             </div>
-            <div class="date"><time datetime="2017-12-23T03:55:00.000Z" itemprop="datePublished">2017-12-23</time></div>
+            <div class="date"><time datetime="2017-03-07T13:19:00.000Z" itemprop="datePublished">2017-03-07</time></div>
         </div>
         
     
         <h1 class="article-title" itemprop="name">
-        <a href="/2017/12/23/Thread_And_Synchronized/">쓰레드와 동기화</a>
+        <a href="/2017/03/07/Thread_Pool/">Thread pool (tuning point!)</a>
         </h1>
     
 
         <p class="article-excerpt">
-            이펙티브자바 규칙66: 변경 가능 공유 데이터에 대한 접근은 동기화하라
-아래 코드는 실행한지 1초가 지나면 stopRequested 변수를 true로 바꿔주고 프로그램이 종료되도록 기대하면서 작성된 코드입니다.
-하지만 실제로 아래 코드를 돌려보면 절대 종료 되지 않습니다.
-12345678910111213141516171819202122import java.
+            
+ElasticSearch 에 대량의 데이터를 bulk insert 하는 과정에서
+
+예상했던 값보다 indexing rate가 낮은 경우
+데이터를 밀어넣는 클라이언트에 EsRejectedExecutionException 이 발생 하는 경우
+
+여러가지 튜닝 포인트가 있겠지만 그중에서도 Thread pool 은 매우 중요한 값인것 같습니다.공식 홈페이지의 문서
         </p>
     </div>
 </article>

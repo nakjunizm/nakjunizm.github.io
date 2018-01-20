@@ -330,6 +330,38 @@
   </entry>
   
   <entry>
+    <title>Thread pool (tuning point!)</title>
+    <link href="http://nakjunizm.github.io/2017/03/07/Thread_Pool/"/>
+    <id>http://nakjunizm.github.io/2017/03/07/Thread_Pool/</id>
+    <published>2017-03-07T13:19:00.000Z</published>
+    <updated>2018-01-20T09:03:15.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="https://nakjunizm.github.io/2017/03/07/Thread_Pool/threadpool1.jpg" alt="threadpool1"></p><p><code>ElasticSearch</code> 에 대량의 데이터를 <code>bulk insert</code> 하는 과정에서</p><ol><li>예상했던 값보다 indexing rate가 낮은 경우</li><li>데이터를 밀어넣는 클라이언트에 EsRejectedExecutionException 이 발생 하는 경우</li></ol><p>여러가지 튜닝 포인트가 있겠지만 그중에서도 <code>Thread pool</code> 은 매우 중요한 값인것 같습니다.<br>공식 홈페이지의 문서를 살펴보면</p><p><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-threadpool.html" target="_blank" rel="noopener">Thread Pool</a></p><blockquote><p>노드 안에서 효과적으로 쓰레드 메모리를 소비하기 위해서 노드는 여러개의 쓰레드풀을 가지고 있다. 많은 쓰레드 풀들은 큐들을 가지고 있고 그 큐들로 인해 넘치는 요청들이 버려지는 대신 큐에 담겨질 수 있다.</p></blockquote><p>라고 소개되고 있습니다.<br>여러가지 중요한 <code>Thread pool</code> 들이 소개되어 있지만 개인적으로 특히 더 중요하다고 생각되는 <code>Thread</code>는 아래 세개 입니다.</p><p><strong>index</strong> : index/delete 연산 용. type은 <code>fixed</code>이고 size는 가용한 프로세서갯수와 동일 합니다. queue_size는 default 200<br><strong>search</strong> : count/search/suggest 연산 용. type은 <code>fixed</code> 이고 size는 ((가용한 프로세서갯수 <em> 3) / 2) + 1 입니다. queue_size는 default 1000<br><em>*bulk</em></em> : bulk 연산 용. size는 가용한 프로세서갯수와 동일 합니다. queue_size는 default 50<br>여기서 주의 깊게 봐야 할 설정이 바로 <code>queue_size</code> 입니다.</p><p>쓰레드풀 자체의 사이즈는 위에서 설명 한것과 같이 가용한 프로세서의 갯수에 의존성이 있기 때문에 튜닝하기 쉽지 않고, <code>queue_size</code>를 늘려줌으로써 <code>EsRejectedExcutionException</code> 이 나는것을 방지 할 수 있습니다.</p><p><code>elasticsearch.yml</code>에 다음과같이 설정해 놓고 사용할 수 있습니다만<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">threadpool.index.type:</span> <span class="string">fixed</span></span><br><span class="line"><span class="string">threadpool.index.size:</span> <span class="number">20</span></span><br><span class="line"><span class="string">threadpool.index.queue_size:</span> <span class="number">1000</span></span><br></pre></td></tr></table></figure></p><p>운영중인 클러스터에 <code>elasticsearch.yml</code>을 변경하고 순차적으로 재시작 하는 작업은 부담이 가는것은 사실 입니다.<br><strong>좋은소식은 ThreadPool 설정은 dynamic setting 이므로 운영중인 클러스터를 재시작 할 필요 없이 api를 날려서 적용 시킬수 있습니다</strong></p><ol><li>먼저 내 클러스터의 쓰레드풀 설정을 살펴봅시다.<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#내 쓰레드풀에 대한 개요</span><br><span class="line">GET _nodes/thread_pool</span><br><span class="line"></span><br><span class="line">#현재 각 쓰레드풀의 상태</span><br><span class="line">GET _nodes/stats/thread_pool</span><br></pre></td></tr></table></figure></li></ol><p>위 명령어는 <code>sense</code> 기준이고 <code>curl</code>로 확인하는 경우 아래와 같이 날려보면 됩니다.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -XGET &apos;http://myclusterip:port/_nodes/thread_pool&apos;</span><br></pre></td></tr></table></figure></p><p>이제 다시 맨 처음의 주제로 돌아와서 내 생각보다 bulk insert 되는 속도가 느린것 같거나 자꾸 익셉션이 발생하는 경우<br>bulk queue가 너무 적은것은 아닌가 의심해 볼 수 있습니다.<br>쓰레드풀의 상태를 봤을 때 <code>rejected</code>된 건수가 많이 보이면 <code>bulk queue</code>를 늘려보는게 좋습니다.<br>벌크 인서트할때도 그렇고, 검색할때도 자꾸 밀리는것 같은 느낌이 들어서 다음과 같이 설정을 변경해 봤습니다.<br>(기존 설정은 default값인 bulk.queue_size는 50, search.queue_size는 1000 이었습니다.)</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PUT _cluster/settings</span><br><span class="line">&#123;</span><br><span class="line">    &quot;transient&quot; : &#123;</span><br><span class="line">        &quot;threadpool.bulk.queue_size&quot; : 500,</span><br><span class="line">        &quot;threadpool.search.queue_size&quot; : 4000</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>좀 더 지켜봐야겠지만 위와 같이 변경 하고 나서 클라이언트에서 <code>EsRejectedExecutionException</code> 도 더이상 보이지 않고 클러스터가 훨씬 안정적이게 됐습니다.</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;img src=&quot;https://nakjunizm.github.io/2017/03/07/Thread_Pool/threadpool1.jpg&quot; alt=&quot;threadpool1&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ElasticSearch&lt;/code&gt; 에 대량의 
+      
+    
+    </summary>
+    
+      <category term="Operations" scheme="http://nakjunizm.github.io/categories/Operations/"/>
+    
+      <category term="ElasticSearch" scheme="http://nakjunizm.github.io/categories/Operations/ElasticSearch/"/>
+    
+    
+      <category term="elasticsearch" scheme="http://nakjunizm.github.io/tags/elasticsearch/"/>
+    
+      <category term="thread pool" scheme="http://nakjunizm.github.io/tags/thread-pool/"/>
+    
+      <category term="tuning" scheme="http://nakjunizm.github.io/tags/tuning/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Queue 와 Deque(Double ended queue)</title>
     <link href="http://nakjunizm.github.io/2017/02/24/Queue_And_Deque/"/>
     <id>http://nakjunizm.github.io/2017/02/24/Queue_And_Deque/</id>
