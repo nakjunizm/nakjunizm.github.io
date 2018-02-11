@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://nakjunizm.github.io/"/>
-  <updated>2018-02-11T04:51:34.000Z</updated>
+  <updated>2018-02-11T05:08:31.000Z</updated>
   <id>http://nakjunizm.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://nakjunizm.github.io/2018/01/30/SystemEventNotificationService/"/>
     <id>http://nakjunizm.github.io/2018/01/30/SystemEventNotificationService/</id>
     <published>2018-01-30T01:43:00.000Z</published>
-    <updated>2018-02-11T04:51:34.000Z</updated>
+    <updated>2018-02-11T05:08:31.000Z</updated>
     
     <content type="html"><![CDATA[<p>Windows 2012/R2</p><h3 id="증상"><a href="#증상" class="headerlink" title="# 증상"></a># 증상</h3><p>사용자가 로그아웃을 시도했는데 “System Event Notification Service 준비 중….” 메세지가 화면에서 뱅글뱅글 돌고 로그아웃은 되지 않는 경우<br><img src="https://nakjunizm.github.io/2018/01/30/SystemEventNotificationService/SystemEventNotificationService1.jpg" alt="SystemEventNotificationService1"></p><h3 id="해결"><a href="#해결" class="headerlink" title="# 해결"></a># 해결</h3><p>운영중인 시스템에서 <strong> 재부팅을 하지 않고 </strong> 해결 가능한 방법 입니다.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc queryex sens</span><br></pre></td></tr></table></figure></p><p>를 치면 System Event Notification Service 의 PID를 확인 할 수 있습니다.<br>해당 PID를 강제로 종료시켜야 합니다.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">taskkill /PID 646 /F</span><br></pre></td></tr></table></figure></p>]]></content>
     
@@ -171,6 +171,40 @@
       <category term="serialization" scheme="http://nakjunizm.github.io/tags/serialization/"/>
     
       <category term="transient" scheme="http://nakjunizm.github.io/tags/transient/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Node가 예기치 않게 이탈될 경우 shard allocation 지연시키기</title>
+    <link href="http://nakjunizm.github.io/2017/08/24/Shard_Allocation_And_FD/"/>
+    <id>http://nakjunizm.github.io/2017/08/24/Shard_Allocation_And_FD/</id>
+    <published>2017-08-24T03:57:00.000Z</published>
+    <updated>2018-02-11T05:57:07.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="https://nakjunizm.github.io/2017/08/24/Shard_Allocation_And_FD/summer-814679_640.jpg" alt=""></p><h3 id="클러스터에서-노드가-제외되는-현상"><a href="#클러스터에서-노드가-제외되는-현상" class="headerlink" title="# 클러스터에서 노드가 제외되는 현상"></a># 클러스터에서 노드가 제외되는 현상</h3><p>ElasticSearch 에서는 Fault Detection을 위해 master-&gt;nodes, nodes-&gt;master 양방향으로 주기적으로 ping을 날립니다.<br>아무 설정을 하지 않았다면 1초마다 ping을 날리고, 30초 동안 응답이 없으면 3번 재시도 후 최종적으로 fault라고 단정짓고 해당 노드를 클러스터에서 제외 시킵니다.</p><p>운영중인 클러스터에서는 이런 상황이라면 문제가 심각해 질 수 있습니다. 이유는</p><ul><li>클러스터에서 노드가 한개 빠짐 -&gt;</li><li>빠진 노드가 가지고 있던 shard 들이 unassigned shards 로 변경됨 -&gt;</li><li>unassigned shards 를 기존 노드들이 나눠갖는 shard allocation 발생 -&gt;</li><li>데이터 량이 많은 인덱스의 경우 shard allocation 작업은 굉장히 비싼 작업이므로 CPU load 높아짐 -&gt;</li><li>서비스 지연이 발생 가능</li></ul><p>위와같은 상황이 발생되지 않도록 예방하기 위해서는 두가지 솔루션이 있습니다.</p><ol><li><strong> 노드가 클러스터에서 이탈되지 않도록 Fault Detection 을  느슨하게 변경 </strong></li><li><strong> 노드가 클러스터에서 이탈 되더라도 unassigned shards 를 바로 allocation 이 일어 나지 않도록 설정 변경</strong></li></ol><h3 id="Fault-Detection"><a href="#Fault-Detection" class="headerlink" title="# Fault Detection"></a># Fault Detection</h3><p>첫번째로 Fault Detection을 느슨하게 변경 하는 방법을 알아보겠습니다.</p><p>아래 표와 같이 ping_interval, ping_timeout, ping_retries 관련 값을 조정함으로서 느슨하게 변경 할 수 있습니다.<br><strong> ※ 해당 값의 변경은 Elastic 에서 권장하는 방법은 아닙니다. </strong></p><table><thead><tr><th>Setting</th><th>Description</th></tr></thead><tbody><tr><td>discovery.zen.fd.ping_interval</td><td>How often a node gets pinged. Defaults to 1s.</td></tr><tr><td>discovery.zen.fd.ping_timeout</td><td>How long to wait for a ping response, defaults to 30s.</td></tr><tr><td>discovery.zen.fd.ping_retries</td><td>How many ping failures / timeouts cause a node to be considered failed. Defaults to 3.</td></tr></tbody></table><p>&lt; elasticsearch.yml 에 설정 할 수 있는 fault detection 관련 설정값&gt;<br>출처 : <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery-zen.html" target="_blank" rel="noopener">https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery-zen.html</a></p><p>위 설정은 dynamic setting 으로 바로 적용하기는 어렵고 (바로 반영 시키려면 인덱스를 close 한 상태로는 가능) elasticsearch.yml 파일에 설정 후 재기동 하는것이 좋겠습니다.<br>인덱스 close가 가능한 상황이라면 아래 명령어를 바로 날려도 됩니다.</p><p>fault detection ping retries 를 6번으로 변경하는 예<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">curl -XPUT &apos;localhost:9200/_all/_settings?pretty&apos; -H &apos;Content-Type: application/json&apos; -d&apos;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;discovery.zen.fd.ping_retries&quot;: 6</span><br><span class="line">  &#125;</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure></p><h3 id="allocation-지연"><a href="#allocation-지연" class="headerlink" title="# allocation 지연"></a># allocation 지연</h3><p>두번째로 unassigned shards의 allocation을 지연시키는 방법을 알아 보겠습니다.</p><p>이유를 정확히 알 수 없지만 GC가 오래 걸려서 Stop the world가 길게 된다던지 하면 첫번째 방법으로 fault detection을 느슨하게 했더라도 노드가 클러스터에서 빠질 수 있습니다.</p><p>노드가 빠졌더라도 shard allocation만 일어나지 않는다면 서버에 무리를 주지는 않으므로 (replica가 1 이상 설정 되어 있어서 노드 한개가 빠지더라도 서비스에 영향이 없다는 가정하에) 빠진 노드를 재시작 하고 다시 클러스터에 join 시킬때까지 시간을 좀 벌려는 목적으로 아래 설정을 적용 시킵니다.</p><p>unassigned shards 를 5분이 지날때 까지 unassigned 상태로 유지하는 예<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">curl -XPUT &apos;localhost:9200/_all/_settings?pretty&apos; -H &apos;Content-Type: application/json&apos; -d&apos;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;index.unassigned.node_left.delayed_timeout&quot;: &quot;5m&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure></p><p>저렇게 되면 노드 하나가 빠져서 cluster health 가 yellow로 변경 된 이후 5분의 여유가 생기므로 shard allocation을 none 으로 바꾼 후 분석을 한다던지 복구를 한다던지 하는 선택지를 가질수 있게 됩니다.</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;img src=&quot;https://nakjunizm.github.io/2017/08/24/Shard_Allocation_And_FD/summer-814679_640.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;클러스터에서-노드가-제외되는-현상&quot;&gt;&lt;
+      
+    
+    </summary>
+    
+      <category term="Operations" scheme="http://nakjunizm.github.io/categories/Operations/"/>
+    
+      <category term="ElasticSearch" scheme="http://nakjunizm.github.io/categories/Operations/ElasticSearch/"/>
+    
+    
+      <category term="elasticsearch" scheme="http://nakjunizm.github.io/tags/elasticsearch/"/>
+    
+      <category term="unassigned" scheme="http://nakjunizm.github.io/tags/unassigned/"/>
+    
+      <category term="shards" scheme="http://nakjunizm.github.io/tags/shards/"/>
+    
+      <category term="allocation" scheme="http://nakjunizm.github.io/tags/allocation/"/>
     
   </entry>
   
