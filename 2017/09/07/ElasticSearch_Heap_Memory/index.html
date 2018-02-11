@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>ElasticSearch Heap 메모리 설정 | nakjunizm&#39;s dev note</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="elasticsearch,heap,swapoff,compressedoops" />
+    
+    <meta name="description" content="# 권장 메모리 할당량ES의 힙 사이즈는 전체 서버가 가진 메모리의 반을 설정하는 것을 권장하고, 64GB 이상의 메모리를 가지고 있는 서버라고 할지라도 30.5GB 이상을 ES에 할당하는것은 권장하지 않습니다. 예를들어 32GB의 메모리를 가진 서버라면 ES에 16GB 할당. 64GB의 메모리를 가진 서버라면 ES에 30.5GB 할당.128GB의 메모리">
+<meta name="keywords" content="elasticsearch,heap,swapoff,compressedoops">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ElasticSearch Heap 메모리 설정">
+<meta property="og:url" content="http://nakjunizm.github.io/2017/09/07/ElasticSearch_Heap_Memory/index.html">
+<meta property="og:site_name" content="nakjunizm&#39;s dev note">
+<meta property="og:description" content="# 권장 메모리 할당량ES의 힙 사이즈는 전체 서버가 가진 메모리의 반을 설정하는 것을 권장하고, 64GB 이상의 메모리를 가지고 있는 서버라고 할지라도 30.5GB 이상을 ES에 할당하는것은 권장하지 않습니다. 예를들어 32GB의 메모리를 가진 서버라면 ES에 16GB 할당. 64GB의 메모리를 가진 서버라면 ES에 30.5GB 할당.128GB의 메모리">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://nakjunizm.github.io/2017/09/07/ElasticSearch_Heap_Memory/beach-2179183_640.jpg">
+<meta property="og:updated_time" content="2018-02-11T12:15:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ElasticSearch Heap 메모리 설정">
+<meta name="twitter:description" content="# 권장 메모리 할당량ES의 힙 사이즈는 전체 서버가 가진 메모리의 반을 설정하는 것을 권장하고, 64GB 이상의 메모리를 가지고 있는 서버라고 할지라도 30.5GB 이상을 ES에 할당하는것은 권장하지 않습니다. 예를들어 32GB의 메모리를 가진 서버라면 ES에 16GB 할당. 64GB의 메모리를 가진 서버라면 ES에 30.5GB 할당.128GB의 메모리">
+<meta name="twitter:image" content="https://nakjunizm.github.io/2017/09/07/ElasticSearch_Heap_Memory/beach-2179183_640.jpg">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="nakjunizm&#39;s dev note" type="application/atom+xml" />
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-112395863-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">dev note</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/">Development</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/java/">java</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/">Operations</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Windows/">Windows</a></li></ul></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-ElasticSearch_Heap_Memory" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        ElasticSearch Heap 메모리 설정
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2017/09/07/ElasticSearch_Heap_Memory/" class="article-date">
+            <time datetime="2017-09-07T05:31:00.000Z" itemprop="datePublished">2017-09-07</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/compressedoops/">compressedoops</a>, <a class="tag-link" href="/tags/elasticsearch/">elasticsearch</a>, <a class="tag-link" href="/tags/heap/">heap</a>, <a class="tag-link" href="/tags/swapoff/">swapoff</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <p><img src="https://nakjunizm.github.io/2017/09/07/ElasticSearch_Heap_Memory/beach-2179183_640.jpg" alt=""></p>
+<h3 id="권장-메모리-할당량"><a href="#권장-메모리-할당량" class="headerlink" title="# 권장 메모리 할당량"></a># 권장 메모리 할당량</h3><p>ES의 힙 사이즈는 전체 서버가 가진 메모리의 반을 설정하는 것을 권장하고, 64GB 이상의 메모리를 가지고 있는 서버라고 할지라도 30.5GB 이상을 ES에 할당하는것은 권장하지 않습니다.</p>
+<p>예를들어 32GB의 메모리를 가진 서버라면 ES에 16GB 할당. 64GB의 메모리를 가진 서버라면 ES에 30.5GB 할당.<br>128GB의 메모리를 가진 서버라고 할지라도 ES에 30.5 GB 할당.<br>왜 30.5GB로 한정 짓는지에 대해서는 밑에서 좀 더 자세히 다루도록 하겠습니다.</p>
+<h3 id="Memory-swapping-기능은-비활성화"><a href="#Memory-swapping-기능은-비활성화" class="headerlink" title="# Memory swapping 기능은 비활성화"></a># Memory swapping 기능은 비활성화</h3><p>ES는 메모리에 많은양의 데이터를 올려놓고 searching, indexing 등의 작업을 하기 때문에 swap을 켜 놓으면 disk로 내려서 작업이 되어 버리는 순간 성능에 치명적인 악영향을 끼칠수 있습니다.<br>엘라스틱 에서는 swap을 사용하지 않게 하기 위해서 세가지 옵션을 제시 합니다.</p>
+<ul>
+<li>swap off<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo swapoff -a</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>위 설정은 reboot 하고 나면 원상복구 되는 설정 입니다.<br>그러므로 <code>fstab</code>에서도 swap 을 comment out 하는것이 좋습니다.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/fstab</span><br></pre></td></tr></table></figure></p>
+<p>swap 이란 단어를 포함하고 있는 라인 #으로 주석처리</p>
+<ul>
+<li>sysctl 의 vm.swappiness=1 로 설정<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl -a |grep swappiness</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>을 하여 vm.swappiness 설정이 되어 있는지 확인하고, grep되는 결과가 없거나 1이 아닌 값으로 설정 되어 있다면<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl -w vm.swappiness=1</span><br></pre></td></tr></table></figure></p>
+<p>or<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/sysctl.conf</span><br><span class="line">vm.swappiness=1</span><br></pre></td></tr></table></figure></p>
+<p>추가 후<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl -p</span><br></pre></td></tr></table></figure></p>
+<p>참고로 vm.swapiness 설정은 swap 사용의 적극성 혹은 활용 수준을 정하는 커널 속성 입니다.<br>0으로 설정하면 사용 안함 1은 최소로 사용 ~ 100은 적극적으로 스왑 활용 인데 <strong> 0으로 설정하지 않고 1로 설정하는 이유 </strong> 는 0으로 설정할 시 <code>OOM Killer</code>가 스왑을 사용하려고 시도하는 어플리케이션!!!! 을 외치며 ES를 바로 kill 시켜 버릴수도 있기 때문에 0으로는 설정하지 않습니다.<br><br><br>인터넷에서 찾을 수 있는 포스트 내용 중 SSD일 경우 vm.swapiness를 10으로 줘도 문제가 없다고 하는 사람들도 있는데 저는 서버에 SSD를 사용해서 10으로 설정했다가 OS가 swap을 사용해 버리는 바람에 성능에 영향을 받았던 경험이 있습니다. 그래서 다시 1로 변경.</p>
+<ul>
+<li>memory lock<br><br>위 두 설정은 root나 sudoer 계정을 가지고 있을때만 가능한 설정 인데<br>OS를 관리하는 쪽에서 절대로 위 설정들을 허용해 주지 않는다면 마지막으로 jvm자체에 설정을 주는 수 밖에 없습니다.<br><strong> elasticsearch.yml </strong> 파일에 다음과 같이 을 true를 주면 (버전에 따라 프로퍼티 네임이 다르니 주의!)<br>이 옵션은 elasticsearch가 기동될때 자기한테 할당된 메모리를 lock 한 채로 뜨게 되며<br>swap으로 메모리가 빠져나가는것을 방지 해 주는 옵션입니다.<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#ES 2.X</span><br><span class="line">bootstrap.mlockall: true</span><br><span class="line">#ES 5.X</span><br><span class="line">bootstrap.memory_lock: true</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>하지만 memory lock 설정과 vm.swappiness: 1로 설정은 elasticsearch 가 스왑을 최대한 안 쓰게 설정한 것이지만<br>스왑 자체가 OS에서 사용하는 자원이기 때문에 OS가 필요하다고 판단하면 쓸 수도 있습니다.<br>개인적으로는 vm.swappiness :1 설정 및 mlockall :true 둘 다 설정 했는데 그 이후로 거의 1년간 운영해 오면서 OS가 swap을 쓴적은 없습니다.<br>확인 할 수 있는 방법은 간단하게 free -m 등으로 확인해서 swap 영역에 할당된 영역을 확인해 보시면 됩니다.</p>
+<h3 id="Zero-Based-Compressed-Oops-Ordinary-Object-Pointers"><a href="#Zero-Based-Compressed-Oops-Ordinary-Object-Pointers" class="headerlink" title="# Zero-Based Compressed Oops (Ordinary Object Pointers)"></a># Zero-Based Compressed Oops (Ordinary Object Pointers)</h3><p><strong> # 권장 메모리 할당량 </strong> 에서 30.5GB 이상으로 설정하지 말라고 했던 것의 연장선 입니다.<br>Oops 에 대해서 대략적으로 말씀드리면 오브젝트들이 어느 메모리에 locate 되어 있는지를 관리하는 <strong> JVM의 포인터 </strong> 라고 생각 하면 쉽습니다.<br>이 Managed 포인터의 크기는 기본적으로 OS의 bit를 따라 가며 32bit OS에서는 2의 32승(=4GB)의 크기를 가지며 64bit OS에서는 2의 64승(=2EB 엑사바이트)의 크기를 가진다고 볼 수 있겠습니다.<br>그런데 생각해보면 2의 64승의 주소를 찾아가는 연산을 하려면 오브젝트의 메모리 주소를 찾는데만해도 많은 시간이 소요될 것이고 거의 쓸모없는 프로그램이 될것이기 때문에<strong> JAVA는 64bit의 OS라 할지라도 4GB 이하의 힙을 가지고 JVM을 띄우면 32bit의 oops를 그대로 따라가도록 설계 </strong> 되어 있습니다.<br>그리고 4GB가 넘어가는 영역에 대해서는 compressed oops라는 기법을 사용할 수 있는데 포인터가 실제 오브젝트가 들어있는 메모리 주소값을 가르키는것이 아니고 8byte단위로 나눠놓은 offset을 가르키게 됩니다.<br>이렇게 되면 2의 32승 bit (=4GB)을 표현할 수 있는 32bit oop를 이용하여 실제로는 8배 많은  32GB의 주소값까지 표현할 수 있게 되는것 입니다.<br>Compressed oops를 설계 한 사람들이 아무 생각없이 8byte (= 2의 3승 byte) 단위로 끊어 놓지는 않았을 테고.. 어떤이유가 있을까요?<br>아마도 적당히 큰 메모리 공간을 활용할 수 있으면서 성능도 놓치고 싶지 않는 범위내에서 끊어 놓았을텐데….<br>굉장히 복잡한 여러가지 이유가 있겠지만 <strong> 기본적으로 java가 사용하는 메모리 스키마는 8byte의 구조를 가지고 있다고 합니다. </strong> 그렇기 때문에 8byte단위로 건너뛰면서 mapping을 해 놓으면 좌로 3번 시프트 ( &lt;&lt; 3 ) 해 주는 연산만으로 원래 가르키고자 했던 주소값을 정확히 가르킬수 있게 되는것 입니다.<br><br>그런데 이렇게 되기 위해서는 한가지 필요충분조건이 필요 합니다.<br>바로 메모리주소의 시작점이 0부터 시작해야 한다는 조건인데요, 이 조건이 충족되지 않으면 Non-Zero based Compressed oops로 동작을 하게 되고 좌로 3번 시프트 &lt;&lt; 3 해준 이후에 시작점만큼 + 해주는 연산이 추가로 들어가야 되서 메모리의 크기가 큰 경우 성능에 영향을 끼치게 됩니다.</p>
+<p>자세히 보려면 너무 어렵고 한번에 다루기도 힘든 내용이니 관심 있으신 분들은 이 두 포스트를 읽어보시길 추천 합니다.<br><a href="http://docs.oracle.com/javase/7/docs/technotes/guides/vm/performance-enhancements-7.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/7/docs/technotes/guides/vm/performance-enhancements-7.html</a><br><a href="https://wiki.openjdk.java.net/display/HotSpot/CompressedOops" target="_blank" rel="noopener">https://wiki.openjdk.java.net/display/HotSpot/CompressedOops</a></p>
+<h3 id="결론-그럼-나는-얼마까지-ES에-메모리를-할당하면-좋을까요"><a href="#결론-그럼-나는-얼마까지-ES에-메모리를-할당하면-좋을까요" class="headerlink" title="# 결론 : 그럼 나는 얼마까지 ES에 메모리를 할당하면 좋을까요?"></a># 결론 : 그럼 나는 얼마까지 ES에 메모리를 할당하면 좋을까요?</h3><ol>
+<li>서버의 메모리가 63GB 미만이라면 =&gt; 내가 가진 메모리의 반.</li>
+<li>서버의 메모리가 63GB 이상이라면 =&gt; 내 서버에서 Zero based 모드로 Compressed oops를 사용할 수있는 임계치</li>
+</ol>
+<p>※ 임계치를 알아보는 방법<br><br>서버에서 커맨드를 그냥 날려보시면 됩니다! <br><br>내 메모리가 64GB라서 32GB부터 확인해보는 시나리오로 확인해 보는법을 보여드리겠습니다.</p>
+<ul>
+<li>32GB<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">java -Xmx32G -XX:+PrintFlagsFinal -XX:+UnlockDiagnosticVMOptions -XX:+PrintCompressedOopsMode 2&gt;/dev/null |grep Compressed |grep Oops</span><br><span class="line">bool PrintCompressedOopsMode                  := true                                &#123;diagnostic&#125;</span><br><span class="line">bool UseCompressedOops                         = false                               &#123;lp64_product&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>bool UseCompressedOops = false 임을 확인 할수 있습니다.</p>
+<ul>
+<li>31GB<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java -Xmx31G -XX:+PrintFlagsFinal -XX:+UnlockDiagnosticVMOptions -XX:+PrintCompressedOopsMode 2&gt;/dev/null |grep Compressed |grep Oops</span><br><span class="line">heap address: 0x00007f9348800000, size: 31744 MB, Compressed Oops mode: Non-zero based:0x00007f93487ff000, Oop shift amount: 3</span><br><span class="line">bool PrintCompressedOopsMode                  := true                                &#123;diagnostic&#125;</span><br><span class="line">bool UseCompressedOops                        := true                                &#123;lp64_product&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>31GB는 UseCompressedOops = true 입니다. <strong> 하지만! Compressed Oops mode 가 Non-zero based 인 것을 확인 할 수 있습니다. </strong> 우리가 원하는 결과가 아닙니다.</p>
+<ul>
+<li>30GB<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java -Xmx30G -XX:+PrintFlagsFinal -XX:+UnlockDiagnosticVMOptions -XX:+PrintCompressedOopsMode 2&gt;/dev/null |grep Compressed |grep Oops</span><br><span class="line">heap address: 0x0000000080000000, size: 30720 MB, Compressed Oops mode: Zero based, Oop shift amount: 3</span><br><span class="line">bool PrintCompressedOopsMode                  := true                                &#123;diagnostic&#125;</span><br><span class="line">bool UseCompressedOops                        := true                                &#123;lp64_product&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>이번에는 CompressedOops 도 사용하고 Zero based 모드로 잘 되어 있네요.<br>30GB는 사용해도 좋습니다.</p>
+<p><strong> 추가 Tip </strong><br>30GB로 운영하는데 CPU도 별로 많이 안쓰는것 같고 메모리도 여유있는것으로 확인되면 FullGC 시간을 줄이기 위해 힙을 24GB정도로 내려서 사용하는것도 고려해 볼 만 합니다. 운영환경에서 최적의 힙 메모리를 적용하기 위해서는 일정기간 트렌딩을 살펴보고 결정하는게 좋겠습니다.</p>
+<h3 id="references"><a href="#references" class="headerlink" title="# references :"></a># references :</h3><p><a href="https://www.elastic.co/guide/en/elasticsearch/guide/current/heap-sizing.html" target="_blank" rel="noopener">https://www.elastic.co/guide/en/elasticsearch/guide/current/heap-sizing.html</a><br><a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.5/setup-configuration-memory.html" target="_blank" rel="noopener">https://www.elastic.co/guide/en/elasticsearch/reference/5.5/setup-configuration-memory.html</a><br><a href="https://www.elastic.co/blog/a-heap-of-trouble" target="_blank" rel="noopener">https://www.elastic.co/blog/a-heap-of-trouble</a><br><a href="http://docs.oracle.com/javase/7/docs/technotes/guides/vm/performance-enhancements-7.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/7/docs/technotes/guides/vm/performance-enhancements-7.html</a><br><a href="https://wiki.openjdk.java.net/display/HotSpot/CompressedOops" target="_blank" rel="noopener">https://wiki.openjdk.java.net/display/HotSpot/CompressedOops</a></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="http://nakjunizm.github.io/2017/09/07/ElasticSearch_Heap_Memory/" data-id="cjdir6l1u000lyt951hs6p99m" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+    
+    </section>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="instagram" href="https://www.instagram.com/nakjunizm" target="_blank">
+                        <i class="icon fa fa-instagram"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="https://www.facebook.com/nakjunizm" target="_blank">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/nakjunizm" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/12/10/Serialization_And_Transient/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            직렬화(Serialization) 와 transient 키워드
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2017/08/24/Shard_Allocation_And_FD/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">Node가 예기치 않게 이탈될 경우 shard allocation 지연시키기</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/01/30/SystemEventNotificationService/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2018/01/30/SystemEventNotificationService/SystemEventNotificationService1.jpg)" alt="System Event Notification Service 준비 중 해결 방법" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Windows/">Windows</a></p>
+                            <p class="item-title"><a href="/2018/01/30/SystemEventNotificationService/" class="title">System Event Notification Service 준비 중 해결 방법</a></p>
+                            <p class="item-date"><time datetime="2018-01-30T01:43:00.000Z" itemprop="datePublished">2018-01-30</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/01/05/Singleton_Pattern/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2018/01/05/Singleton_Pattern/singleton1.jpg)" alt="Singleton Pattern" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Development/java/">java</a></p>
+                            <p class="item-title"><a href="/2018/01/05/Singleton_Pattern/" class="title">Singleton Pattern</a></p>
+                            <p class="item-date"><time datetime="2018-01-05T11:48:00.000Z" itemprop="datePublished">2018-01-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/12/31/Builder_Pattern/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/12/31/Builder_Pattern/builder1.jpg)" alt="Builder Pattern" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Development/java/">java</a></p>
+                            <p class="item-title"><a href="/2017/12/31/Builder_Pattern/" class="title">Builder Pattern</a></p>
+                            <p class="item-date"><time datetime="2017-12-31T06:45:00.000Z" itemprop="datePublished">2017-12-31</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/12/23/Thread_And_Synchronized/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/12/23/Thread_And_Synchronized/thread1.jpg)" alt="쓰레드와 동기화" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Development/java/">java</a></p>
+                            <p class="item-title"><a href="/2017/12/23/Thread_And_Synchronized/" class="title">쓰레드와 동기화</a></p>
+                            <p class="item-date"><time datetime="2017-12-23T03:55:00.000Z" itemprop="datePublished">2017-12-23</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/12/10/Serialization_And_Transient/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/12/10/Serialization_And_Transient/serialization1.jpg)" alt="직렬화(Serialization) 와 transient 키워드" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Development/java/">java</a></p>
+                            <p class="item-title"><a href="/2017/12/10/Serialization_And_Transient/" class="title">직렬화(Serialization) 와 transient 키워드</a></p>
+                            <p class="item-date"><time datetime="2017-12-10T03:38:00.000Z" itemprop="datePublished">2017-12-10</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">categories</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Development/">Development</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Development/java/">java</a><span class="category-list-count">13</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/">Operations</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Windows/">Windows</a><span class="category-list-count">1</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">3</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/ArrayList/" style="font-size: 10px;">ArrayList</a> <a href="/tags/Collections/" style="font-size: 10px;">Collections</a> <a href="/tags/Deque/" style="font-size: 10px;">Deque</a> <a href="/tags/LinkedList/" style="font-size: 10px;">LinkedList</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/Queue/" style="font-size: 10px;">Queue</a> <a href="/tags/SENS/" style="font-size: 10px;">SENS</a> <a href="/tags/Set/" style="font-size: 10px;">Set</a> <a href="/tags/System-Event-Notification-Service/" style="font-size: 10px;">System Event Notification Service</a> <a href="/tags/allocation/" style="font-size: 10px;">allocation</a> <a href="/tags/builder/" style="font-size: 10px;">builder</a> <a href="/tags/coding-convention/" style="font-size: 10px;">coding convention</a> <a href="/tags/comparable/" style="font-size: 10px;">comparable</a> <a href="/tags/comparator/" style="font-size: 10px;">comparator</a> <a href="/tags/compressedoops/" style="font-size: 10px;">compressedoops</a> <a href="/tags/elasticsearch/" style="font-size: 16.67px;">elasticsearch</a> <a href="/tags/exception/" style="font-size: 10px;">exception</a> <a href="/tags/final/" style="font-size: 10px;">final</a> <a href="/tags/heap/" style="font-size: 10px;">heap</a> <a href="/tags/hot-thread/" style="font-size: 10px;">hot thread</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/pattern/" style="font-size: 13.33px;">pattern</a> <a href="/tags/pending-tasks/" style="font-size: 10px;">pending tasks</a> <a href="/tags/primitive-type/" style="font-size: 10px;">primitive type</a> <a href="/tags/reference-type/" style="font-size: 10px;">reference type</a> <a href="/tags/serialization/" style="font-size: 10px;">serialization</a> <a href="/tags/shards/" style="font-size: 10px;">shards</a> <a href="/tags/singleton/" style="font-size: 10px;">singleton</a> <a href="/tags/stringpool/" style="font-size: 10px;">stringpool</a> <a href="/tags/swapoff/" style="font-size: 10px;">swapoff</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/thread-pool/" style="font-size: 10px;">thread pool</a> <a href="/tags/transient/" style="font-size: 10px;">transient</a> <a href="/tags/try-with-resources/" style="font-size: 10px;">try-with-resources</a> <a href="/tags/tuning/" style="font-size: 10px;">tuning</a> <a href="/tags/unassigned/" style="font-size: 10px;">unassigned</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/windows2012/" style="font-size: 10px;">windows2012</a> <a href="/tags/스트링풀/" style="font-size: 10px;">스트링풀</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="https://github.com/nakjunizm">github</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2018 NAKJUN SUNG</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_shortname = 'nakjunizm';
+    
+    
+    var disqus_url = 'http://nakjunizm.github.io/2017/09/07/ElasticSearch_Heap_Memory/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
