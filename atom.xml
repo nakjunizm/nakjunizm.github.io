@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://nakjunizm.github.io/"/>
-  <updated>2018-01-20T08:13:52.000Z</updated>
+  <updated>2018-02-11T03:39:48.000Z</updated>
   <id>http://nakjunizm.github.io/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>System Event Notification Service 준비 중 해결 방법</title>
+    <link href="http://nakjunizm.github.io/2018/01/30/SystemEventNotificationService/"/>
+    <id>http://nakjunizm.github.io/2018/01/30/SystemEventNotificationService/</id>
+    <published>2018-01-30T01:43:00.000Z</published>
+    <updated>2018-02-11T03:39:48.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Windows 2012/R2</p><h3 id="증상"><a href="#증상" class="headerlink" title="# 증상"></a># 증상</h3><p>사용자가 로그아웃을 시도했는데 “System Event Notification Service 준비 중….” 메세지가 화면에서 뱅글뱅글 돌고 로그아웃은 되지 않는 경우<br><img src="https://nakjunizm.github.io/2018/01/30/Cluster_Check/SystemEventNotificationService1.jpg" alt="SystemEventNotificationService1"></p><h3 id="해결"><a href="#해결" class="headerlink" title="# 해결"></a># 해결</h3><p>운영중인 시스템에서 <strong> 재부팅을 하지 않고 </strong> 해결 가능한 방법 입니다.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc queryex sens</span><br></pre></td></tr></table></figure></p><p>를 치면 System Event Notification Service 의 PID를 확인 할 수 있습니다.<br>해당 PID를 강제로 종료시켜야 합니다.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">taskkill /PID 646 /F</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Windows 2012/R2&lt;/p&gt;
+&lt;h3 id=&quot;증상&quot;&gt;&lt;a href=&quot;#증상&quot; class=&quot;headerlink&quot; title=&quot;# 증상&quot;&gt;&lt;/a&gt;# 증상&lt;/h3&gt;&lt;p&gt;사용자가 로그아웃을 시도했는데 “System Event Notification
+      
+    
+    </summary>
+    
+      <category term="Operations" scheme="http://nakjunizm.github.io/categories/Operations/"/>
+    
+      <category term="Windows" scheme="http://nakjunizm.github.io/categories/Operations/Windows/"/>
+    
+    
+      <category term="windows2012" scheme="http://nakjunizm.github.io/tags/windows2012/"/>
+    
+      <category term="SENS" scheme="http://nakjunizm.github.io/tags/SENS/"/>
+    
+      <category term="System Event Notification Service" scheme="http://nakjunizm.github.io/tags/System-Event-Notification-Service/"/>
+    
+  </entry>
   
   <entry>
     <title>Singleton Pattern</title>
@@ -41,9 +73,9 @@
     
       <category term="java" scheme="http://nakjunizm.github.io/tags/java/"/>
     
-      <category term="singleton" scheme="http://nakjunizm.github.io/tags/singleton/"/>
-    
       <category term="pattern" scheme="http://nakjunizm.github.io/tags/pattern/"/>
+    
+      <category term="singleton" scheme="http://nakjunizm.github.io/tags/singleton/"/>
     
   </entry>
   
@@ -72,9 +104,9 @@
     
       <category term="java" scheme="http://nakjunizm.github.io/tags/java/"/>
     
-      <category term="pattern" scheme="http://nakjunizm.github.io/tags/pattern/"/>
-    
       <category term="builder" scheme="http://nakjunizm.github.io/tags/builder/"/>
+    
+      <category term="pattern" scheme="http://nakjunizm.github.io/tags/pattern/"/>
     
   </entry>
   
