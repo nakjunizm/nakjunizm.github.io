@@ -73,9 +73,9 @@
     
       <category term="java" scheme="http://nakjunizm.github.io/tags/java/"/>
     
-      <category term="singleton" scheme="http://nakjunizm.github.io/tags/singleton/"/>
-    
       <category term="pattern" scheme="http://nakjunizm.github.io/tags/pattern/"/>
+    
+      <category term="singleton" scheme="http://nakjunizm.github.io/tags/singleton/"/>
     
   </entry>
   
@@ -104,9 +104,9 @@
     
       <category term="java" scheme="http://nakjunizm.github.io/tags/java/"/>
     
-      <category term="pattern" scheme="http://nakjunizm.github.io/tags/pattern/"/>
-    
       <category term="builder" scheme="http://nakjunizm.github.io/tags/builder/"/>
+    
+      <category term="pattern" scheme="http://nakjunizm.github.io/tags/pattern/"/>
     
   </entry>
   
