@@ -73,9 +73,9 @@
     
       <category term="java" scheme="http://nakjunizm.github.io/tags/java/"/>
     
-      <category term="singleton" scheme="http://nakjunizm.github.io/tags/singleton/"/>
-    
       <category term="pattern" scheme="http://nakjunizm.github.io/tags/pattern/"/>
+    
+      <category term="singleton" scheme="http://nakjunizm.github.io/tags/singleton/"/>
     
   </entry>
   
@@ -104,9 +104,9 @@
     
       <category term="java" scheme="http://nakjunizm.github.io/tags/java/"/>
     
-      <category term="pattern" scheme="http://nakjunizm.github.io/tags/pattern/"/>
-    
       <category term="builder" scheme="http://nakjunizm.github.io/tags/builder/"/>
+    
+      <category term="pattern" scheme="http://nakjunizm.github.io/tags/pattern/"/>
     
   </entry>
   
@@ -171,6 +171,37 @@
       <category term="serialization" scheme="http://nakjunizm.github.io/tags/serialization/"/>
     
       <category term="transient" scheme="http://nakjunizm.github.io/tags/transient/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>reroute: shard를 강제로 locate 시키는 방법</title>
+    <link href="http://nakjunizm.github.io/2017/09/26/reroute/"/>
+    <id>http://nakjunizm.github.io/2017/09/26/reroute/</id>
+    <published>2017-09-26T09:27:00.000Z</published>
+    <updated>2018-02-12T12:44:16.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="ElasticSearch-Shard-Initialize-fail-시-강제로-locate-시키는-방법"><a href="#ElasticSearch-Shard-Initialize-fail-시-강제로-locate-시키는-방법" class="headerlink" title="# ElasticSearch Shard Initialize fail 시 강제로 locate 시키는 방법"></a># ElasticSearch Shard Initialize fail 시 강제로 locate 시키는 방법</h3><p>어떤 이유에선지 shard의 initialize가 실패하고 unassigned shard상태로 남아있다면 강제로 특정 노드로 옮겨줘야 할 필요가 있습니다.<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">POST _cluster/reroute</span><br><span class="line">&#123;</span><br><span class="line">   <span class="attr">"commands"</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">         <span class="attr">"allocate"</span>: &#123;</span><br><span class="line">            <span class="attr">"index"</span>: <span class="string">"인덱스명"</span>,</span><br><span class="line">            <span class="attr">"shard"</span>: <span class="string">"보낼샤드넘버,</span></span><br><span class="line"><span class="string">            "</span>node<span class="string">": "</span>타겟노드명<span class="string">",</span></span><br><span class="line"><span class="string">            "</span>allow_primary<span class="string">": "</span><span class="literal">true</span><span class="string">"</span></span><br><span class="line"><span class="string">         &#125;</span></span><br><span class="line"><span class="string">      &#125;</span></span><br><span class="line"><span class="string">   ]</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure></p><p><code>allow_primary</code> 옵션을 true로 주면 primary 샤드를 옮기겠다고 선언 하는 것 입니다.<br>혹시라도 cluster health가 red로 빠져있고 primary and replica shard 모두 unassigned 샤드 인경우…<br>primary 샤드만 재배치 되고 replica는 여전히 unassigned 로 남아 있다면 “allow_primary”: “false” 로 바꾸고 “node” 도 primary shard가 있는 노드가 아닌 다른 노드로 설정하여 다시 한번 실행 시켜주면 됩니다.</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;ElasticSearch-Shard-Initialize-fail-시-강제로-locate-시키는-방법&quot;&gt;&lt;a href=&quot;#ElasticSearch-Shard-Initialize-fail-시-강제로-locate-시키는-방법&quot; class=&quot;h
+      
+    
+    </summary>
+    
+      <category term="Operations" scheme="http://nakjunizm.github.io/categories/Operations/"/>
+    
+      <category term="ElasticSearch" scheme="http://nakjunizm.github.io/categories/Operations/ElasticSearch/"/>
+    
+    
+      <category term="elasticsearch" scheme="http://nakjunizm.github.io/tags/elasticsearch/"/>
+    
+      <category term="unassigned" scheme="http://nakjunizm.github.io/tags/unassigned/"/>
+    
+      <category term="reroute" scheme="http://nakjunizm.github.io/tags/reroute/"/>
     
   </entry>
   

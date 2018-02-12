@@ -3,20 +3,26 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Archive: 2017/8 | nakjunizm&#39;s dev note</title>
+    <title>reroute: shard를 강제로 locate 시키는 방법 | nakjunizm&#39;s dev note</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <meta name="description" content="you know.... for dev!!!">
-<meta property="og:type" content="website">
-<meta property="og:title" content="nakjunizm&#39;s dev note">
-<meta property="og:url" content="http://nakjunizm.github.io/archives/2017/08/index.html">
+        <meta name="keywords" content="elasticsearch,unassigned,reroute" />
+    
+    <meta name="description" content="# ElasticSearch Shard Initialize fail 시 강제로 locate 시키는 방법어떤 이유에선지 shard의 initialize가 실패하고 unassigned shard상태로 남아있다면 강제로 특정 노드로 옮겨줘야 할 필요가 있습니다.12345678910111213POST _cluster/reroute&amp;#123;   &quot;commands&quot;">
+<meta name="keywords" content="elasticsearch,unassigned,reroute">
+<meta property="og:type" content="article">
+<meta property="og:title" content="reroute: shard를 강제로 locate 시키는 방법">
+<meta property="og:url" content="http://nakjunizm.github.io/2017/09/26/reroute/index.html">
 <meta property="og:site_name" content="nakjunizm&#39;s dev note">
-<meta property="og:description" content="you know.... for dev!!!">
+<meta property="og:description" content="# ElasticSearch Shard Initialize fail 시 강제로 locate 시키는 방법어떤 이유에선지 shard의 initialize가 실패하고 unassigned shard상태로 남아있다면 강제로 특정 노드로 옮겨줘야 할 필요가 있습니다.12345678910111213POST _cluster/reroute&amp;#123;   &quot;commands&quot;">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="https://nakjunizm.github.io/2017/09/26/reroute/reroute1.png">
+<meta property="og:updated_time" content="2018-02-12T12:44:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="nakjunizm&#39;s dev note">
-<meta name="twitter:description" content="you know.... for dev!!!">
+<meta name="twitter:title" content="reroute: shard를 강제로 locate 시키는 방법">
+<meta name="twitter:description" content="# ElasticSearch Shard Initialize fail 시 강제로 locate 시키는 방법어떤 이유에선지 shard의 initialize가 실패하고 unassigned shard상태로 남아있다면 강제로 특정 노드로 옮겨줘야 할 필요가 있습니다.12345678910111213POST _cluster/reroute&amp;#123;   &quot;commands&quot;">
+<meta name="twitter:image" content="https://nakjunizm.github.io/2017/09/26/reroute/reroute1.png">
     
 
     
@@ -140,172 +146,124 @@ ga('send', 'pageview');
                         <div class="main-body-header">
     <h1 class="header">
     
-    <i class="icon fa fa-archive"></i>Archive: 2017/8
+    <a class="page-title-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a>
     </h1>
 </div>
                         <div class="main-body-content">
-                            
-
-    
-    
+                            <article id="post-reroute" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
         
-        
-        <section class="archives-wrap">
-            <div class="archive-year-wrap">
-                <a href="/archives/2017" class="archive-year"><i class="icon fa fa-calendar-o"></i>2017</a>
-            </div>
-            <div class="archives">
-    
-    
-    
-        <div class="article-row">
-    
-        <article class="article article-summary">
-    <div class="article-summary-inner">
-        
-        <a href="/2017/08/24/Shard_Allocation_And_FD/" class="thumbnail">
-    
-    
-        <span style="background-image:url(https://nakjunizm.github.io/2017/08/24/Shard_Allocation_And_FD/summer-814679_640.jpg)" alt="Node가 예기치 않게 이탈될 경우 shard allocation 지연시키기" class="thumbnail-image"></span>
-    
-    
-        
-<span class="comment-counter">
-    <i class="fa fa-comments-o"></i>
-    
-        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="http://nakjunizm.github.io/2017/08/24/Shard_Allocation_And_FD/">0</span>
-    
-</span>
-
-
-    
-</a>
-
-        
-        <div class="article-meta">
-            <div class="category">
-            <a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a>
-            </div>
-            <div class="date"><time datetime="2017-08-24T03:57:00.000Z" itemprop="datePublished">2017-08-24</time></div>
-        </div>
-        
+            <header class="article-header">
+                
     
         <h1 class="article-title" itemprop="name">
-        <a href="/2017/08/24/Shard_Allocation_And_FD/">Node가 예기치 않게 이탈될 경우 shard allocation 지연시키기</a>
+        reroute: shard를 강제로 locate 시키는 방법
         </h1>
     
 
-        <p class="article-excerpt">
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2017/09/26/reroute/" class="article-date">
+            <time datetime="2017-09-26T09:27:00.000Z" itemprop="datePublished">2017-09-26</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/elasticsearch/">elasticsearch</a>, <a class="tag-link" href="/tags/reroute/">reroute</a>, <a class="tag-link" href="/tags/unassigned/">unassigned</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h3 id="ElasticSearch-Shard-Initialize-fail-시-강제로-locate-시키는-방법"><a href="#ElasticSearch-Shard-Initialize-fail-시-강제로-locate-시키는-방법" class="headerlink" title="# ElasticSearch Shard Initialize fail 시 강제로 locate 시키는 방법"></a># ElasticSearch Shard Initialize fail 시 강제로 locate 시키는 방법</h3><p>어떤 이유에선지 shard의 initialize가 실패하고 unassigned shard상태로 남아있다면 강제로 특정 노드로 옮겨줘야 할 필요가 있습니다.<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">POST _cluster/reroute</span><br><span class="line">&#123;</span><br><span class="line">   <span class="attr">"commands"</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">         <span class="attr">"allocate"</span>: &#123;</span><br><span class="line">            <span class="attr">"index"</span>: <span class="string">"인덱스명"</span>,</span><br><span class="line">            <span class="attr">"shard"</span>: <span class="string">"보낼샤드넘버,</span></span><br><span class="line"><span class="string">            "</span>node<span class="string">": "</span>타겟노드명<span class="string">",</span></span><br><span class="line"><span class="string">            "</span>allow_primary<span class="string">": "</span><span class="literal">true</span><span class="string">"</span></span><br><span class="line"><span class="string">         &#125;</span></span><br><span class="line"><span class="string">      &#125;</span></span><br><span class="line"><span class="string">   ]</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p><code>allow_primary</code> 옵션을 true로 주면 primary 샤드를 옮기겠다고 선언 하는 것 입니다.<br>혹시라도 cluster health가 red로 빠져있고 primary and replica shard 모두 unassigned 샤드 인경우…<br>primary 샤드만 재배치 되고 replica는 여전히 unassigned 로 남아 있다면 “allow_primary”: “false” 로 바꾸고 “node” 도 primary shard가 있는 노드가 아닌 다른 노드로 설정하여 다시 한번 실행 시켜주면 됩니다.</p>
+
+        </div>
+        <footer class="article-footer">
             
-# 클러스터에서 노드가 제외되는 현상ElasticSearch 에서는 Fault Detection을 위해 master-&gt;nodes, nodes-&gt;master 양방향으로 주기적으로 ping을 날립니다.아무 설정을 하지 않았다면 1초마다 ping을 날리고, 30초 동안 응답이 없으면 3번 재시도 후 최종적으로 fault라고 단정짓고 해당 노드를 클러
-        </p>
+
+
+
+    <a data-url="http://nakjunizm.github.io/2017/09/26/reroute/" data-id="cjdk7nn4i000pxe95idwajlgd" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
     </div>
 </article>
-    
 
-    
-    
-    
-    
-        <article class="article article-summary">
-    <div class="article-summary-inner">
-        
-        <a href="/2017/08/10/Try_With_Resources/" class="thumbnail">
-    
-    
-        <span style="background-image:url(https://nakjunizm.github.io/2017/08/10/Try_With_Resources/trywithresources1.jpg)" alt="try-with-resources" class="thumbnail-image"></span>
-    
+    <section id="comments">
     
         
-<span class="comment-counter">
-    <i class="fa fa-comments-o"></i>
-    
-        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="http://nakjunizm.github.io/2017/08/10/Try_With_Resources/">0</span>
-    
-</span>
-
-
-    
-</a>
-
-        
-        <div class="article-meta">
-            <div class="category">
-            <a class="article-category-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Development/java/">java</a>
-            </div>
-            <div class="date"><time datetime="2017-08-10T12:45:00.000Z" itemprop="datePublished">2017-08-10</time></div>
-        </div>
-        
-    
-        <h1 class="article-title" itemprop="name">
-        <a href="/2017/08/10/Try_With_Resources/">try-with-resources</a>
-        </h1>
-    
-
-        <p class="article-excerpt">
-            java7부터 AutoCloseable 인터페이스를 구현한 클래스라면 try-catch-finally 구조에서 지저분하게 finally 블럭에 close()를 명시적으로 호출 하지 않아도 자동으로 close 시켜주는 쿨한 feature를 제공합니다.
-하지만 옛날에 자바를 배워서 쭉 코딩은 해왔지만 새로운 코딩스타일을 선호 하지 않는 분들은 아래와 같이 코딩
-        </p>
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
     </div>
-</article>
-    
-        </div>
-    
 
     
-    
-    
-    
-        <div class="article-row">
-    
-        <article class="article article-summary">
-    <div class="article-summary-inner">
-        
-        <a href="/2017/08/03/Cluster_Check/" class="thumbnail">
-    
-    
-        <span style="background-image:url(https://nakjunizm.github.io/2017/08/03/Cluster_Check/cluster1.jpg)" alt="내 클러스터에 문제가 있는건 아닌지 의심된다면?" class="thumbnail-image"></span>
-    
-    
-        
-<span class="comment-counter">
-    <i class="fa fa-comments-o"></i>
-    
-        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="http://nakjunizm.github.io/2017/08/03/Cluster_Check/">0</span>
-    
-</span>
-
-
-    
-</a>
-
-        
-        <div class="article-meta">
-            <div class="category">
-            <a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a>
-            </div>
-            <div class="date"><time datetime="2017-08-03T00:20:00.000Z" itemprop="datePublished">2017-08-03</time></div>
-        </div>
-        
-    
-        <h1 class="article-title" itemprop="name">
-        <a href="/2017/08/03/Cluster_Check/">내 클러스터에 문제가 있는건 아닌지 의심된다면?</a>
-        </h1>
-    
-
-        <p class="article-excerpt">
-            bulk indexing을 하고 있거나 검색을 heavy 하게 날리고 있을때 클러스터 헬스는 그린으로 멀쩡한거 하지만 뭔가 퍼포먼스가 너무 떨어지는 느낌이 들때가 있습니다.클러스터 로그를 살펴봐도 별다른점을 못찾겠고 어디서 부터 살펴봐야 할지 난감한데요 이럴 때 참고하면 좋은 몇가지 api들을 소개하겠습니다.
-# 1. pending task 확인1curl 
-        </p>
-    </div>
-</article>
-    
-        </div>
-    
-
-
-    </div></section>
-
+    </section>
 
 
                         </div>
@@ -350,6 +308,29 @@ ga('send', 'pageview');
             
         </ul>
     </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/12/10/Serialization_And_Transient/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            직렬화(Serialization) 와 transient 키워드
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2017/09/07/ElasticSearch_Heap_Memory/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">ElasticSearch Heap 메모리 설정</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
     
     <div class="widgets-container">
         
@@ -537,11 +518,13 @@ ga('send', 'pageview');
     var disqus_shortname = 'nakjunizm';
     
     
+    var disqus_url = 'http://nakjunizm.github.io/2017/09/26/reroute/';
+    
     (function() {
     var dsq = document.createElement('script');
     dsq.type = 'text/javascript';
     dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
     </script>
