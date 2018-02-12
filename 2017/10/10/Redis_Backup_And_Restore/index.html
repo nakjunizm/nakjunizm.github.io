@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Redis backup and restore | nakjunizm&#39;s dev note</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="redis,backup,restore" />
+    
+    <meta name="description" content="# Redis Persistence modeRedis는 데이터를 메모리에 올려놓고 쓰기 때문에 Redis가 down되면서 데이터가 날아가는 것을 방지 하기 위해 두가지의 persistence 모드를 제공 합니다.  RDB AOF  1. RDBRDB persistence는 point-in-time snapshot을 사용자가 지정한 inverval 마다 찍어서">
+<meta name="keywords" content="redis,backup,restore">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis backup and restore">
+<meta property="og:url" content="http://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/index.html">
+<meta property="og:site_name" content="nakjunizm&#39;s dev note">
+<meta property="og:description" content="# Redis Persistence modeRedis는 데이터를 메모리에 올려놓고 쓰기 때문에 Redis가 down되면서 데이터가 날아가는 것을 방지 하기 위해 두가지의 persistence 모드를 제공 합니다.  RDB AOF  1. RDBRDB persistence는 point-in-time snapshot을 사용자가 지정한 inverval 마다 찍어서">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/redis1.png">
+<meta property="og:updated_time" content="2018-02-12T13:06:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis backup and restore">
+<meta name="twitter:description" content="# Redis Persistence modeRedis는 데이터를 메모리에 올려놓고 쓰기 때문에 Redis가 down되면서 데이터가 날아가는 것을 방지 하기 위해 두가지의 persistence 모드를 제공 합니다.  RDB AOF  1. RDBRDB persistence는 point-in-time snapshot을 사용자가 지정한 inverval 마다 찍어서">
+<meta name="twitter:image" content="https://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/redis1.png">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="nakjunizm&#39;s dev note" type="application/atom+xml" />
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-112395863-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">dev note</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/">Development</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/java/">java</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/">Operations</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Redis/">Redis</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Windows/">Windows</a></li></ul></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Operations/Redis/">Redis</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-Redis_Backup_And_Restore" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        Redis backup and restore
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2017/10/10/Redis_Backup_And_Restore/" class="article-date">
+            <time datetime="2017-10-10T03:50:00.000Z" itemprop="datePublished">2017-10-10</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/backup/">backup</a>, <a class="tag-link" href="/tags/redis/">redis</a>, <a class="tag-link" href="/tags/restore/">restore</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h3 id="Redis-Persistence-mode"><a href="#Redis-Persistence-mode" class="headerlink" title="# Redis Persistence mode"></a># Redis Persistence mode</h3><p>Redis는 데이터를 메모리에 올려놓고 쓰기 때문에 Redis가 down되면서 데이터가 날아가는 것을 방지 하기 위해 두가지의 persistence 모드를 제공 합니다.</p>
+<ul>
+<li>RDB</li>
+<li>AOF</li>
+</ul>
+<h3 id="1-RDB"><a href="#1-RDB" class="headerlink" title="1. RDB"></a>1. RDB</h3><p>RDB persistence는 point-in-time snapshot을 사용자가 지정한 inverval 마다 찍어서 디스크에 .rdb file로 내립니다.</p>
+<ul>
+<li>장점</li>
+</ul>
+<ol>
+<li>특정 시점의 데이터를 file로 저장하고 저장된 파일을 안전한 backup 저장소로 옮길수 있기 때문에 backup 용도로 좋음.</li>
+<li>AOF에 비해 상대적으로 빠른 복구가 가능</li>
+</ol>
+<ul>
+<li>단점</li>
+</ul>
+<ol>
+<li>snapshot을 찍는 interval 사이에 들어온 데이터는 보존할 수 없음.</li>
+<li>RDB는 disk 에 파일을 내릴때 fork()를 수행하는데 이 때 dataset 의 크기가 크면 Redis가 some millisecond 동안 응답을 못 줄 확률이 있음.</li>
+</ol>
+<h6 id="2-AOF"><a href="#2-AOF" class="headerlink" title="2. AOF"></a>2. AOF</h6><p>AOF는 모든 write operation에 대한 로그를 파일로 남깁니다.<br>그래서 redis가 startup 될때 그 로그에 남아있는 command를 다시 play함으로써 원본 dataset을 복원하는 방식 입니다.<br>- 장점<br>\1. 모든 write operation이 로깅 되므로 놓치는 data가 없이 완벽하게 복원 가능<br>\2. AOF 로그는 append only log이므로 파일이 corrupt될 확률이 거의 없고 만약 disk full 등의 이유로 파일이 깨지더라도 redis-check-aof tool로 쉽게 고칠 수 있음.<br>\3. AOF 로그가 너무 커지면 Reis가 알아서 로그를 rewirte 할수 있다.<br>- 단점<br>\1. 파일 크기가 일반적으로 RDB 파일보다 큼.<br>\2. fsync policy에 따라 다르긴 하지만 일반적으로 RDB에 비해 느림.</p>
+<h4 id="RDB를-써야하나-AOF를-써야하나"><a href="#RDB를-써야하나-AOF를-써야하나" class="headerlink" title="RDB를 써야하나 AOF를 써야하나?"></a>RDB를 써야하나 AOF를 써야하나?</h4><p>Redis 홈페이지의 article에 따르면 (<a href="https://redis.io/topics/persistence" target="_blank" rel="noopener">https://redis.io/topics/persistence</a>)<br>- 데이터의 양이 많고 몇분간의 데이터 유실정도는 감수 할 수 있으면 간단히 RDB 만 사용해도 무방.<br>- 데이터의 유실이 절대 있으면 안된다면 AOF를 단독으로 사용하지는 말고, AOF+RDB 사용을 권장함.</p>
+<h6 id="RDB-Backup"><a href="#RDB-Backup" class="headerlink" title="RDB Backup"></a>RDB Backup</h6><p>- 디폴트로 Redis는 snapshot을 save하게 설정되어 있고 해당 파일은 dump.rdb라는 이름으로 디스크에 저장됩니다.<br>- dataset의 변경이 최소 M번 이상 있었는지 매 N 초 마다 확인해서 save 하도록 설정할 수 있습니다.<br>- 수동으로 SAVE 혹은 BGSAVE 명령어를 사용하여 .rdb 파일을 생성할수 있습니다.<br>- redis.conf 파일 설정 예) save 60 1000 &lt;- 60초마다 최소 1000개의 key의 변화가 있을 시 save. 여러개의 save 조건을 다른 라인으로 설정 하는 것도 가능 합니다.</p>
+<h6 id="RDB-Restoring"><a href="#RDB-Restoring" class="headerlink" title="RDB Restoring"></a>RDB Restoring</h6><p>- dump.rdb 파일을 resotre하기 위해서는 단순히 dump.rdb 파일을 Redis의 data dir 에 넣고 redis를 재시작 하기만 하면 됩니다.<br>- data dir이 어딘지 모르겠으면 redis.conf 파일에서 dir을 찾거나 redis-cli에서</p>
+<p>127.0.0.1:6379&gt; CONFIG get dir</p>
+<p>명령어를 쳐 보면 어느 경로에 설정되어 있는지 확인할 수 있습니다.</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="http://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/" data-id="cjdk8gjbs000tnf958p3z0dfd" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+    
+    </section>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="instagram" href="https://www.instagram.com/nakjunizm" target="_blank">
+                        <i class="icon fa fa-instagram"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="https://www.facebook.com/nakjunizm" target="_blank">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/nakjunizm" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/12/10/Serialization_And_Transient/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            직렬화(Serialization) 와 transient 키워드
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2017/09/26/reroute/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">reroute: shard를 강제로 locate 시키는 방법</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/01/30/SystemEventNotificationService/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2018/01/30/SystemEventNotificationService/SystemEventNotificationService1.jpg)" alt="System Event Notification Service 준비 중 해결 방법" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Windows/">Windows</a></p>
+                            <p class="item-title"><a href="/2018/01/30/SystemEventNotificationService/" class="title">System Event Notification Service 준비 중 해결 방법</a></p>
+                            <p class="item-date"><time datetime="2018-01-30T01:43:00.000Z" itemprop="datePublished">2018-01-30</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/01/05/Singleton_Pattern/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2018/01/05/Singleton_Pattern/singleton1.jpg)" alt="Singleton Pattern" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Development/java/">java</a></p>
+                            <p class="item-title"><a href="/2018/01/05/Singleton_Pattern/" class="title">Singleton Pattern</a></p>
+                            <p class="item-date"><time datetime="2018-01-05T11:48:00.000Z" itemprop="datePublished">2018-01-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/12/31/Builder_Pattern/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/12/31/Builder_Pattern/builder1.jpg)" alt="Builder Pattern" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Development/java/">java</a></p>
+                            <p class="item-title"><a href="/2017/12/31/Builder_Pattern/" class="title">Builder Pattern</a></p>
+                            <p class="item-date"><time datetime="2017-12-31T06:45:00.000Z" itemprop="datePublished">2017-12-31</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/12/23/Thread_And_Synchronized/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/12/23/Thread_And_Synchronized/thread1.jpg)" alt="쓰레드와 동기화" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Development/java/">java</a></p>
+                            <p class="item-title"><a href="/2017/12/23/Thread_And_Synchronized/" class="title">쓰레드와 동기화</a></p>
+                            <p class="item-date"><time datetime="2017-12-23T03:55:00.000Z" itemprop="datePublished">2017-12-23</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/12/10/Serialization_And_Transient/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/12/10/Serialization_And_Transient/serialization1.jpg)" alt="직렬화(Serialization) 와 transient 키워드" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Development/java/">java</a></p>
+                            <p class="item-title"><a href="/2017/12/10/Serialization_And_Transient/" class="title">직렬화(Serialization) 와 transient 키워드</a></p>
+                            <p class="item-date"><time datetime="2017-12-10T03:38:00.000Z" itemprop="datePublished">2017-12-10</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">categories</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Development/">Development</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Development/java/">java</a><span class="category-list-count">13</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/">Operations</a><span class="category-list-count">7</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Redis/">Redis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Windows/">Windows</a><span class="category-list-count">1</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">3</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/ArrayList/" style="font-size: 10px;">ArrayList</a> <a href="/tags/Collections/" style="font-size: 10px;">Collections</a> <a href="/tags/Deque/" style="font-size: 10px;">Deque</a> <a href="/tags/LinkedList/" style="font-size: 10px;">LinkedList</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/Queue/" style="font-size: 10px;">Queue</a> <a href="/tags/SENS/" style="font-size: 10px;">SENS</a> <a href="/tags/Set/" style="font-size: 10px;">Set</a> <a href="/tags/System-Event-Notification-Service/" style="font-size: 10px;">System Event Notification Service</a> <a href="/tags/allocation/" style="font-size: 10px;">allocation</a> <a href="/tags/backup/" style="font-size: 10px;">backup</a> <a href="/tags/builder/" style="font-size: 10px;">builder</a> <a href="/tags/coding-convention/" style="font-size: 10px;">coding convention</a> <a href="/tags/comparable/" style="font-size: 10px;">comparable</a> <a href="/tags/comparator/" style="font-size: 10px;">comparator</a> <a href="/tags/compressedoops/" style="font-size: 10px;">compressedoops</a> <a href="/tags/elasticsearch/" style="font-size: 16.67px;">elasticsearch</a> <a href="/tags/exception/" style="font-size: 10px;">exception</a> <a href="/tags/final/" style="font-size: 10px;">final</a> <a href="/tags/heap/" style="font-size: 10px;">heap</a> <a href="/tags/hot-thread/" style="font-size: 10px;">hot thread</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/pattern/" style="font-size: 13.33px;">pattern</a> <a href="/tags/pending-tasks/" style="font-size: 10px;">pending tasks</a> <a href="/tags/primitive-type/" style="font-size: 10px;">primitive type</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/reference-type/" style="font-size: 10px;">reference type</a> <a href="/tags/reroute/" style="font-size: 10px;">reroute</a> <a href="/tags/restore/" style="font-size: 10px;">restore</a> <a href="/tags/serialization/" style="font-size: 10px;">serialization</a> <a href="/tags/shards/" style="font-size: 10px;">shards</a> <a href="/tags/singleton/" style="font-size: 10px;">singleton</a> <a href="/tags/stringpool/" style="font-size: 10px;">stringpool</a> <a href="/tags/swapoff/" style="font-size: 10px;">swapoff</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/thread-pool/" style="font-size: 10px;">thread pool</a> <a href="/tags/transient/" style="font-size: 10px;">transient</a> <a href="/tags/try-with-resources/" style="font-size: 10px;">try-with-resources</a> <a href="/tags/tuning/" style="font-size: 10px;">tuning</a> <a href="/tags/unassigned/" style="font-size: 13.33px;">unassigned</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/windows2012/" style="font-size: 10px;">windows2012</a> <a href="/tags/스트링풀/" style="font-size: 10px;">스트링풀</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="https://github.com/nakjunizm">github</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2018 NAKJUN SUNG</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_shortname = 'nakjunizm';
+    
+    
+    var disqus_url = 'http://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

@@ -175,6 +175,37 @@
   </entry>
   
   <entry>
+    <title>Redis backup and restore</title>
+    <link href="http://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/"/>
+    <id>http://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/</id>
+    <published>2017-10-10T03:50:00.000Z</published>
+    <updated>2018-02-12T13:06:48.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="Redis-Persistence-mode"><a href="#Redis-Persistence-mode" class="headerlink" title="# Redis Persistence mode"></a># Redis Persistence mode</h3><p>Redis는 데이터를 메모리에 올려놓고 쓰기 때문에 Redis가 down되면서 데이터가 날아가는 것을 방지 하기 위해 두가지의 persistence 모드를 제공 합니다.</p><ul><li>RDB</li><li>AOF</li></ul><h3 id="1-RDB"><a href="#1-RDB" class="headerlink" title="1. RDB"></a>1. RDB</h3><p>RDB persistence는 point-in-time snapshot을 사용자가 지정한 inverval 마다 찍어서 디스크에 .rdb file로 내립니다.</p><ul><li>장점</li></ul><ol><li>특정 시점의 데이터를 file로 저장하고 저장된 파일을 안전한 backup 저장소로 옮길수 있기 때문에 backup 용도로 좋음.</li><li>AOF에 비해 상대적으로 빠른 복구가 가능</li></ol><ul><li>단점</li></ul><ol><li>snapshot을 찍는 interval 사이에 들어온 데이터는 보존할 수 없음.</li><li>RDB는 disk 에 파일을 내릴때 fork()를 수행하는데 이 때 dataset 의 크기가 크면 Redis가 some millisecond 동안 응답을 못 줄 확률이 있음.</li></ol><h6 id="2-AOF"><a href="#2-AOF" class="headerlink" title="2. AOF"></a>2. AOF</h6><p>AOF는 모든 write operation에 대한 로그를 파일로 남깁니다.<br>그래서 redis가 startup 될때 그 로그에 남아있는 command를 다시 play함으로써 원본 dataset을 복원하는 방식 입니다.<br>- 장점<br>\1. 모든 write operation이 로깅 되므로 놓치는 data가 없이 완벽하게 복원 가능<br>\2. AOF 로그는 append only log이므로 파일이 corrupt될 확률이 거의 없고 만약 disk full 등의 이유로 파일이 깨지더라도 redis-check-aof tool로 쉽게 고칠 수 있음.<br>\3. AOF 로그가 너무 커지면 Reis가 알아서 로그를 rewirte 할수 있다.<br>- 단점<br>\1. 파일 크기가 일반적으로 RDB 파일보다 큼.<br>\2. fsync policy에 따라 다르긴 하지만 일반적으로 RDB에 비해 느림.</p><h4 id="RDB를-써야하나-AOF를-써야하나"><a href="#RDB를-써야하나-AOF를-써야하나" class="headerlink" title="RDB를 써야하나 AOF를 써야하나?"></a>RDB를 써야하나 AOF를 써야하나?</h4><p>Redis 홈페이지의 article에 따르면 (<a href="https://redis.io/topics/persistence" target="_blank" rel="noopener">https://redis.io/topics/persistence</a>)<br>- 데이터의 양이 많고 몇분간의 데이터 유실정도는 감수 할 수 있으면 간단히 RDB 만 사용해도 무방.<br>- 데이터의 유실이 절대 있으면 안된다면 AOF를 단독으로 사용하지는 말고, AOF+RDB 사용을 권장함.</p><h6 id="RDB-Backup"><a href="#RDB-Backup" class="headerlink" title="RDB Backup"></a>RDB Backup</h6><p>- 디폴트로 Redis는 snapshot을 save하게 설정되어 있고 해당 파일은 dump.rdb라는 이름으로 디스크에 저장됩니다.<br>- dataset의 변경이 최소 M번 이상 있었는지 매 N 초 마다 확인해서 save 하도록 설정할 수 있습니다.<br>- 수동으로 SAVE 혹은 BGSAVE 명령어를 사용하여 .rdb 파일을 생성할수 있습니다.<br>- redis.conf 파일 설정 예) save 60 1000 &lt;- 60초마다 최소 1000개의 key의 변화가 있을 시 save. 여러개의 save 조건을 다른 라인으로 설정 하는 것도 가능 합니다.</p><h6 id="RDB-Restoring"><a href="#RDB-Restoring" class="headerlink" title="RDB Restoring"></a>RDB Restoring</h6><p>- dump.rdb 파일을 resotre하기 위해서는 단순히 dump.rdb 파일을 Redis의 data dir 에 넣고 redis를 재시작 하기만 하면 됩니다.<br>- data dir이 어딘지 모르겠으면 redis.conf 파일에서 dir을 찾거나 redis-cli에서</p><p>127.0.0.1:6379&gt; CONFIG get dir</p><p>명령어를 쳐 보면 어느 경로에 설정되어 있는지 확인할 수 있습니다.</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;Redis-Persistence-mode&quot;&gt;&lt;a href=&quot;#Redis-Persistence-mode&quot; class=&quot;headerlink&quot; title=&quot;# Redis Persistence mode&quot;&gt;&lt;/a&gt;# Redis Persistenc
+      
+    
+    </summary>
+    
+      <category term="Operations" scheme="http://nakjunizm.github.io/categories/Operations/"/>
+    
+      <category term="Redis" scheme="http://nakjunizm.github.io/categories/Operations/Redis/"/>
+    
+    
+      <category term="redis" scheme="http://nakjunizm.github.io/tags/redis/"/>
+    
+      <category term="backup" scheme="http://nakjunizm.github.io/tags/backup/"/>
+    
+      <category term="restore" scheme="http://nakjunizm.github.io/tags/restore/"/>
+    
+  </entry>
+  
+  <entry>
     <title>reroute: shard를 강제로 locate 시키는 방법</title>
     <link href="http://nakjunizm.github.io/2017/09/26/reroute/"/>
     <id>http://nakjunizm.github.io/2017/09/26/reroute/</id>
