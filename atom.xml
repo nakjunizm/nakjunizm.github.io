@@ -366,9 +366,9 @@
     
       <category term="elasticsearch" scheme="http://nakjunizm.github.io/tags/elasticsearch/"/>
     
-      <category term="reroute" scheme="http://nakjunizm.github.io/tags/reroute/"/>
-    
       <category term="unassigned" scheme="http://nakjunizm.github.io/tags/unassigned/"/>
+    
+      <category term="reroute" scheme="http://nakjunizm.github.io/tags/reroute/"/>
     
   </entry>
   
