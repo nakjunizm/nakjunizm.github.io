@@ -212,27 +212,6 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/heap/</loc>
-        <lastmod>2018-02-11T12:15:26.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://nakjunizm.github.io/tags/swapoff/</loc>
-        <lastmod>2018-02-11T12:15:26.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://nakjunizm.github.io/tags/compressedoops/</loc>
-        <lastmod>2018-02-11T12:15:26.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://nakjunizm.github.io/tags/unassigned/</loc>
         <lastmod>2018-02-12T12:44:16.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -345,13 +324,6 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/elasticsearch/</loc>
-        <lastmod>2018-06-24T03:06:34.435Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://nakjunizm.github.io/tags/kibana/</loc>
         <lastmod>2018-06-24T03:06:34.435Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -382,6 +354,69 @@
     <url>
         <loc>http://nakjunizm.github.io/tags/ingest-node/</loc>
         <lastmod>2018-06-24T03:06:34.435Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/read-only/</loc>
+        <lastmod>2018-10-26T12:34:33.863Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/FORBIDDEN-12-index/</loc>
+        <lastmod>2018-10-26T12:34:33.863Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/allow-delete/</loc>
+        <lastmod>2018-10-26T12:34:33.863Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/watermark/</loc>
+        <lastmod>2018-10-26T12:34:33.863Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/disk-flood/</loc>
+        <lastmod>2018-10-26T12:34:33.863Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/elasticsearch/</loc>
+        <lastmod>2018-10-26T12:35:05.915Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/heap/</loc>
+        <lastmod>2018-10-26T12:35:05.915Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/swapoff/</loc>
+        <lastmod>2018-10-26T12:35:05.915Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/compressedoops/</loc>
+        <lastmod>2018-10-26T12:35:05.915Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
