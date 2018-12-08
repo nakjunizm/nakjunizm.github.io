@@ -7,6 +7,14 @@
     </url>
 
     <url>
+        <loc>http://nakjunizm.github.io/2018/11/08/Kibana_Authentication_with_nginx/</loc>
+        <lastmod>2018-12-08T13:39:21.339Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://nakjunizm.github.io/2017/09/07/ElasticSearch_Heap_Memory/</loc>
         <lastmod>2018-10-26T12:35:05.915Z</lastmod>
         <changefreq>weekly</changefreq>
