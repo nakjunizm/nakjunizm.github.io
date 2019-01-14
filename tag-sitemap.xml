@@ -212,14 +212,14 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/unassigned/</loc>
+        <loc>http://nakjunizm.github.io/tags/reroute/</loc>
         <lastmod>2018-02-12T12:44:16.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/reroute/</loc>
+        <loc>http://nakjunizm.github.io/tags/unassigned/</loc>
         <lastmod>2018-02-12T12:44:16.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
@@ -408,13 +408,6 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/elasticsearch/</loc>
-        <lastmod>2018-12-08T13:39:21.339Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://nakjunizm.github.io/tags/kibana/</loc>
         <lastmod>2018-12-08T13:39:21.339Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -431,6 +424,55 @@
     <url>
         <loc>http://nakjunizm.github.io/tags/nginx/</loc>
         <lastmod>2018-12-08T13:39:21.339Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/ordinals/</loc>
+        <lastmod>2019-01-14T13:26:31.940Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/eager-global-ordinals/</loc>
+        <lastmod>2019-01-14T13:26:31.940Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/doc-value/</loc>
+        <lastmod>2019-01-14T13:26:31.940Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/elasticsearch/</loc>
+        <lastmod>2019-01-14T13:51:45.548Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/versionup/</loc>
+        <lastmod>2019-01-14T13:51:45.548Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/ES-Version-up/</loc>
+        <lastmod>2019-01-14T13:51:45.548Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/6-4-0/</loc>
+        <lastmod>2019-01-14T13:51:45.548Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
