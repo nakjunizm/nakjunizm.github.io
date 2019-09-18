@@ -21,13 +21,6 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/categories/Development/</loc>
-        <lastmod>2018-02-12T13:35:34.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://nakjunizm.github.io/categories/Development/java/</loc>
         <lastmod>2018-02-12T13:35:34.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -58,6 +51,20 @@
     <url>
         <loc>http://nakjunizm.github.io/categories/Operations/Ansible/</loc>
         <lastmod>2019-08-26T12:45:45.038Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/categories/Development/</loc>
+        <lastmod>2019-09-18T14:02:03.923Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/categories/Development/node/</loc>
+        <lastmod>2019-09-18T14:02:03.923Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
