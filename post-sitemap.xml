@@ -7,8 +7,16 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2019/10/18/Passportjs_guide/</loc>
-        <lastmod>2019-09-18T14:09:35.422Z</lastmod>
+        <loc>http://nakjunizm.github.io/2019/10/16/GraphQL_Schema/</loc>
+        <lastmod>2019-10-29T12:31:58.993Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/2019/09/18/Passportjs_guide/</loc>
+        <lastmod>2019-10-29T12:31:50.939Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 

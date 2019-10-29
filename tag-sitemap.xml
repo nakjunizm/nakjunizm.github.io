@@ -493,21 +493,42 @@
 
     <url>
         <loc>http://nakjunizm.github.io/tags/node/</loc>
-        <lastmod>2019-09-18T14:09:35.422Z</lastmod>
+        <lastmod>2019-10-29T12:31:50.939Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>http://nakjunizm.github.io/tags/passport/</loc>
-        <lastmod>2019-09-18T14:09:35.422Z</lastmod>
+        <lastmod>2019-10-29T12:31:50.939Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>http://nakjunizm.github.io/tags/OAuth/</loc>
-        <lastmod>2019-09-18T14:09:35.422Z</lastmod>
+        <lastmod>2019-10-29T12:31:50.939Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/GraphQL/</loc>
+        <lastmod>2019-10-29T12:31:58.993Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/Schema/</loc>
+        <lastmod>2019-10-29T12:31:58.993Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/tags/Apollo/</loc>
+        <lastmod>2019-10-29T12:31:58.993Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
