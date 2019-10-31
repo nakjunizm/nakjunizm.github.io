@@ -42,13 +42,6 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/categories/Operations/</loc>
-        <lastmod>2019-08-26T12:45:45.038Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://nakjunizm.github.io/categories/Operations/Ansible/</loc>
         <lastmod>2019-08-26T12:45:45.038Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -72,6 +65,20 @@
     <url>
         <loc>http://nakjunizm.github.io/categories/Development/GraphQL/</loc>
         <lastmod>2019-10-29T12:31:58.993Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/categories/Operations/</loc>
+        <lastmod>2019-10-31T14:16:11.252Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.github.io/categories/Operations/RabbitMQ/</loc>
+        <lastmod>2019-10-31T14:16:11.252Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
