@@ -1,84 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="sitemap.xsl"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>http://nakjunizm.github.io</loc>
+        <loc>http://nakjunizm.com</loc>
         <changefreq>daily</changefreq>
         <priority>1</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/categories/Operations/Windows/</loc>
+        <loc>http://nakjunizm.com/categories/Operations/Windows/</loc>
         <lastmod>2018-02-11T05:08:31.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/categories/Operations/Redis/</loc>
+        <loc>http://nakjunizm.com/categories/Operations/Redis/</loc>
         <lastmod>2018-02-12T13:28:05.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/categories/Development/java/</loc>
+        <loc>http://nakjunizm.com/categories/Development/java/</loc>
         <lastmod>2018-02-12T13:35:34.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/categories/Operations/Kafka/</loc>
+        <loc>http://nakjunizm.com/categories/Operations/Kafka/</loc>
         <lastmod>2018-06-24T03:01:44.729Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/categories/Operations/ElasticSearch/</loc>
+        <loc>http://nakjunizm.com/categories/Operations/ElasticSearch/</loc>
         <lastmod>2019-01-14T13:54:16.588Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/categories/Operations/Ansible/</loc>
+        <loc>http://nakjunizm.com/categories/Operations/Ansible/</loc>
         <lastmod>2019-08-26T12:45:45.038Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/categories/Development/node/</loc>
+        <loc>http://nakjunizm.com/categories/Development/node/</loc>
         <lastmod>2019-10-29T12:31:50.939Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/categories/Development/</loc>
+        <loc>http://nakjunizm.com/categories/Development/</loc>
         <lastmod>2019-10-29T12:31:58.993Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/categories/Development/GraphQL/</loc>
+        <loc>http://nakjunizm.com/categories/Development/GraphQL/</loc>
         <lastmod>2019-10-29T12:31:58.993Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/categories/Operations/</loc>
-        <lastmod>2020-01-08T12:44:11.948Z</lastmod>
+        <loc>http://nakjunizm.com/categories/Operations/</loc>
+        <lastmod>2019-10-31T14:16:11.252Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/categories/Operations/RabbitMQ/</loc>
-        <lastmod>2020-01-08T12:44:11.948Z</lastmod>
+        <loc>http://nakjunizm.com/categories/Operations/RabbitMQ/</loc>
+        <lastmod>2019-10-31T14:16:11.252Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.com/categories/DevOps/</loc>
+        <lastmod>2020-01-08T13:23:50.234Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.com/categories/DevOps/Docker/</loc>
+        <lastmod>2020-01-08T13:23:50.234Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.com/categories/DevOps/Docker/Swarm/</loc>
+        <lastmod>2020-01-08T13:23:50.234Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

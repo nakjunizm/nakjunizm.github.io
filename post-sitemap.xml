@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="sitemap.xsl"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>http://nakjunizm.github.io</loc>
+        <loc>http://nakjunizm.com</loc>
         <changefreq>daily</changefreq>
         <priority>1</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2019/10/30/The_Future_Of_Docker_Swarm/</loc>
-        <lastmod>2020-01-08T12:44:11.948Z</lastmod>
+        <loc>http://nakjunizm.com/2020/01/08/The_Future_Of_Docker_Swarm/</loc>
+        <lastmod>2020-01-08T13:23:50.234Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2019/10/30/RabbitMQ_Cluster/</loc>
+        <loc>http://nakjunizm.com/2019/10/30/RabbitMQ_Cluster/</loc>
         <lastmod>2019-10-31T14:16:11.252Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -23,7 +23,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2019/10/16/GraphQL_Schema/</loc>
+        <loc>http://nakjunizm.com/2019/10/16/GraphQL_Schema/</loc>
         <lastmod>2019-10-29T12:31:58.993Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -31,7 +31,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2019/09/18/Passportjs_guide/</loc>
+        <loc>http://nakjunizm.com/2019/09/18/Passportjs_guide/</loc>
         <lastmod>2019-10-29T12:31:50.939Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -39,7 +39,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2019/02/08/Ansible_For_Windows/</loc>
+        <loc>http://nakjunizm.com/2019/02/08/Ansible_For_Windows/</loc>
         <lastmod>2019-08-26T12:45:45.038Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -47,7 +47,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2018/12/28/Eager_Global_Ordinals/</loc>
+        <loc>http://nakjunizm.com/2018/12/28/Eager_Global_Ordinals/</loc>
         <lastmod>2019-01-14T13:54:16.588Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -55,7 +55,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2019/01/11/ElasticSearch_Versionup_From2x_To6x/</loc>
+        <loc>http://nakjunizm.com/2019/01/11/ElasticSearch_Versionup_From2x_To6x/</loc>
         <lastmod>2019-01-14T13:51:45.548Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -63,7 +63,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2018/11/08/Kibana_Authentication_with_nginx/</loc>
+        <loc>http://nakjunizm.com/2018/11/08/Kibana_Authentication_with_nginx/</loc>
         <lastmod>2018-12-08T13:39:21.339Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -71,7 +71,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/09/07/ElasticSearch_Heap_Memory/</loc>
+        <loc>http://nakjunizm.com/2017/09/07/ElasticSearch_Heap_Memory/</loc>
         <lastmod>2018-10-26T12:35:05.915Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -79,7 +79,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2018/10/26/ElasticSearch_Cluster_block_exception/</loc>
+        <loc>http://nakjunizm.com/2018/10/26/ElasticSearch_Cluster_block_exception/</loc>
         <lastmod>2018-10-26T12:34:33.863Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -87,7 +87,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2018/03/09/Ingest_Node/</loc>
+        <loc>http://nakjunizm.com/2018/03/09/Ingest_Node/</loc>
         <lastmod>2018-06-24T03:06:34.435Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -95,7 +95,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2018/04/23/Kafka_Offset_Reset/</loc>
+        <loc>http://nakjunizm.com/2018/04/23/Kafka_Offset_Reset/</loc>
         <lastmod>2018-06-24T03:01:44.729Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -103,7 +103,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2018/03/08/ElasticSearch_License_Update/</loc>
+        <loc>http://nakjunizm.com/2018/03/08/ElasticSearch_License_Update/</loc>
         <lastmod>2018-03-19T14:42:03.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -111,7 +111,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2018/01/01/ELK_Apache_Log_Visualization/</loc>
+        <loc>http://nakjunizm.com/2018/01/01/ELK_Apache_Log_Visualization/</loc>
         <lastmod>2018-03-19T12:49:41.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -119,7 +119,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/04/21/Map_And_Set/</loc>
+        <loc>http://nakjunizm.com/2017/04/21/Map_And_Set/</loc>
         <lastmod>2018-02-12T13:35:34.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -127,7 +127,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/08/10/Try_With_Resources/</loc>
+        <loc>http://nakjunizm.com/2017/08/10/Try_With_Resources/</loc>
         <lastmod>2018-02-12T13:32:01.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -135,7 +135,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/</loc>
+        <loc>http://nakjunizm.com/2017/10/10/Redis_Backup_And_Restore/</loc>
         <lastmod>2018-02-12T13:28:05.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -143,7 +143,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/09/26/reroute/</loc>
+        <loc>http://nakjunizm.com/2017/09/26/reroute/</loc>
         <lastmod>2018-02-12T12:44:16.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -151,7 +151,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/08/24/Shard_Allocation_And_FD/</loc>
+        <loc>http://nakjunizm.com/2017/08/24/Shard_Allocation_And_FD/</loc>
         <lastmod>2018-02-11T06:01:37.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -159,7 +159,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2018/01/30/SystemEventNotificationService/</loc>
+        <loc>http://nakjunizm.com/2018/01/30/SystemEventNotificationService/</loc>
         <lastmod>2018-02-11T05:08:31.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -167,7 +167,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/08/03/Cluster_Check/</loc>
+        <loc>http://nakjunizm.com/2017/08/03/Cluster_Check/</loc>
         <lastmod>2018-01-23T12:49:52.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -175,7 +175,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/03/07/Thread_Pool/</loc>
+        <loc>http://nakjunizm.com/2017/03/07/Thread_Pool/</loc>
         <lastmod>2018-01-20T09:13:57.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -183,7 +183,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2018/01/05/Singleton_Pattern/</loc>
+        <loc>http://nakjunizm.com/2018/01/05/Singleton_Pattern/</loc>
         <lastmod>2018-01-20T08:13:52.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -191,7 +191,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/12/31/Builder_Pattern/</loc>
+        <loc>http://nakjunizm.com/2017/12/31/Builder_Pattern/</loc>
         <lastmod>2018-01-16T12:39:57.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -199,7 +199,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/12/23/Thread_And_Synchronized/</loc>
+        <loc>http://nakjunizm.com/2017/12/23/Thread_And_Synchronized/</loc>
         <lastmod>2018-01-16T12:34:07.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -207,7 +207,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/12/10/Serialization_And_Transient/</loc>
+        <loc>http://nakjunizm.com/2017/12/10/Serialization_And_Transient/</loc>
         <lastmod>2018-01-16T12:27:10.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -215,7 +215,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/07/25/String_Pool/</loc>
+        <loc>http://nakjunizm.com/2017/07/25/String_Pool/</loc>
         <lastmod>2018-01-16T12:05:57.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -223,7 +223,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/07/03/Final_Keyword/</loc>
+        <loc>http://nakjunizm.com/2017/07/03/Final_Keyword/</loc>
         <lastmod>2018-01-14T02:13:42.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -231,7 +231,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/06/26/Reference_Type/</loc>
+        <loc>http://nakjunizm.com/2017/06/26/Reference_Type/</loc>
         <lastmod>2018-01-13T11:53:29.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -239,7 +239,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/06/25/Primitive_Type/</loc>
+        <loc>http://nakjunizm.com/2017/06/25/Primitive_Type/</loc>
         <lastmod>2018-01-13T11:50:12.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -247,7 +247,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/02/24/Queue_And_Deque/</loc>
+        <loc>http://nakjunizm.com/2017/02/24/Queue_And_Deque/</loc>
         <lastmod>2018-01-12T13:19:29.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -255,7 +255,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/02/11/Comparable_And_Comparator/</loc>
+        <loc>http://nakjunizm.com/2017/02/11/Comparable_And_Comparator/</loc>
         <lastmod>2018-01-11T14:03:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -263,7 +263,7 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/2017/02/19/ArrayList_And_LinkedList/</loc>
+        <loc>http://nakjunizm.com/2017/02/19/ArrayList_And_LinkedList/</loc>
         <lastmod>2018-01-11T14:03:19.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>

@@ -2,561 +2,575 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/Collections/</loc>
+        <loc>http://nakjunizm.com/tags/Collections/</loc>
         <lastmod>2018-01-11T14:03:19.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/ArrayList/</loc>
+        <loc>http://nakjunizm.com/tags/ArrayList/</loc>
         <lastmod>2018-01-11T14:03:19.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/LinkedList/</loc>
+        <loc>http://nakjunizm.com/tags/LinkedList/</loc>
         <lastmod>2018-01-11T14:03:19.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/comparable/</loc>
+        <loc>http://nakjunizm.com/tags/comparable/</loc>
         <lastmod>2018-01-11T14:03:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/comparator/</loc>
+        <loc>http://nakjunizm.com/tags/comparator/</loc>
         <lastmod>2018-01-11T14:03:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/Queue/</loc>
+        <loc>http://nakjunizm.com/tags/Queue/</loc>
         <lastmod>2018-01-12T13:19:29.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/Deque/</loc>
+        <loc>http://nakjunizm.com/tags/Deque/</loc>
         <lastmod>2018-01-12T13:19:29.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/primitive-type/</loc>
+        <loc>http://nakjunizm.com/tags/primitive-type/</loc>
         <lastmod>2018-01-13T11:50:12.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/reference-type/</loc>
+        <loc>http://nakjunizm.com/tags/reference-type/</loc>
         <lastmod>2018-01-13T11:53:29.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/final/</loc>
+        <loc>http://nakjunizm.com/tags/final/</loc>
         <lastmod>2018-01-14T02:13:42.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/coding-convention/</loc>
+        <loc>http://nakjunizm.com/tags/coding-convention/</loc>
         <lastmod>2018-01-14T02:13:42.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/stringpool/</loc>
+        <loc>http://nakjunizm.com/tags/stringpool/</loc>
         <lastmod>2018-01-16T12:05:57.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/%EC%8A%A4%ED%8A%B8%EB%A7%81%ED%92%80/</loc>
+        <loc>http://nakjunizm.com/tags/%EC%8A%A4%ED%8A%B8%EB%A7%81%ED%92%80/</loc>
         <lastmod>2018-01-16T12:05:57.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/serialization/</loc>
+        <loc>http://nakjunizm.com/tags/serialization/</loc>
         <lastmod>2018-01-16T12:27:10.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/transient/</loc>
+        <loc>http://nakjunizm.com/tags/transient/</loc>
         <lastmod>2018-01-16T12:27:10.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/thread/</loc>
+        <loc>http://nakjunizm.com/tags/thread/</loc>
         <lastmod>2018-01-16T12:34:07.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/synchronized/</loc>
+        <loc>http://nakjunizm.com/tags/synchronized/</loc>
         <lastmod>2018-01-16T12:34:07.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/volatile/</loc>
+        <loc>http://nakjunizm.com/tags/volatile/</loc>
         <lastmod>2018-01-16T12:34:07.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/builder/</loc>
+        <loc>http://nakjunizm.com/tags/builder/</loc>
         <lastmod>2018-01-16T12:39:57.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/pattern/</loc>
+        <loc>http://nakjunizm.com/tags/pattern/</loc>
         <lastmod>2018-01-20T08:13:52.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/singleton/</loc>
+        <loc>http://nakjunizm.com/tags/singleton/</loc>
         <lastmod>2018-01-20T08:13:52.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/thread-pool/</loc>
+        <loc>http://nakjunizm.com/tags/thread-pool/</loc>
         <lastmod>2018-01-20T09:13:57.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/tuning/</loc>
+        <loc>http://nakjunizm.com/tags/tuning/</loc>
         <lastmod>2018-01-20T09:13:57.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/pending-tasks/</loc>
+        <loc>http://nakjunizm.com/tags/pending-tasks/</loc>
         <lastmod>2018-01-23T12:49:52.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/hot-thread/</loc>
+        <loc>http://nakjunizm.com/tags/hot-thread/</loc>
         <lastmod>2018-01-23T12:49:52.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/windows2012/</loc>
+        <loc>http://nakjunizm.com/tags/windows2012/</loc>
         <lastmod>2018-02-11T05:08:31.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/SENS/</loc>
+        <loc>http://nakjunizm.com/tags/SENS/</loc>
         <lastmod>2018-02-11T05:08:31.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/System-Event-Notification-Service/</loc>
+        <loc>http://nakjunizm.com/tags/System-Event-Notification-Service/</loc>
         <lastmod>2018-02-11T05:08:31.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/shards/</loc>
+        <loc>http://nakjunizm.com/tags/shards/</loc>
         <lastmod>2018-02-11T06:01:37.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/allocation/</loc>
+        <loc>http://nakjunizm.com/tags/allocation/</loc>
         <lastmod>2018-02-11T06:01:37.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/unassigned/</loc>
+        <loc>http://nakjunizm.com/tags/unassigned/</loc>
         <lastmod>2018-02-12T12:44:16.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/reroute/</loc>
+        <loc>http://nakjunizm.com/tags/reroute/</loc>
         <lastmod>2018-02-12T12:44:16.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/redis/</loc>
+        <loc>http://nakjunizm.com/tags/redis/</loc>
         <lastmod>2018-02-12T13:28:05.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/backup/</loc>
+        <loc>http://nakjunizm.com/tags/backup/</loc>
         <lastmod>2018-02-12T13:28:05.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/restore/</loc>
+        <loc>http://nakjunizm.com/tags/restore/</loc>
         <lastmod>2018-02-12T13:28:05.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/exception/</loc>
+        <loc>http://nakjunizm.com/tags/exception/</loc>
         <lastmod>2018-02-12T13:32:01.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/try-with-resources/</loc>
+        <loc>http://nakjunizm.com/tags/try-with-resources/</loc>
         <lastmod>2018-02-12T13:32:01.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/java/</loc>
+        <loc>http://nakjunizm.com/tags/java/</loc>
         <lastmod>2018-02-12T13:35:34.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/Map/</loc>
+        <loc>http://nakjunizm.com/tags/Map/</loc>
         <lastmod>2018-02-12T13:35:34.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/Set/</loc>
+        <loc>http://nakjunizm.com/tags/Set/</loc>
         <lastmod>2018-02-12T13:35:34.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/apache/</loc>
+        <loc>http://nakjunizm.com/tags/apache/</loc>
         <lastmod>2018-03-19T12:49:41.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/log/</loc>
+        <loc>http://nakjunizm.com/tags/log/</loc>
         <lastmod>2018-03-19T12:49:41.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/license/</loc>
+        <loc>http://nakjunizm.com/tags/license/</loc>
         <lastmod>2018-03-19T14:42:03.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/kafka/</loc>
+        <loc>http://nakjunizm.com/tags/kafka/</loc>
         <lastmod>2018-06-24T03:01:44.729Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/offset/</loc>
+        <loc>http://nakjunizm.com/tags/offset/</loc>
         <lastmod>2018-06-24T03:01:44.729Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/zookeeper/</loc>
+        <loc>http://nakjunizm.com/tags/zookeeper/</loc>
         <lastmod>2018-06-24T03:01:44.729Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/logstash/</loc>
+        <loc>http://nakjunizm.com/tags/logstash/</loc>
         <lastmod>2018-06-24T03:06:34.435Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/elk/</loc>
+        <loc>http://nakjunizm.com/tags/elk/</loc>
         <lastmod>2018-06-24T03:06:34.435Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/visualization/</loc>
+        <loc>http://nakjunizm.com/tags/visualization/</loc>
         <lastmod>2018-06-24T03:06:34.435Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/ingest-node/</loc>
+        <loc>http://nakjunizm.com/tags/ingest-node/</loc>
         <lastmod>2018-06-24T03:06:34.435Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/read-only/</loc>
+        <loc>http://nakjunizm.com/tags/read-only/</loc>
         <lastmod>2018-10-26T12:34:33.863Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/FORBIDDEN-12-index/</loc>
+        <loc>http://nakjunizm.com/tags/FORBIDDEN-12-index/</loc>
         <lastmod>2018-10-26T12:34:33.863Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/allow-delete/</loc>
+        <loc>http://nakjunizm.com/tags/allow-delete/</loc>
         <lastmod>2018-10-26T12:34:33.863Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/watermark/</loc>
+        <loc>http://nakjunizm.com/tags/watermark/</loc>
         <lastmod>2018-10-26T12:34:33.863Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/disk-flood/</loc>
+        <loc>http://nakjunizm.com/tags/disk-flood/</loc>
         <lastmod>2018-10-26T12:34:33.863Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/heap/</loc>
+        <loc>http://nakjunizm.com/tags/heap/</loc>
         <lastmod>2018-10-26T12:35:05.915Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/swapoff/</loc>
+        <loc>http://nakjunizm.com/tags/swapoff/</loc>
         <lastmod>2018-10-26T12:35:05.915Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/compressedoops/</loc>
+        <loc>http://nakjunizm.com/tags/compressedoops/</loc>
         <lastmod>2018-10-26T12:35:05.915Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/kibana/</loc>
+        <loc>http://nakjunizm.com/tags/kibana/</loc>
         <lastmod>2018-12-08T13:39:21.339Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/authentication/</loc>
+        <loc>http://nakjunizm.com/tags/authentication/</loc>
         <lastmod>2018-12-08T13:39:21.339Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/nginx/</loc>
+        <loc>http://nakjunizm.com/tags/nginx/</loc>
         <lastmod>2018-12-08T13:39:21.339Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/versionup/</loc>
+        <loc>http://nakjunizm.com/tags/versionup/</loc>
         <lastmod>2019-01-14T13:51:45.548Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/ES-Version-up/</loc>
+        <loc>http://nakjunizm.com/tags/ES-Version-up/</loc>
         <lastmod>2019-01-14T13:51:45.548Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/6-4-0/</loc>
+        <loc>http://nakjunizm.com/tags/6-4-0/</loc>
         <lastmod>2019-01-14T13:51:45.548Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/elasticsearch/</loc>
+        <loc>http://nakjunizm.com/tags/elasticsearch/</loc>
         <lastmod>2019-01-14T13:54:16.588Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/ordinals/</loc>
+        <loc>http://nakjunizm.com/tags/ordinals/</loc>
         <lastmod>2019-01-14T13:54:16.588Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/eager-global-ordinals/</loc>
+        <loc>http://nakjunizm.com/tags/eager-global-ordinals/</loc>
         <lastmod>2019-01-14T13:54:16.588Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/doc-value/</loc>
+        <loc>http://nakjunizm.com/tags/doc-value/</loc>
         <lastmod>2019-01-14T13:54:16.588Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/ansible/</loc>
+        <loc>http://nakjunizm.com/tags/ansible/</loc>
         <lastmod>2019-08-26T12:45:45.038Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/devops/</loc>
+        <loc>http://nakjunizm.com/tags/devops/</loc>
         <lastmod>2019-08-26T12:45:45.038Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/node/</loc>
+        <loc>http://nakjunizm.com/tags/node/</loc>
         <lastmod>2019-10-29T12:31:50.939Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/passport/</loc>
+        <loc>http://nakjunizm.com/tags/passport/</loc>
         <lastmod>2019-10-29T12:31:50.939Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/OAuth/</loc>
+        <loc>http://nakjunizm.com/tags/OAuth/</loc>
         <lastmod>2019-10-29T12:31:50.939Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/GraphQL/</loc>
+        <loc>http://nakjunizm.com/tags/GraphQL/</loc>
         <lastmod>2019-10-29T12:31:58.993Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/Schema/</loc>
+        <loc>http://nakjunizm.com/tags/Schema/</loc>
         <lastmod>2019-10-29T12:31:58.993Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/Apollo/</loc>
+        <loc>http://nakjunizm.com/tags/Apollo/</loc>
         <lastmod>2019-10-29T12:31:58.993Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/rabbitmq/</loc>
-        <lastmod>2020-01-08T12:44:11.948Z</lastmod>
+        <loc>http://nakjunizm.com/tags/rabbitmq/</loc>
+        <lastmod>2019-10-31T14:16:11.252Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/ha/</loc>
-        <lastmod>2020-01-08T12:44:11.948Z</lastmod>
+        <loc>http://nakjunizm.com/tags/ha/</loc>
+        <lastmod>2019-10-31T14:16:11.252Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/cluster/</loc>
-        <lastmod>2020-01-08T12:44:11.948Z</lastmod>
+        <loc>http://nakjunizm.com/tags/cluster/</loc>
+        <lastmod>2019-10-31T14:16:11.252Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.github.io/tags/mirror/</loc>
-        <lastmod>2020-01-08T12:44:11.948Z</lastmod>
+        <loc>http://nakjunizm.com/tags/mirror/</loc>
+        <lastmod>2019-10-31T14:16:11.252Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.com/tags/Swarm/</loc>
+        <lastmod>2020-01-08T13:23:50.234Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.com/tags/Docker/</loc>
+        <lastmod>2020-01-08T13:23:50.234Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
