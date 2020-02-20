@@ -7,6 +7,22 @@
     </url>
 
     <url>
+        <loc>http://nakjunizm.com/2018/03/08/ElasticSearch_License_Update/</loc>
+        <lastmod>2020-02-20T13:33:11.384Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.com/2020/02/20/haproxy/</loc>
+        <lastmod>2020-02-20T13:33:07.914Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://nakjunizm.com/2020/01/29/Cidr/</loc>
         <lastmod>2020-01-29T13:53:44.390Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -105,14 +121,6 @@
     <url>
         <loc>http://nakjunizm.com/2018/04/23/Kafka_Offset_Reset/</loc>
         <lastmod>2018-06-24T03:01:44.729Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://nakjunizm.com/2018/03/08/ElasticSearch_License_Update/</loc>
-        <lastmod>2018-03-19T14:42:03.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 

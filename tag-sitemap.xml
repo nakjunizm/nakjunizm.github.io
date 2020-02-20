@@ -296,13 +296,6 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.com/tags/license/</loc>
-        <lastmod>2018-03-19T14:42:03.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://nakjunizm.com/tags/kafka/</loc>
         <lastmod>2018-06-24T03:01:44.729Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -450,13 +443,6 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.com/tags/elasticsearch/</loc>
-        <lastmod>2019-01-14T13:54:16.588Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://nakjunizm.com/tags/ordinals/</loc>
         <lastmod>2019-01-14T13:54:16.588Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -585,6 +571,34 @@
     <url>
         <loc>http://nakjunizm.com/tags/Subnet/</loc>
         <lastmod>2020-01-29T13:53:44.390Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.com/tags/haproxy/</loc>
+        <lastmod>2020-02-20T13:33:07.914Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.com/tags/keepalived/</loc>
+        <lastmod>2020-02-20T13:33:07.914Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.com/tags/elasticsearch/</loc>
+        <lastmod>2020-02-20T13:33:11.384Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.com/tags/license/</loc>
+        <lastmod>2020-02-20T13:33:11.384Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

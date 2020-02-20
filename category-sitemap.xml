@@ -35,13 +35,6 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.com/categories/Operations/ElasticSearch/</loc>
-        <lastmod>2019-01-14T13:54:16.588Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://nakjunizm.com/categories/Operations/Ansible/</loc>
         <lastmod>2019-08-26T12:45:45.038Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -77,13 +70,6 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.com/categories/DevOps/</loc>
-        <lastmod>2020-01-08T13:29:30.703Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://nakjunizm.com/categories/DevOps/Docker/</loc>
         <lastmod>2020-01-08T13:29:30.703Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -98,15 +84,36 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.com/categories/Operations/</loc>
+        <loc>http://nakjunizm.com/categories/Operations/Cloud/</loc>
         <lastmod>2020-01-29T13:53:44.390Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://nakjunizm.com/categories/Operations/Cloud/</loc>
-        <lastmod>2020-01-29T13:53:44.390Z</lastmod>
+        <loc>http://nakjunizm.com/categories/DevOps/</loc>
+        <lastmod>2020-02-20T13:33:07.914Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.com/categories/DevOps/LoadBalancing/</loc>
+        <lastmod>2020-02-20T13:33:07.914Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.com/categories/Operations/</loc>
+        <lastmod>2020-02-20T13:33:11.384Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.com/categories/Operations/ElasticSearch/</loc>
+        <lastmod>2020-02-20T13:33:11.384Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
