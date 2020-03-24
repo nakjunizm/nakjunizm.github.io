@@ -9,19 +9,19 @@
     
         <meta name="keywords" content="redis,monitoring,zabbix" />
     
-    <meta name="description" content="레디스 모니터링 시 주의사항 (Redis monitoring/single thread)TL;DRRedis는 싱글 쓰레드로 동작 하므로 CPU 모니터링을 할때 redis 프로세스를 따로 모니터링 해 줘야 합니다. 그렇지 않으면 redis의 cpu가 100을 치고 hang 걸린 상황에서 전체 코어 중 하나의 코어만 다 쓰는 상황이라 알람이 발생 하지 않을 수">
+    <meta name="description" content="TL;DRRedis는 싱글 쓰레드로 동작 하므로 CPU 모니터링을 할때 redis 프로세스를 따로 모니터링 해 줘야 합니다. 그렇지 않으면 redis의 cpu가 100을 치고 hang 걸린 상황에서 전체 코어 중 하나의 코어만 다 쓰는 상황이라 알람이 발생 하지 않을 수 있습니다. CPU 사용량 모니터링대부분의 사이트에서는 zabbix 나 prometheu">
 <meta name="keywords" content="redis,monitoring,zabbix">
 <meta property="og:type" content="article">
 <meta property="og:title" content="레디스 모니터링 시 주의사항 (Redis monitoring&#x2F;single thread)">
 <meta property="og:url" content="http://nakjunizm.com/2020/03/24/Redis_Monitoring/index.html">
 <meta property="og:site_name" content="nakjunizm&#39;s dev note">
-<meta property="og:description" content="레디스 모니터링 시 주의사항 (Redis monitoring/single thread)TL;DRRedis는 싱글 쓰레드로 동작 하므로 CPU 모니터링을 할때 redis 프로세스를 따로 모니터링 해 줘야 합니다. 그렇지 않으면 redis의 cpu가 100을 치고 hang 걸린 상황에서 전체 코어 중 하나의 코어만 다 쓰는 상황이라 알람이 발생 하지 않을 수">
+<meta property="og:description" content="TL;DRRedis는 싱글 쓰레드로 동작 하므로 CPU 모니터링을 할때 redis 프로세스를 따로 모니터링 해 줘야 합니다. 그렇지 않으면 redis의 cpu가 100을 치고 hang 걸린 상황에서 전체 코어 중 하나의 코어만 다 쓰는 상황이라 알람이 발생 하지 않을 수 있습니다. CPU 사용량 모니터링대부분의 사이트에서는 zabbix 나 prometheu">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/redis1.png">
-<meta property="og:updated_time" content="2020-03-24T13:21:00.500Z">
+<meta property="og:updated_time" content="2020-03-24T13:23:29.314Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="레디스 모니터링 시 주의사항 (Redis monitoring&#x2F;single thread)">
-<meta name="twitter:description" content="레디스 모니터링 시 주의사항 (Redis monitoring/single thread)TL;DRRedis는 싱글 쓰레드로 동작 하므로 CPU 모니터링을 할때 redis 프로세스를 따로 모니터링 해 줘야 합니다. 그렇지 않으면 redis의 cpu가 100을 치고 hang 걸린 상황에서 전체 코어 중 하나의 코어만 다 쓰는 상황이라 알람이 발생 하지 않을 수">
+<meta name="twitter:description" content="TL;DRRedis는 싱글 쓰레드로 동작 하므로 CPU 모니터링을 할때 redis 프로세스를 따로 모니터링 해 줘야 합니다. 그렇지 않으면 redis의 cpu가 100을 치고 hang 걸린 상황에서 전체 코어 중 하나의 코어만 다 쓰는 상황이라 알람이 발생 하지 않을 수 있습니다. CPU 사용량 모니터링대부분의 사이트에서는 zabbix 나 prometheu">
 <meta name="twitter:image" content="https://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/redis1.png">
     
 
@@ -182,7 +182,7 @@ ga('send', 'pageview');
         
         
         <div class="article-entry" itemprop="articleBody">
-            <h1 id="레디스-모니터링-시-주의사항-Redis-monitoring-single-thread"><a href="#레디스-모니터링-시-주의사항-Redis-monitoring-single-thread" class="headerlink" title="레디스 모니터링 시 주의사항 (Redis monitoring/single thread)"></a>레디스 모니터링 시 주의사항 (Redis monitoring/single thread)</h1><h2 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR"></a>TL;DR</h2><p>Redis는 싱글 쓰레드로 동작 하므로 CPU 모니터링을 할때 redis 프로세스를 따로 모니터링 해 줘야 합니다. 그렇지 않으면 redis의 cpu가 100을 치고 hang 걸린 상황에서 전체 코어 중 하나의 코어만 다 쓰는 상황이라 알람이 발생 하지 않을 수 있습니다.</p>
+            <h2 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR"></a>TL;DR</h2><p>Redis는 싱글 쓰레드로 동작 하므로 CPU 모니터링을 할때 redis 프로세스를 따로 모니터링 해 줘야 합니다. 그렇지 않으면 redis의 cpu가 100을 치고 hang 걸린 상황에서 전체 코어 중 하나의 코어만 다 쓰는 상황이라 알람이 발생 하지 않을 수 있습니다.</p>
 <h2 id="CPU-사용량-모니터링"><a href="#CPU-사용량-모니터링" class="headerlink" title="CPU 사용량 모니터링"></a>CPU 사용량 모니터링</h2><p>대부분의 사이트에서는 <a href="https://www.zabbix.com/" target="_blank" rel="noopener">zabbix</a> 나 <a href="https://prometheus.io/" target="_blank" rel="noopener">prometheus</a> 혹은 ELK stack 등의 오픈소스를 활용하던지 혹은 자체적으로 개발한 툴을 이용하던지 어떤 식으로든 안정적인 서비스를 위해 인프라와 어플리케이션을 모니터링 하고 임계치를 설정하여 알람을 받고 있을 것 입니다.</p>
 <p>이때 가장 기본적으로 모니터링 하는 것중 하나가 <code>CPU Usage</code> 인데 보통은 CPU user time + system time + iowait time 더한 값을 usage로 보고 각 운영 환경에 맞는 임계치를 두고 알람을 받습니다.<br><code>70% 이상 warning, 90% 이상 high, 100% critical</code> 등의 기준을 잡고 <code>10분간 3회 이상 연속으로</code> 발생시 알람을 발생 시키는 트리거를 예로 들 수 있겠네요.</p>
 <h2 id="Redis가-올라가-있는-인프라-VM-혹은-서버-의-CPU-모니터링-할-때-주의-할점"><a href="#Redis가-올라가-있는-인프라-VM-혹은-서버-의-CPU-모니터링-할-때-주의-할점" class="headerlink" title="Redis가 올라가 있는 인프라 (VM 혹은 서버) 의 CPU 모니터링 할 때 주의 할점"></a>Redis가 올라가 있는 인프라 (VM 혹은 서버) 의 CPU 모니터링 할 때 주의 할점</h2><p><a href="https://redis.io/topics/benchmarks" target="_blank" rel="noopener">redis 홈페이지에 올라와 있는 벤치마크관련 포스트</a> 를 보면 아래와 같이 나와 있습니다.</p>
@@ -213,7 +213,7 @@ ga('send', 'pageview');
 
 
 
-    <a data-url="http://nakjunizm.com/2020/03/24/Redis_Monitoring/" data-id="ck85xgpjn0024273ij2l6r6yv" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://nakjunizm.com/2020/03/24/Redis_Monitoring/" data-id="ck85xjobz00224p3izsjjzv16" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         $('body').on('click', function() {
