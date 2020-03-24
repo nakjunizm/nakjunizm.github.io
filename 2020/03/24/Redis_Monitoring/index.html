@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Redis backup and restore | nakjunizm&#39;s dev note</title>
+    <title>레디스 모니터링 시 주의사항 (Redis monitoring/single thread) | nakjunizm&#39;s dev note</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
@@ -12,15 +12,15 @@
     <meta name="description" content="레디스 모니터링 시 주의사항 (Redis monitoring/single thread)TL;DRRedis는 싱글 쓰레드로 동작 하므로 CPU 모니터링을 할때 redis 프로세스를 따로 모니터링 해 줘야 합니다. 그렇지 않으면 redis의 cpu가 100을 치고 hang 걸린 상황에서 전체 코어 중 하나의 코어만 다 쓰는 상황이라 알람이 발생 하지 않을 수">
 <meta name="keywords" content="redis,monitoring,zabbix">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Redis backup and restore">
+<meta property="og:title" content="레디스 모니터링 시 주의사항 (Redis monitoring&#x2F;single thread)">
 <meta property="og:url" content="http://nakjunizm.com/2020/03/24/Redis_Monitoring/index.html">
 <meta property="og:site_name" content="nakjunizm&#39;s dev note">
 <meta property="og:description" content="레디스 모니터링 시 주의사항 (Redis monitoring/single thread)TL;DRRedis는 싱글 쓰레드로 동작 하므로 CPU 모니터링을 할때 redis 프로세스를 따로 모니터링 해 줘야 합니다. 그렇지 않으면 redis의 cpu가 100을 치고 hang 걸린 상황에서 전체 코어 중 하나의 코어만 다 쓰는 상황이라 알람이 발생 하지 않을 수">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/redis1.png">
-<meta property="og:updated_time" content="2020-03-24T13:18:46.412Z">
+<meta property="og:updated_time" content="2020-03-24T13:21:00.500Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Redis backup and restore">
+<meta name="twitter:title" content="레디스 모니터링 시 주의사항 (Redis monitoring&#x2F;single thread)">
 <meta name="twitter:description" content="레디스 모니터링 시 주의사항 (Redis monitoring/single thread)TL;DRRedis는 싱글 쓰레드로 동작 하므로 CPU 모니터링을 할때 redis 프로세스를 따로 모니터링 해 줘야 합니다. 그렇지 않으면 redis의 cpu가 100을 치고 hang 걸린 상황에서 전체 코어 중 하나의 코어만 다 쓰는 상황이라 알람이 발생 하지 않을 수">
 <meta name="twitter:image" content="https://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/redis1.png">
     
@@ -157,7 +157,7 @@ ga('send', 'pageview');
                 
     
         <h1 class="article-title" itemprop="name">
-        Redis backup and restore
+        레디스 모니터링 시 주의사항 (Redis monitoring/single thread)
         </h1>
     
 
@@ -213,7 +213,7 @@ ga('send', 'pageview');
 
 
 
-    <a data-url="http://nakjunizm.com/2020/03/24/Redis_Monitoring/" data-id="ck85xdpr00020zk3i3hrnbqoe" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+    <a data-url="http://nakjunizm.com/2020/03/24/Redis_Monitoring/" data-id="ck85xgpjn0024273ij2l6r6yv" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
     (function ($) {
         $('body').on('click', function() {
@@ -359,7 +359,7 @@ ga('send', 'pageview');
                             <a href="/2020/03/24/Redis_Monitoring/" class="thumbnail">
     
     
-        <span style="background-image:url(https://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/redis1.png)" alt="Redis backup and restore" class="thumbnail-image"></span>
+        <span style="background-image:url(https://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/redis1.png)" alt="레디스 모니터링 시 주의사항 (Redis monitoring/single thread)" class="thumbnail-image"></span>
     
     
 </a>
@@ -368,7 +368,7 @@ ga('send', 'pageview');
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Redis/">Redis</a></p>
-                            <p class="item-title"><a href="/2020/03/24/Redis_Monitoring/" class="title">Redis backup and restore</a></p>
+                            <p class="item-title"><a href="/2020/03/24/Redis_Monitoring/" class="title">레디스 모니터링 시 주의사항 (Redis monitoring/single thread)</a></p>
                             <p class="item-date"><time datetime="2020-03-24T13:14:00.000Z" itemprop="datePublished">2020-03-24</time></p>
                         </div>
                     </li>
