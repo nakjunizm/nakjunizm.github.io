@@ -226,13 +226,6 @@
     </url>
 
     <url>
-        <loc>http://nakjunizm.com/tags/redis/</loc>
-        <lastmod>2018-02-12T13:28:05.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://nakjunizm.com/tags/backup/</loc>
         <lastmod>2018-02-12T13:28:05.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -599,6 +592,27 @@
     <url>
         <loc>http://nakjunizm.com/tags/license/</loc>
         <lastmod>2020-02-20T13:33:11.384Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.com/tags/redis/</loc>
+        <lastmod>2020-03-24T13:18:46.412Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.com/tags/monitoring/</loc>
+        <lastmod>2020-03-24T13:18:46.412Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://nakjunizm.com/tags/zabbix/</loc>
+        <lastmod>2020-03-24T13:18:46.412Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
