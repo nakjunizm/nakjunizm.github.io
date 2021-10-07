@@ -6,23 +6,27 @@
     
 
     
-    <title>nakjunizm&#39;s dev note</title>
+    <title>minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때 | nakjunizm&#39;s dev note</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <meta name="keywords" content="" />
+    <meta name="keywords" content="minikube,loadbalancer" />
     
-    <meta name="description" content="for my memory...">
+    <meta name="description" content="minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때상황local (mac os)에 minikube으로 k8s 클러스터 구성해 놓고, nginx-ingress helm chart를 install 했으나 LoadBalncer type의 service의 EXTERNAL-IP 가  상태로 더이상">
 <meta property="og:type" content="article">
-<meta property="og:title" content="nakjunizm&#39;s dev note">
+<meta property="og:title" content="minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때">
 <meta property="og:url" content="https://nakjunizm.com/2021/10/05/Minikube_ExternalIP_Pending/index.html">
 <meta property="og:site_name" content="nakjunizm&#39;s dev note">
-<meta property="og:description" content="for my memory...">
+<meta property="og:description" content="minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때상황local (mac os)에 minikube으로 k8s 클러스터 구성해 놓고, nginx-ingress helm chart를 install 했으나 LoadBalncer type의 service의 EXTERNAL-IP 가  상태로 더이상">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-10-04T15:00:00.000Z">
-<meta property="article:modified_time" content="2021-10-06T15:33:17.468Z">
+<meta property="og:image" content="https://nakjunizm.github.io/2021/10/05/Minikube_ExternalIP_Pending/minikube.png">
+<meta property="article:published_time" content="2021-10-05T13:33:00.000Z">
+<meta property="article:modified_time" content="2021-10-07T13:45:32.915Z">
 <meta property="article:author" content="NJ SUNG">
+<meta property="article:tag" content="minikube">
+<meta property="article:tag" content="loadbalancer">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nakjunizm.github.io/2021/10/05/Minikube_ExternalIP_Pending/minikube.png">
     
 
     
@@ -99,7 +103,7 @@ ga('send', 'pageview');
                                     <a class="main-nav-list-link" href="/">Home</a>
                                 </li>
                             
-                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/">DevOps</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/Docker/">Docker</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/">Development</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/GraphQL/">GraphQL</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/java/">java</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/node/">node</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/">Operations</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Ansible/">Ansible</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Cloud/">Cloud</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Kafka/">Kafka</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Linux/">Linux</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/RabbitMQ/">RabbitMQ</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Redis/">Redis</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Windows/">Windows</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Zookeeper/">Zookeeper</a></li></ul></li></ul>
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/">DevOps</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/Docker/">Docker</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/Kubernetes/">Kubernetes</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/">Development</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/GraphQL/">GraphQL</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/java/">java</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/node/">node</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/">Operations</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Ansible/">Ansible</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Cloud/">Cloud</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Kafka/">Kafka</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Linux/">Linux</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/RabbitMQ/">RabbitMQ</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Redis/">Redis</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Windows/">Windows</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Zookeeper/">Zookeeper</a></li></ul></li></ul>
                                 
                                 <li class="main-nav-list-item" >
                                     <a class="main-nav-list-link" target="_blank" rel="noopener" href="https://ko.gravatar.com/nakjunizm">About</a>
@@ -161,7 +165,7 @@ ga('send', 'pageview');
                         <div class="main-body-header">
     <h1 class="header">
     
-    uncategorized
+    <a class="page-title-link" href="/categories/DevOps/">DevOps</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/DevOps/Kubernetes/">Kubernetes</a>
     </h1>
 </div>
 
@@ -169,13 +173,23 @@ ga('send', 'pageview');
                             <article id="post-Minikube_ExternalIP_Pending" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때
+        </h1>
+    
+
+            </header>
+        
         
             <div class="article-meta">
                 
   <div class="article-date">
     <i class="fa fa-calendar"></i>
     <a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="article-date">
-       <time datetime="2021-10-04T15:00:00.000Z" itemprop="datePublished">2021-10-05</time>
+       <time datetime="2021-10-05T13:33:00.000Z" itemprop="datePublished">2021-10-05</time>
     </a>
   </div>
 
@@ -183,7 +197,7 @@ ga('send', 'pageview');
 <div class="article-date">
   <i class="fa fa-calendar-plus-o"></i>
   <a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="article-date">
-     <time datetime="2021-10-06T15:33:17.468Z" itemprop="dateModified">2021-10-07</time>
+     <time datetime="2021-10-07T13:45:32.915Z" itemprop="dateModified">2021-10-07</time>
   </a>
 </div>
 
@@ -191,6 +205,11 @@ ga('send', 'pageview');
                 
 
                 
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/loadbalancer/" rel="tag">loadbalancer</a>, <a class="tag-link-link" href="/tags/minikube/" rel="tag">minikube</a>
+    </div>
+
                 
 
                 
@@ -205,7 +224,22 @@ ga('send', 'pageview');
 
             
 
-            
+            <h1 id="minikube-에서-loadbalancer-type의-service의-external-ip가-pending-상태-일때"><a href="#minikube-에서-loadbalancer-type의-service의-external-ip가-pending-상태-일때" class="headerlink" title="minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때"></a>minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때</h1><h3 id="상황"><a href="#상황" class="headerlink" title="상황"></a>상황</h3><p>local (mac os)에 minikube으로 k8s 클러스터 구성해 놓고, nginx-ingress helm chart를 install 했으나 LoadBalncer type의 service의 EXTERNAL-IP 가 <pending> 상태로 더이상 진행이 안됨.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">🌈  ~/workspace/Charts$ kubectl get services</span><br><span class="line">NAME                            TYPE           CLUSTER-IP        EXTERNAL-IP   PORT(S)                      AGE</span><br><span class="line">kubernetes                      ClusterIP      10.XXX.0.1        &lt;none&gt;        443/TCP                      22h</span><br><span class="line">nakjunizm-front-nginx-ingress   LoadBalancer   10.XXX.249.157    &lt;pending&gt;     80:32003/TCP,443:31274/TCP   46m</span><br></pre></td></tr></table></figure>
+
+<h3 id="솔루션"><a href="#솔루션" class="headerlink" title="솔루션"></a>솔루션</h3><p>external ip를 제공하는 퍼블릭 클라우드 제공자 (AWS, Azure GCP등) 에서 kubernates를 서비스 형으로 사용 하는경우에는 문제가 되지 않으나 로컬에 minikube이나 kubeadm 등으로 설치 한 경우는 해당 현상이 발생 합니다.<br>minikube의 경우 별도의 터미널을 더 열어서 minikube tunnel 명령어를 사용하면  LoadBalancer type의 서비스를 사용 가능 합니다.</p>
+<p>새 터미널에서 터널 한 모습</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">🌈  ~$ minikube tunnel</span><br><span class="line">Password:</span><br><span class="line">Status:</span><br><span class="line"> machine: minikube</span><br><span class="line"> pid: 42342</span><br><span class="line"> route: 10.XXX.0.0/12 -&gt; 172.XXX.110.3</span><br><span class="line"> minikube: Running</span><br><span class="line"> services: [nakjunizm-front-nginx-ingress]</span><br><span class="line">   errors:</span><br><span class="line">   minikube: no errors</span><br><span class="line">   router: no errors</span><br><span class="line">   loadbalancer emulator: no errors</span><br></pre></td></tr></table></figure>
+
+<p>터널 후 원래 터미널에서 로드밸런서 다시 확인</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">🌈 ~/workspace/Charts$ kubectl get services</span><br><span class="line">NAME                            TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)                      AGE</span><br><span class="line">kubernetes                      ClusterIP      10.XXX.0.1       &lt;none&gt;           443/TCP                      22h</span><br><span class="line">nakjunizm-front-nginx-ingress   LoadBalancer   10.XXX.249.157   10.XXX.249.157   80:32003/TCP,443:31274/TCP   60m</span><br></pre></td></tr></table></figure>
+<p>위와같이 EXTERNAL-IP 에 IP가 할당 된 것을 확인 할 수 있습니다.</p>
+<p>2020-10-07 추가.<br>위 내용은 (라이센스 문제 등으로) Docker desktop 이 아닌 minikube으로 설치한 경우에 해당 하며,<br>LoadBalancer Type이 아닌 NodePort Type의 서비스도 터널을 해야 내 로컬호스트에서 접속 가능 합니다.</p>
+<h3 id="참조"><a href="#참조" class="headerlink" title="참조"></a>참조</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/44110876/kubernetes-service-external-ip-pending">https://stackoverflow.com/questions/44110876/kubernetes-service-external-ip-pending</a></li>
+<li><a target="_blank" rel="noopener" href="https://minikube.sigs.k8s.io/docs/handbook/accessing/#using-minikube-tunnel">https://minikube.sigs.k8s.io/docs/handbook/accessing/#using-minikube-tunnel</a></li>
+</ul>
+
         </div>
         <footer class="article-footer">
             
@@ -282,16 +316,16 @@ ga('send', 'pageview');
             "@type": "Person",
             "name": "NJ SUNG"
         },
-        
-        "image": "https://nakjunizm.com",
-        "keywords": "",
-        "genre": "",
+        "headline": "minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때",
+        "image": "https://nakjunizm.comhttps://nakjunizm.github.io/2021/10/05/Minikube_ExternalIP_Pending/minikube.png",
+        "keywords": "minikube loadbalancer",
+        "genre": "DevOps Kubernetes",
         "datePublished": "2021-10-05",
         "dateCreated": "2021-10-05",
         "dateModified": "2021-10-07",
         "url": "https://nakjunizm.com/2021/10/05/Minikube_ExternalIP_Pending/",
-        "description": "",
-        "wordCount": 1
+        "description": "minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때상황local (mac os)에 minikube으로 k8s 클러스터 구성해 놓고, nginx-ingress helm chart를 install 했으나 LoadBalncer type의 service의 EXTERNAL-IP 가  상태로 더이상 ",
+        "wordCount": 558
     }
 </script>
 
@@ -384,7 +418,7 @@ ga('send', 'pageview');
                             <a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="thumbnail">
     
     
-        <span class="thumbnail-image thumbnail-none"></span>
+        <span style="background-image:url(https://nakjunizm.github.io/2021/10/05/Minikube_ExternalIP_Pending/minikube.png)" alt="minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때" class="thumbnail-image"></span>
     
     
 </a>
@@ -392,9 +426,9 @@ ga('send', 'pageview');
                         </div>
                         
                         <div class="item-inner">
-                            <p class="item-category"></p>
-                            <p class="item-title"><a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="title"></a></p>
-                            <p class="item-date"><time datetime="2021-10-04T15:00:00.000Z" itemprop="datePublished">2021-10-05</time></p>
+                            <p class="item-category"><a class="article-category-link" href="/categories/DevOps/">DevOps</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/DevOps/Kubernetes/">Kubernetes</a></p>
+                            <p class="item-title"><a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="title">minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때</a></p>
+                            <p class="item-date"><time datetime="2021-10-05T13:33:00.000Z" itemprop="datePublished">2021-10-05</time></p>
                         </div>
                     </li>
                 
@@ -487,7 +521,7 @@ ga('send', 'pageview');
     <div class="widget-wrap widget-list">
         <h3 class="widget-title">categories</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/Swarm/">Swarm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/">Development</a><span class="category-list-count">15</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Development/GraphQL/">GraphQL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/java/">java</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/node/">node</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/">Operations</a><span class="category-list-count">21</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Ansible/">Ansible</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Cloud/">Cloud</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Kafka/">Kafka</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/RabbitMQ/">RabbitMQ</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Redis/">Redis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Windows/">Windows</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Zookeeper/">Zookeeper</a><span class="category-list-count">1</span></li></ul></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/Swarm/">Swarm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Kubernetes/">Kubernetes</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/">Development</a><span class="category-list-count">15</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Development/GraphQL/">GraphQL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/java/">java</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/node/">node</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/">Operations</a><span class="category-list-count">21</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Ansible/">Ansible</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Cloud/">Cloud</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Kafka/">Kafka</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/RabbitMQ/">RabbitMQ</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Redis/">Redis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Windows/">Windows</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Zookeeper/">Zookeeper</a><span class="category-list-count">1</span></li></ul></li></ul>
         </div>
     </div>
 
@@ -507,7 +541,7 @@ ga('send', 'pageview');
     <div class="widget-wrap widget-float">
         <h3 class="widget-title">tag cloud</h3>
         <div class="widget tagcloud">
-            <a href="/tags/6-4-0/" style="font-size: 10px;">6.4.0</a> <a href="/tags/Apollo/" style="font-size: 10px;">Apollo</a> <a href="/tags/ArrayList/" style="font-size: 10px;">ArrayList</a> <a href="/tags/CIDR/" style="font-size: 10px;">CIDR</a> <a href="/tags/Collections/" style="font-size: 10px;">Collections</a> <a href="/tags/Deque/" style="font-size: 10px;">Deque</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/ES-Version-up/" style="font-size: 10px;">ES Version up</a> <a href="/tags/FORBIDDEN-12-index/" style="font-size: 10px;">FORBIDDEN/12/index</a> <a href="/tags/GraphQL/" style="font-size: 10px;">GraphQL</a> <a href="/tags/LinkedList/" style="font-size: 10px;">LinkedList</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/OAuth/" style="font-size: 10px;">OAuth</a> <a href="/tags/Queue/" style="font-size: 10px;">Queue</a> <a href="/tags/SENS/" style="font-size: 10px;">SENS</a> <a href="/tags/Schema/" style="font-size: 10px;">Schema</a> <a href="/tags/Set/" style="font-size: 10px;">Set</a> <a href="/tags/Subnet/" style="font-size: 10px;">Subnet</a> <a href="/tags/Swarm/" style="font-size: 10px;">Swarm</a> <a href="/tags/System-Event-Notification-Service/" style="font-size: 10px;">System Event Notification Service</a> <a href="/tags/allocation/" style="font-size: 10px;">allocation</a> <a href="/tags/allow-delete/" style="font-size: 10px;">allow_delete</a> <a href="/tags/ansible/" style="font-size: 10px;">ansible</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/authentication/" style="font-size: 10px;">authentication</a> <a href="/tags/autopurge/" style="font-size: 10px;">autopurge</a> <a href="/tags/backup/" style="font-size: 10px;">backup</a> <a href="/tags/builder/" style="font-size: 10px;">builder</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/coding-convention/" style="font-size: 10px;">coding convention</a> <a href="/tags/comparable/" style="font-size: 10px;">comparable</a> <a href="/tags/comparator/" style="font-size: 10px;">comparator</a> <a href="/tags/compressedoops/" style="font-size: 10px;">compressedoops</a> <a href="/tags/devops/" style="font-size: 10px;">devops</a> <a href="/tags/disk-flood/" style="font-size: 10px;">disk_flood</a> <a href="/tags/doc-value/" style="font-size: 10px;">doc value</a> <a href="/tags/eager-global-ordinals/" style="font-size: 10px;">eager_global_ordinals</a> <a href="/tags/elasticsearch/" style="font-size: 17.5px;">elasticsearch</a> <a href="/tags/elk/" style="font-size: 12.5px;">elk</a> <a href="/tags/exception/" style="font-size: 10px;">exception</a> <a href="/tags/final/" style="font-size: 10px;">final</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/ha/" style="font-size: 10px;">ha</a> <a href="/tags/haproxy/" style="font-size: 10px;">haproxy</a> <a href="/tags/heap/" style="font-size: 10px;">heap</a> <a href="/tags/hot-thread/" style="font-size: 10px;">hot thread</a> <a href="/tags/ingest-node/" style="font-size: 10px;">ingest_node</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/kafka/" style="font-size: 10px;">kafka</a> <a href="/tags/keepalived/" style="font-size: 10px;">keepalived</a> <a href="/tags/kibana/" style="font-size: 15px;">kibana</a> <a href="/tags/license/" style="font-size: 10px;">license</a> <a href="/tags/log/" style="font-size: 10px;">log</a> <a href="/tags/logstash/" style="font-size: 12.5px;">logstash</a> <a href="/tags/mirror/" style="font-size: 10px;">mirror</a> <a href="/tags/monitoring/" style="font-size: 10px;">monitoring</a> <a href="/tags/mtime/" style="font-size: 10px;">mtime</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node/" style="font-size: 10px;">node</a> <a href="/tags/offset/" style="font-size: 10px;">offset</a> <a href="/tags/ordinals/" style="font-size: 10px;">ordinals</a> <a href="/tags/passport/" style="font-size: 10px;">passport</a> <a href="/tags/pattern/" style="font-size: 12.5px;">pattern</a> <a href="/tags/pending-tasks/" style="font-size: 10px;">pending tasks</a> <a href="/tags/primitive-type/" style="font-size: 10px;">primitive type</a> <a href="/tags/rabbitmq/" style="font-size: 10px;">rabbitmq</a> <a href="/tags/read-only/" style="font-size: 10px;">read-only</a> <a href="/tags/redis/" style="font-size: 12.5px;">redis</a> <a href="/tags/reference-type/" style="font-size: 10px;">reference type</a> <a href="/tags/reroute/" style="font-size: 10px;">reroute</a> <a href="/tags/restore/" style="font-size: 10px;">restore</a> <a href="/tags/serialization/" style="font-size: 10px;">serialization</a> <a href="/tags/shards/" style="font-size: 10px;">shards</a> <a href="/tags/singleton/" style="font-size: 10px;">singleton</a> <a href="/tags/snapRetain/" style="font-size: 10px;">snapRetain</a> <a href="/tags/stringpool/" style="font-size: 10px;">stringpool</a> <a href="/tags/swapoff/" style="font-size: 10px;">swapoff</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/thread-pool/" style="font-size: 10px;">thread pool</a> <a href="/tags/transient/" style="font-size: 10px;">transient</a> <a href="/tags/try-with-resources/" style="font-size: 10px;">try-with-resources</a> <a href="/tags/tuning/" style="font-size: 10px;">tuning</a> <a href="/tags/unassigned/" style="font-size: 12.5px;">unassigned</a> <a href="/tags/versionup/" style="font-size: 10px;">versionup</a> <a href="/tags/visualization/" style="font-size: 12.5px;">visualization</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/watermark/" style="font-size: 10px;">watermark</a> <a href="/tags/windows2012/" style="font-size: 10px;">windows2012</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/zookeeper/" style="font-size: 12.5px;">zookeeper</a> <a href="/tags/%EC%8A%A4%ED%8A%B8%EB%A7%81%ED%92%80/" style="font-size: 10px;">스트링풀</a>
+            <a href="/tags/6-4-0/" style="font-size: 10px;">6.4.0</a> <a href="/tags/Apollo/" style="font-size: 10px;">Apollo</a> <a href="/tags/ArrayList/" style="font-size: 10px;">ArrayList</a> <a href="/tags/CIDR/" style="font-size: 10px;">CIDR</a> <a href="/tags/Collections/" style="font-size: 10px;">Collections</a> <a href="/tags/Deque/" style="font-size: 10px;">Deque</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/ES-Version-up/" style="font-size: 10px;">ES Version up</a> <a href="/tags/FORBIDDEN-12-index/" style="font-size: 10px;">FORBIDDEN/12/index</a> <a href="/tags/GraphQL/" style="font-size: 10px;">GraphQL</a> <a href="/tags/LinkedList/" style="font-size: 10px;">LinkedList</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/OAuth/" style="font-size: 10px;">OAuth</a> <a href="/tags/Queue/" style="font-size: 10px;">Queue</a> <a href="/tags/SENS/" style="font-size: 10px;">SENS</a> <a href="/tags/Schema/" style="font-size: 10px;">Schema</a> <a href="/tags/Set/" style="font-size: 10px;">Set</a> <a href="/tags/Subnet/" style="font-size: 10px;">Subnet</a> <a href="/tags/Swarm/" style="font-size: 10px;">Swarm</a> <a href="/tags/System-Event-Notification-Service/" style="font-size: 10px;">System Event Notification Service</a> <a href="/tags/allocation/" style="font-size: 10px;">allocation</a> <a href="/tags/allow-delete/" style="font-size: 10px;">allow_delete</a> <a href="/tags/ansible/" style="font-size: 10px;">ansible</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/authentication/" style="font-size: 10px;">authentication</a> <a href="/tags/autopurge/" style="font-size: 10px;">autopurge</a> <a href="/tags/backup/" style="font-size: 10px;">backup</a> <a href="/tags/builder/" style="font-size: 10px;">builder</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/coding-convention/" style="font-size: 10px;">coding convention</a> <a href="/tags/comparable/" style="font-size: 10px;">comparable</a> <a href="/tags/comparator/" style="font-size: 10px;">comparator</a> <a href="/tags/compressedoops/" style="font-size: 10px;">compressedoops</a> <a href="/tags/devops/" style="font-size: 10px;">devops</a> <a href="/tags/disk-flood/" style="font-size: 10px;">disk_flood</a> <a href="/tags/doc-value/" style="font-size: 10px;">doc value</a> <a href="/tags/eager-global-ordinals/" style="font-size: 10px;">eager_global_ordinals</a> <a href="/tags/elasticsearch/" style="font-size: 17.5px;">elasticsearch</a> <a href="/tags/elk/" style="font-size: 12.5px;">elk</a> <a href="/tags/exception/" style="font-size: 10px;">exception</a> <a href="/tags/final/" style="font-size: 10px;">final</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/ha/" style="font-size: 10px;">ha</a> <a href="/tags/haproxy/" style="font-size: 10px;">haproxy</a> <a href="/tags/heap/" style="font-size: 10px;">heap</a> <a href="/tags/hot-thread/" style="font-size: 10px;">hot thread</a> <a href="/tags/ingest-node/" style="font-size: 10px;">ingest_node</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/kafka/" style="font-size: 10px;">kafka</a> <a href="/tags/keepalived/" style="font-size: 10px;">keepalived</a> <a href="/tags/kibana/" style="font-size: 15px;">kibana</a> <a href="/tags/license/" style="font-size: 10px;">license</a> <a href="/tags/loadbalancer/" style="font-size: 10px;">loadbalancer</a> <a href="/tags/log/" style="font-size: 10px;">log</a> <a href="/tags/logstash/" style="font-size: 12.5px;">logstash</a> <a href="/tags/minikube/" style="font-size: 10px;">minikube</a> <a href="/tags/mirror/" style="font-size: 10px;">mirror</a> <a href="/tags/monitoring/" style="font-size: 10px;">monitoring</a> <a href="/tags/mtime/" style="font-size: 10px;">mtime</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node/" style="font-size: 10px;">node</a> <a href="/tags/offset/" style="font-size: 10px;">offset</a> <a href="/tags/ordinals/" style="font-size: 10px;">ordinals</a> <a href="/tags/passport/" style="font-size: 10px;">passport</a> <a href="/tags/pattern/" style="font-size: 12.5px;">pattern</a> <a href="/tags/pending-tasks/" style="font-size: 10px;">pending tasks</a> <a href="/tags/primitive-type/" style="font-size: 10px;">primitive type</a> <a href="/tags/rabbitmq/" style="font-size: 10px;">rabbitmq</a> <a href="/tags/read-only/" style="font-size: 10px;">read-only</a> <a href="/tags/redis/" style="font-size: 12.5px;">redis</a> <a href="/tags/reference-type/" style="font-size: 10px;">reference type</a> <a href="/tags/reroute/" style="font-size: 10px;">reroute</a> <a href="/tags/restore/" style="font-size: 10px;">restore</a> <a href="/tags/serialization/" style="font-size: 10px;">serialization</a> <a href="/tags/shards/" style="font-size: 10px;">shards</a> <a href="/tags/singleton/" style="font-size: 10px;">singleton</a> <a href="/tags/snapRetain/" style="font-size: 10px;">snapRetain</a> <a href="/tags/stringpool/" style="font-size: 10px;">stringpool</a> <a href="/tags/swapoff/" style="font-size: 10px;">swapoff</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/thread-pool/" style="font-size: 10px;">thread pool</a> <a href="/tags/transient/" style="font-size: 10px;">transient</a> <a href="/tags/try-with-resources/" style="font-size: 10px;">try-with-resources</a> <a href="/tags/tuning/" style="font-size: 10px;">tuning</a> <a href="/tags/unassigned/" style="font-size: 12.5px;">unassigned</a> <a href="/tags/versionup/" style="font-size: 10px;">versionup</a> <a href="/tags/visualization/" style="font-size: 12.5px;">visualization</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/watermark/" style="font-size: 10px;">watermark</a> <a href="/tags/windows2012/" style="font-size: 10px;">windows2012</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/zookeeper/" style="font-size: 12.5px;">zookeeper</a> <a href="/tags/%EC%8A%A4%ED%8A%B8%EB%A7%81%ED%92%80/" style="font-size: 10px;">스트링풀</a>
         </div>
     </div>
 
