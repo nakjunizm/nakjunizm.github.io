@@ -12,16 +12,16 @@
     
     <meta name="keywords" content="minikube,loadbalancer" />
     
-    <meta name="description" content="minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때상황local (mac os)에 minikube으로 k8s 클러스터 구성해 놓고, nginx-ingress helm chart를 install 했으나 LoadBalncer type의 service의 EXTERNAL-IP 가  상태로 더이상">
+    <meta name="description" content="상황local (mac os)에 minikube으로 k8s 클러스터 구성해 놓고, nginx-ingress helm chart를 install 했으나 LoadBalncer type의 service의 EXTERNAL-IP 가  상태로 더이상 진행이 안됨. 1234🌈  ~&#x2F;workspace&#x2F;Charts$ kubectl get servicesNAME">
 <meta property="og:type" content="article">
 <meta property="og:title" content="minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때">
 <meta property="og:url" content="https://nakjunizm.com/2021/10/05/Minikube_ExternalIP_Pending/index.html">
 <meta property="og:site_name" content="nakjunizm&#39;s dev note">
-<meta property="og:description" content="minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때상황local (mac os)에 minikube으로 k8s 클러스터 구성해 놓고, nginx-ingress helm chart를 install 했으나 LoadBalncer type의 service의 EXTERNAL-IP 가  상태로 더이상">
+<meta property="og:description" content="상황local (mac os)에 minikube으로 k8s 클러스터 구성해 놓고, nginx-ingress helm chart를 install 했으나 LoadBalncer type의 service의 EXTERNAL-IP 가  상태로 더이상 진행이 안됨. 1234🌈  ~&#x2F;workspace&#x2F;Charts$ kubectl get servicesNAME">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://nakjunizm.github.io/2021/10/05/Minikube_ExternalIP_Pending/minikube.png">
 <meta property="article:published_time" content="2021-10-05T13:33:00.000Z">
-<meta property="article:modified_time" content="2021-10-07T13:45:32.915Z">
+<meta property="article:modified_time" content="2021-10-07T13:47:52.230Z">
 <meta property="article:author" content="NJ SUNG">
 <meta property="article:tag" content="minikube">
 <meta property="article:tag" content="loadbalancer">
@@ -197,7 +197,7 @@ ga('send', 'pageview');
 <div class="article-date">
   <i class="fa fa-calendar-plus-o"></i>
   <a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="article-date">
-     <time datetime="2021-10-07T13:45:32.915Z" itemprop="dateModified">2021-10-07</time>
+     <time datetime="2021-10-07T13:47:52.230Z" itemprop="dateModified">2021-10-07</time>
   </a>
 </div>
 
@@ -224,7 +224,7 @@ ga('send', 'pageview');
 
             
 
-            <h1 id="minikube-에서-loadbalancer-type의-service의-external-ip가-pending-상태-일때"><a href="#minikube-에서-loadbalancer-type의-service의-external-ip가-pending-상태-일때" class="headerlink" title="minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때"></a>minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때</h1><h3 id="상황"><a href="#상황" class="headerlink" title="상황"></a>상황</h3><p>local (mac os)에 minikube으로 k8s 클러스터 구성해 놓고, nginx-ingress helm chart를 install 했으나 LoadBalncer type의 service의 EXTERNAL-IP 가 <pending> 상태로 더이상 진행이 안됨.</p>
+            <h3 id="상황"><a href="#상황" class="headerlink" title="상황"></a>상황</h3><p>local (mac os)에 minikube으로 k8s 클러스터 구성해 놓고, nginx-ingress helm chart를 install 했으나 LoadBalncer type의 service의 EXTERNAL-IP 가 <pending> 상태로 더이상 진행이 안됨.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">🌈  ~/workspace/Charts$ kubectl get services</span><br><span class="line">NAME                            TYPE           CLUSTER-IP        EXTERNAL-IP   PORT(S)                      AGE</span><br><span class="line">kubernetes                      ClusterIP      10.XXX.0.1        &lt;none&gt;        443/TCP                      22h</span><br><span class="line">nakjunizm-front-nginx-ingress   LoadBalancer   10.XXX.249.157    &lt;pending&gt;     80:32003/TCP,443:31274/TCP   46m</span><br></pre></td></tr></table></figure>
 
 <h3 id="솔루션"><a href="#솔루션" class="headerlink" title="솔루션"></a>솔루션</h3><p>external ip를 제공하는 퍼블릭 클라우드 제공자 (AWS, Azure GCP등) 에서 kubernates를 서비스 형으로 사용 하는경우에는 문제가 되지 않으나 로컬에 minikube이나 kubeadm 등으로 설치 한 경우는 해당 현상이 발생 합니다.<br>minikube의 경우 별도의 터미널을 더 열어서 minikube tunnel 명령어를 사용하면  LoadBalancer type의 서비스를 사용 가능 합니다.</p>
@@ -324,8 +324,9 @@ ga('send', 'pageview');
         "dateCreated": "2021-10-05",
         "dateModified": "2021-10-07",
         "url": "https://nakjunizm.com/2021/10/05/Minikube_ExternalIP_Pending/",
-        "description": "minikube 에서 loadbalancer type의 service의 external ip가 pending 상태 일때상황local (mac os)에 minikube으로 k8s 클러스터 구성해 놓고, nginx-ingress helm chart를 install 했으나 LoadBalncer type의 service의 EXTERNAL-IP 가  상태로 더이상 ",
-        "wordCount": 558
+        "description": "상황local (mac os)에 minikube으로 k8s 클러스터 구성해 놓고, nginx-ingress helm chart를 install 했으나 LoadBalncer type의 service의 EXTERNAL-IP 가  상태로 더이상 진행이 안됨.
+1234🌈  ~/workspace/Charts$ kubectl get servicesNAME      ",
+        "wordCount": 536
     }
 </script>
 
