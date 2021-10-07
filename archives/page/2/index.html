@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>Archive | nakjunizm&#39;s dev note</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="description" content="for my memory...">
+<meta property="og:type" content="website">
+<meta property="og:title" content="nakjunizm&#39;s dev note">
+<meta property="og:url" content="https://nakjunizm.com/archives/page/2/index.html">
+<meta property="og:site_name" content="nakjunizm&#39;s dev note">
+<meta property="og:description" content="for my memory...">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="NJ SUNG">
+<meta name="twitter:card" content="summary">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="nakjunizm&#39;s dev note" type="application/atom+xml" />
+    
+
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-112395863-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+    
+    
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/">DevOps</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/Docker/">Docker</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/">Development</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/GraphQL/">GraphQL</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/java/">java</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/node/">node</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/">Operations</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Ansible/">Ansible</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Cloud/">Cloud</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Kafka/">Kafka</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Linux/">Linux</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/RabbitMQ/">RabbitMQ</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Redis/">Redis</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Windows/">Windows</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Zookeeper/">Zookeeper</a></li></ul></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" target="_blank" rel="noopener" href="https://ko.gravatar.com/nakjunizm">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <i class="icon fa fa-archive"></i>Archive
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            
+
+    
+    
+        
+        
+        <section class="archives-wrap">
+            <div class="archive-year-wrap">
+                <a href="/archives/2019" class="archive-year"><i class="icon fa fa-calendar-o"></i>2019</a>
+            </div>
+            <div class="archives">
+    
+    
+    
+        <div class="article-row">
+    
+        <article class="article article-summary">
+    <div class="article-summary-inner">
+        
+        <a href="/2019/02/08/Ansible_For_Windows/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2019/02/08/Ansible_For_Windows/Ansible1.png)" alt="Ansible_For_Windows" class="thumbnail-image"></span>
+    
+    
+        
+<span class="comment-counter">
+    <i class="fa fa-comments-o"></i>
+    
+        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="https://nakjunizm.com/2019/02/08/Ansible_For_Windows/">0</span>
+    
+</span>
+
+
+    
+</a>
+
+        
+        <div class="article-meta">
+            <div class="category">
+            <a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Ansible/">Ansible</a>
+            </div>
+            <div class="date"><time datetime="2019-02-08T13:53:00.000Z" itemprop="datePublished">2019-02-08</time></div>
+        </div>
+        
+    
+        <h1 class="article-title" itemprop="name">
+        <a href="/2019/02/08/Ansible_For_Windows/">Ansible_For_Windows</a>
+        </h1>
+    
+
+        <p class="article-excerpt">
+            Ansible을 활용한 windows 서버에 배포 혹은 작업 하기
+Ansible을 업무에 사용하는데 아주 가~끔 Linux + Windows 로 서버가 통일되지 않은 사이트들을 구축해야 할 때가 있습니다.
+Linux의 경우 Ansible이 agentless 하게 ssh로 모든 작업이 이뤄지기 때문에 아무런 문제가 없지만
+Windows 서버의 경우 어떻게 해
+        </p>
+    </div>
+</article>
+    
+
+    
+    
+    
+    
+        <article class="article article-summary">
+    <div class="article-summary-inner">
+        
+        <a href="/2019/01/11/ElasticSearch_Versionup_From2x_To6x/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2019/01/11/ElasticSearch_Versionup_From2x_To6x/ESVU3.png)" alt="ElasticSearch_Version_Up" class="thumbnail-image"></span>
+    
+    
+        
+<span class="comment-counter">
+    <i class="fa fa-comments-o"></i>
+    
+        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="https://nakjunizm.com/2019/01/11/ElasticSearch_Versionup_From2x_To6x/">0</span>
+    
+</span>
+
+
+    
+</a>
+
+        
+        <div class="article-meta">
+            <div class="category">
+            <a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a>
+            </div>
+            <div class="date"><time datetime="2019-01-11T13:28:00.000Z" itemprop="datePublished">2019-01-11</time></div>
+        </div>
+        
+    
+        <h1 class="article-title" itemprop="name">
+        <a href="/2019/01/11/ElasticSearch_Versionup_From2x_To6x/">ElasticSearch_Version_Up</a>
+        </h1>
+    
+
+        <p class="article-excerpt">
+            # Overview2.3.X 버전으로 운영되고 있는 클러스터를 6.4.X 클러스터로 버전업 했던 경험을 포스팅 해 보겠습니다.
+
+제약사항
+
+
+기존 2.3.X 클러스터에 ES 뿐 아니라 다른 어플리케이션들도 동작하고 있음
+운영중인 시스템 이므로 ES 클러스터의 다운타임은 존재하면 안됨
+제약사항 1 때문에 임시 서버를 받고, 임시 서버에 6.4.X 클러스터를 
+        </p>
+    </div>
+</article>
+    
+        </div>
+    
+
+    
+    
+        
+            </div></section>
+        
+        
+        <section class="archives-wrap">
+            <div class="archive-year-wrap">
+                <a href="/archives/2018" class="archive-year"><i class="icon fa fa-calendar-o"></i>2018</a>
+            </div>
+            <div class="archives">
+    
+    
+    
+        <div class="article-row">
+    
+        <article class="article article-summary">
+    <div class="article-summary-inner">
+        
+        <a href="/2018/12/28/Eager_Global_Ordinals/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2018/12/28/Eager_Global_Ordinals/Ordinals1.jpeg)" alt="eager global ordinals" class="thumbnail-image"></span>
+    
+    
+        
+<span class="comment-counter">
+    <i class="fa fa-comments-o"></i>
+    
+        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="https://nakjunizm.com/2018/12/28/Eager_Global_Ordinals/">0</span>
+    
+</span>
+
+
+    
+</a>
+
+        
+        <div class="article-meta">
+            <div class="category">
+            <a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a>
+            </div>
+            <div class="date"><time datetime="2018-12-28T13:11:21.000Z" itemprop="datePublished">2018-12-28</time></div>
+        </div>
+        
+    
+        <h1 class="article-title" itemprop="name">
+        <a href="/2018/12/28/Eager_Global_Ordinals/">eager global ordinals</a>
+        </h1>
+    
+
+        <p class="article-excerpt">
+            # eager_global_ordinals란 무엇인가Elastic공식 가이드에서 필요한 부분만 발췌하여 번역하였습니다.
+# Global ordinals
+Global ordinals 는 doc values 최상위에 존재하는 데이터 구조로 각 유니크한 term에 대해 증가하는 넘버를 부여하는 형태로 존재 합니다.
+
+keyword와 text 필드에 적용 가능 합
+        </p>
+    </div>
+</article>
+    
+
+    
+    
+    
+    
+        <article class="article article-summary">
+    <div class="article-summary-inner">
+        
+        <a href="/2018/11/08/Kibana_Authentication_with_nginx/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2018/11/08/Kibana_Authentication_with_nginx/Kibana1.png)" alt="Kibana Authentication with nginx proxy" class="thumbnail-image"></span>
+    
+    
+        
+<span class="comment-counter">
+    <i class="fa fa-comments-o"></i>
+    
+        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="https://nakjunizm.com/2018/11/08/Kibana_Authentication_with_nginx/">0</span>
+    
+</span>
+
+
+    
+</a>
+
+        
+        <div class="article-meta">
+            <div class="category">
+            <a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a>
+            </div>
+            <div class="date"><time datetime="2018-11-08T11:11:00.000Z" itemprop="datePublished">2018-11-08</time></div>
+        </div>
+        
+    
+        <h1 class="article-title" itemprop="name">
+        <a href="/2018/11/08/Kibana_Authentication_with_nginx/">Kibana Authentication with nginx proxy</a>
+        </h1>
+    
+
+        <p class="article-excerpt">
+            kibana에 id/password 기반의 auth 적용
+현재 운영하고 있는 클러스터는 readonly-rest plugin을 사용해서 acl을 적용해 놓은 상태이기 때문에cluster에는 security(x-pack feature)를 적용하고 싶지 않고, kibana에만 id/password를 치고 로그인을 하고 싶었습니다.
+이런 경우 내가 securit
+        </p>
+    </div>
+</article>
+    
+        </div>
+    
+
+    
+    
+    
+    
+        <div class="article-row">
+    
+        <article class="article article-summary">
+    <div class="article-summary-inner">
+        
+        <a href="/2018/10/26/ElasticSearch_Cluster_block_exception/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2018/10/26/ElasticSearch_Cluster_block_exception/Cluster1.png)" alt="ElasticSearch cluster_block_exception" class="thumbnail-image"></span>
+    
+    
+        
+<span class="comment-counter">
+    <i class="fa fa-comments-o"></i>
+    
+        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="https://nakjunizm.com/2018/10/26/ElasticSearch_Cluster_block_exception/">0</span>
+    
+</span>
+
+
+    
+</a>
+
+        
+        <div class="article-meta">
+            <div class="category">
+            <a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a>
+            </div>
+            <div class="date"><time datetime="2018-10-26T12:13:20.000Z" itemprop="datePublished">2018-10-26</time></div>
+        </div>
+        
+    
+        <h1 class="article-title" itemprop="name">
+        <a href="/2018/10/26/ElasticSearch_Cluster_block_exception/">ElasticSearch cluster_block_exception</a>
+        </h1>
+    
+
+        <p class="article-excerpt">
+            # 1. 문제 발생
+운영하고 있는 서비스의 검증계 서버에서 인덱싱이 안된다는 제보가 들어와서 클라이언트 로그를 살펴보니 아래와 같습니다.1index [nakjunizm-index-20181019], type [_doc], id [153974268305904171], message [ElasticsearchException[Elasticsearch excep
+        </p>
+    </div>
+</article>
+    
+
+    
+    
+    
+    
+        <article class="article article-summary">
+    <div class="article-summary-inner">
+        
+        <a href="/2018/04/23/Kafka_Offset_Reset/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2018/04/23/Kafka_Offset_Reset/kafka1.png)" alt="Kafka Offset 재설정 하는 방법" class="thumbnail-image"></span>
+    
+    
+        
+<span class="comment-counter">
+    <i class="fa fa-comments-o"></i>
+    
+        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="https://nakjunizm.com/2018/04/23/Kafka_Offset_Reset/">0</span>
+    
+</span>
+
+
+    
+</a>
+
+        
+        <div class="article-meta">
+            <div class="category">
+            <a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Kafka/">Kafka</a>
+            </div>
+            <div class="date"><time datetime="2018-04-23T03:17:00.000Z" itemprop="datePublished">2018-04-23</time></div>
+        </div>
+        
+    
+        <h1 class="article-title" itemprop="name">
+        <a href="/2018/04/23/Kafka_Offset_Reset/">Kafka Offset 재설정 하는 방법</a>
+        </h1>
+    
+
+        <p class="article-excerpt">
+            # 1. Topic 확인먼저 내가 가진 토픽이 뭔지 정확히 알아야 하므로 아래 커맨드로 확인 합니다.
+1234567nakjunizm@localhost[/kafka/bin]./kafka-topics.sh --list --zookeeper localhost:3181...MyTopic1MyTopic2MyTopic3__consumer_offsets...
+
+# 2.
+        </p>
+    </div>
+</article>
+    
+        </div>
+    
+
+    
+    
+    
+    
+        <div class="article-row">
+    
+        <article class="article article-summary">
+    <div class="article-summary-inner">
+        
+        <a href="/2018/03/09/Ingest_Node/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2018/03/09/Ingest_Node/ingest1.png)" alt="ElasticSearch Ingest Node" class="thumbnail-image"></span>
+    
+    
+        
+<span class="comment-counter">
+    <i class="fa fa-comments-o"></i>
+    
+        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="https://nakjunizm.com/2018/03/09/Ingest_Node/">0</span>
+    
+</span>
+
+
+    
+</a>
+
+        
+        <div class="article-meta">
+            <div class="category">
+            <a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a>
+            </div>
+            <div class="date"><time datetime="2018-03-09T00:17:00.000Z" itemprop="datePublished">2018-03-09</time></div>
+        </div>
+        
+    
+        <h1 class="article-title" itemprop="name">
+        <a href="/2018/03/09/Ingest_Node/">ElasticSearch Ingest Node</a>
+        </h1>
+    
+
+        <p class="article-excerpt">
+            ** 이 포스트는 ELK(+beats)를 이용한 apache log visualization 의 후속 포스트로써 logstash 대신 elasticsearch 의 ingest node 를 사용하는 방법을 소개 합니다. **
+filebeat-logstash-elasticsearch stack을 이용하여 kibana에서 대시보드를 구성하는 방법을 알아봤었습니다
+        </p>
+    </div>
+</article>
+    
+
+    
+    
+    
+    
+        <article class="article article-summary">
+    <div class="article-summary-inner">
+        
+        <a href="/2018/03/08/ElasticSearch_License_Update/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2018/03/08/ElasticSearch_License_Update/license1.png)" alt="ElasticSearch license update" class="thumbnail-image"></span>
+    
+    
+        
+<span class="comment-counter">
+    <i class="fa fa-comments-o"></i>
+    
+        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="https://nakjunizm.com/2018/03/08/ElasticSearch_License_Update/">0</span>
+    
+</span>
+
+
+    
+</a>
+
+        
+        <div class="article-meta">
+            <div class="category">
+            <a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a>
+            </div>
+            <div class="date"><time datetime="2018-03-08T00:56:00.000Z" itemprop="datePublished">2018-03-08</time></div>
+        </div>
+        
+    
+        <h1 class="article-title" itemprop="name">
+        <a href="/2018/03/08/ElasticSearch_License_Update/">ElasticSearch license update</a>
+        </h1>
+    
+
+        <p class="article-excerpt">
+            2020 업데이트!** 현재는 kibana 에서 손쉽게 라이선스를 업데이트 할 수도 있으니 참고하세요 **https://www.elastic.co/guide/en/kibana/current/managing-licenses.html
+Elasticsearch를 운영 하면서 X-pack 에 포함되어 있는 Monitoring 이나 Devtool 등을 사용하면 얻을
+        </p>
+    </div>
+</article>
+    
+        </div>
+    
+
+    
+    
+    
+    
+        <div class="article-row">
+    
+        <article class="article article-summary">
+    <div class="article-summary-inner">
+        
+        <a href="/2018/01/30/SystemEventNotificationService/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2018/01/30/SystemEventNotificationService/SystemEventNotificationService1.jpg)" alt="System Event Notification Service 준비 중 해결 방법" class="thumbnail-image"></span>
+    
+    
+        
+<span class="comment-counter">
+    <i class="fa fa-comments-o"></i>
+    
+        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="https://nakjunizm.com/2018/01/30/SystemEventNotificationService/">0</span>
+    
+</span>
+
+
+    
+</a>
+
+        
+        <div class="article-meta">
+            <div class="category">
+            <a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Windows/">Windows</a>
+            </div>
+            <div class="date"><time datetime="2018-01-30T01:43:00.000Z" itemprop="datePublished">2018-01-30</time></div>
+        </div>
+        
+    
+        <h1 class="article-title" itemprop="name">
+        <a href="/2018/01/30/SystemEventNotificationService/">System Event Notification Service 준비 중 해결 방법</a>
+        </h1>
+    
+
+        <p class="article-excerpt">
+            Windows 2012/R2
+# 증상사용자가 로그아웃을 시도했는데 “System Event Notification Service 준비 중….” 메세지가 화면에서 뱅글뱅글 돌고 로그아웃은 되지 않는 경우
+# 해결운영중인 시스템에서 ** 재부팅을 하지 않고 ** 해결 가능한 방법 입니다.
+1sc queryex sens
+를 치면 System Event Notif
+        </p>
+    </div>
+</article>
+    
+
+    
+    
+    
+    
+        <article class="article article-summary">
+    <div class="article-summary-inner">
+        
+        <a href="/2018/01/05/Singleton_Pattern/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2018/01/05/Singleton_Pattern/singleton1.jpg)" alt="Singleton Pattern" class="thumbnail-image"></span>
+    
+    
+        
+<span class="comment-counter">
+    <i class="fa fa-comments-o"></i>
+    
+        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="https://nakjunizm.com/2018/01/05/Singleton_Pattern/">0</span>
+    
+</span>
+
+
+    
+</a>
+
+        
+        <div class="article-meta">
+            <div class="category">
+            <a class="article-category-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Development/java/">java</a>
+            </div>
+            <div class="date"><time datetime="2018-01-05T11:48:00.000Z" itemprop="datePublished">2018-01-05</time></div>
+        </div>
+        
+    
+        <h1 class="article-title" itemprop="name">
+        <a href="/2018/01/05/Singleton_Pattern/">Singleton Pattern</a>
+        </h1>
+    
+
+        <p class="article-excerpt">
+            # Singleton Pattern싱글톤 패턴(Singleton pattern)은 클래스의 객체화를 한번으로 제한함으로써 프로그램 전반에 걸쳐서 같은 객체에 접근하도록 하는 패턴 입니다.자주 접하는 대표적인 예로는 logger 가 있겠네요.아래는 log4j와 slf4j(logback) 사용 예 입니다. new()를 이용해서 객체를 생성하지 않고 정적 팩토리
+        </p>
+    </div>
+</article>
+    
+        </div>
+    
+
+
+    </div></section>
+
+
+    <nav id="page-nav">
+        <span class="pages">Page 2 of 4</span>
+        <a class="extend prev" rel="prev" href="/archives/">&laquo;</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="page-number" href="/archives/page/4/">4</a><a class="extend next" rel="next" href="/archives/page/3/">&raquo;</a>
+    </nav>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="instagram" href="https://www.instagram.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-instagram"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="https://www.facebook.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+    <div class="widgets-container">
+        
+            
+                
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="title"></a></p>
+                            <p class="item-date"><time datetime="2021-10-04T15:00:00.000Z" itemprop="datePublished">2021-10-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/06/17/Find_Old_Files_And_Delete/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/06/17/Find_Old_Files_And_Delete/mtime1.png)" alt="오래된 (특정 기간 이상 된) 파일 찾아서 지우기 How to find old (aged more than specific days) files and remove" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Linux/">Linux</a></p>
+                            <p class="item-title"><a href="/2020/06/17/Find_Old_Files_And_Delete/" class="title">오래된 (특정 기간 이상 된) 파일 찾아서 지우기 How to find old (aged more than specific days) files and remove</a></p>
+                            <p class="item-date"><time datetime="2020-06-17T12:37:00.000Z" itemprop="datePublished">2020-06-17</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/19/Zookeeper_Cleanup_Transactional_Log/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/05/19/Zookeeper_Cleanup_Transactional_Log/zookeeper1.png)" alt="주키퍼 오래된 스냅샷 및 트랜잭션 로그 삭제하기 zookeeper delete old snapshot and transactional log" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Zookeeper/">Zookeeper</a></p>
+                            <p class="item-title"><a href="/2020/05/19/Zookeeper_Cleanup_Transactional_Log/" class="title">주키퍼 오래된 스냅샷 및 트랜잭션 로그 삭제하기 zookeeper delete old snapshot and transactional log</a></p>
+                            <p class="item-date"><time datetime="2020-05-19T12:14:00.000Z" itemprop="datePublished">2020-05-19</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/03/24/Redis_Monitoring/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/redis1.png)" alt="레디스 모니터링 시 주의사항 (Redis monitoring/single thread)" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Redis/">Redis</a></p>
+                            <p class="item-title"><a href="/2020/03/24/Redis_Monitoring/" class="title">레디스 모니터링 시 주의사항 (Redis monitoring/single thread)</a></p>
+                            <p class="item-date"><time datetime="2020-03-24T13:14:00.000Z" itemprop="datePublished">2020-03-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/02/20/haproxy/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/02/20/haproxy/haproxy2.png)" alt="haproxy &amp; keepalived 로 프록시 구축하기" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/DevOps/">DevOps</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a></p>
+                            <p class="item-title"><a href="/2020/02/20/haproxy/" class="title">haproxy &amp; keepalived 로 프록시 구축하기</a></p>
+                            <p class="item-date"><time datetime="2020-02-20T12:41:00.000Z" itemprop="datePublished">2020-02-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">categories</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/Swarm/">Swarm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/">Development</a><span class="category-list-count">15</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Development/GraphQL/">GraphQL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/java/">java</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/node/">node</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/">Operations</a><span class="category-list-count">21</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Ansible/">Ansible</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Cloud/">Cloud</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Kafka/">Kafka</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/RabbitMQ/">RabbitMQ</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Redis/">Redis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Windows/">Windows</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Zookeeper/">Zookeeper</a><span class="category-list-count">1</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">3</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/6-4-0/" style="font-size: 10px;">6.4.0</a> <a href="/tags/Apollo/" style="font-size: 10px;">Apollo</a> <a href="/tags/ArrayList/" style="font-size: 10px;">ArrayList</a> <a href="/tags/CIDR/" style="font-size: 10px;">CIDR</a> <a href="/tags/Collections/" style="font-size: 10px;">Collections</a> <a href="/tags/Deque/" style="font-size: 10px;">Deque</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/ES-Version-up/" style="font-size: 10px;">ES Version up</a> <a href="/tags/FORBIDDEN-12-index/" style="font-size: 10px;">FORBIDDEN/12/index</a> <a href="/tags/GraphQL/" style="font-size: 10px;">GraphQL</a> <a href="/tags/LinkedList/" style="font-size: 10px;">LinkedList</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/OAuth/" style="font-size: 10px;">OAuth</a> <a href="/tags/Queue/" style="font-size: 10px;">Queue</a> <a href="/tags/SENS/" style="font-size: 10px;">SENS</a> <a href="/tags/Schema/" style="font-size: 10px;">Schema</a> <a href="/tags/Set/" style="font-size: 10px;">Set</a> <a href="/tags/Subnet/" style="font-size: 10px;">Subnet</a> <a href="/tags/Swarm/" style="font-size: 10px;">Swarm</a> <a href="/tags/System-Event-Notification-Service/" style="font-size: 10px;">System Event Notification Service</a> <a href="/tags/allocation/" style="font-size: 10px;">allocation</a> <a href="/tags/allow-delete/" style="font-size: 10px;">allow_delete</a> <a href="/tags/ansible/" style="font-size: 10px;">ansible</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/authentication/" style="font-size: 10px;">authentication</a> <a href="/tags/autopurge/" style="font-size: 10px;">autopurge</a> <a href="/tags/backup/" style="font-size: 10px;">backup</a> <a href="/tags/builder/" style="font-size: 10px;">builder</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/coding-convention/" style="font-size: 10px;">coding convention</a> <a href="/tags/comparable/" style="font-size: 10px;">comparable</a> <a href="/tags/comparator/" style="font-size: 10px;">comparator</a> <a href="/tags/compressedoops/" style="font-size: 10px;">compressedoops</a> <a href="/tags/devops/" style="font-size: 10px;">devops</a> <a href="/tags/disk-flood/" style="font-size: 10px;">disk_flood</a> <a href="/tags/doc-value/" style="font-size: 10px;">doc value</a> <a href="/tags/eager-global-ordinals/" style="font-size: 10px;">eager_global_ordinals</a> <a href="/tags/elasticsearch/" style="font-size: 17.5px;">elasticsearch</a> <a href="/tags/elk/" style="font-size: 12.5px;">elk</a> <a href="/tags/exception/" style="font-size: 10px;">exception</a> <a href="/tags/final/" style="font-size: 10px;">final</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/ha/" style="font-size: 10px;">ha</a> <a href="/tags/haproxy/" style="font-size: 10px;">haproxy</a> <a href="/tags/heap/" style="font-size: 10px;">heap</a> <a href="/tags/hot-thread/" style="font-size: 10px;">hot thread</a> <a href="/tags/ingest-node/" style="font-size: 10px;">ingest_node</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/kafka/" style="font-size: 10px;">kafka</a> <a href="/tags/keepalived/" style="font-size: 10px;">keepalived</a> <a href="/tags/kibana/" style="font-size: 15px;">kibana</a> <a href="/tags/license/" style="font-size: 10px;">license</a> <a href="/tags/log/" style="font-size: 10px;">log</a> <a href="/tags/logstash/" style="font-size: 12.5px;">logstash</a> <a href="/tags/mirror/" style="font-size: 10px;">mirror</a> <a href="/tags/monitoring/" style="font-size: 10px;">monitoring</a> <a href="/tags/mtime/" style="font-size: 10px;">mtime</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node/" style="font-size: 10px;">node</a> <a href="/tags/offset/" style="font-size: 10px;">offset</a> <a href="/tags/ordinals/" style="font-size: 10px;">ordinals</a> <a href="/tags/passport/" style="font-size: 10px;">passport</a> <a href="/tags/pattern/" style="font-size: 12.5px;">pattern</a> <a href="/tags/pending-tasks/" style="font-size: 10px;">pending tasks</a> <a href="/tags/primitive-type/" style="font-size: 10px;">primitive type</a> <a href="/tags/rabbitmq/" style="font-size: 10px;">rabbitmq</a> <a href="/tags/read-only/" style="font-size: 10px;">read-only</a> <a href="/tags/redis/" style="font-size: 12.5px;">redis</a> <a href="/tags/reference-type/" style="font-size: 10px;">reference type</a> <a href="/tags/reroute/" style="font-size: 10px;">reroute</a> <a href="/tags/restore/" style="font-size: 10px;">restore</a> <a href="/tags/serialization/" style="font-size: 10px;">serialization</a> <a href="/tags/shards/" style="font-size: 10px;">shards</a> <a href="/tags/singleton/" style="font-size: 10px;">singleton</a> <a href="/tags/snapRetain/" style="font-size: 10px;">snapRetain</a> <a href="/tags/stringpool/" style="font-size: 10px;">stringpool</a> <a href="/tags/swapoff/" style="font-size: 10px;">swapoff</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/thread-pool/" style="font-size: 10px;">thread pool</a> <a href="/tags/transient/" style="font-size: 10px;">transient</a> <a href="/tags/try-with-resources/" style="font-size: 10px;">try-with-resources</a> <a href="/tags/tuning/" style="font-size: 10px;">tuning</a> <a href="/tags/unassigned/" style="font-size: 12.5px;">unassigned</a> <a href="/tags/versionup/" style="font-size: 10px;">versionup</a> <a href="/tags/visualization/" style="font-size: 12.5px;">visualization</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/watermark/" style="font-size: 10px;">watermark</a> <a href="/tags/windows2012/" style="font-size: 10px;">windows2012</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/zookeeper/" style="font-size: 12.5px;">zookeeper</a> <a href="/tags/%EC%8A%A4%ED%8A%B8%EB%A7%81%ED%92%80/" style="font-size: 10px;">스트링풀</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/nakjunizm">github</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2021 NJ SUNG</p>
+                
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+    </div>
+    
+    
+    <script>
+    var disqus_shortname = 'nakjunizm';
+    
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>

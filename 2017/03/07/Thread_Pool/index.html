@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>Thread pool (tuning point!) | nakjunizm&#39;s dev note</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="elasticsearch,thread pool,tuning" />
+    
+    <meta name="description" content="** 이 포스트에서 수정하는 설정값 들은 elastic에서는 공식적으로 수정하지 말도록 권장하고 있습니다. 꼭 필요한 경우에만 충분한 테스트를 거쳐서 적용하시기 바랍니다. ** ElasticSearch 에 대량의 데이터를 bulk insert 하는 과정에서  예상했던 값보다 indexing rate가 낮은 경우 데이터를 밀어넣는 클라이언트에 EsRejec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Thread pool (tuning point!)">
+<meta property="og:url" content="https://nakjunizm.com/2017/03/07/Thread_Pool/index.html">
+<meta property="og:site_name" content="nakjunizm&#39;s dev note">
+<meta property="og:description" content="** 이 포스트에서 수정하는 설정값 들은 elastic에서는 공식적으로 수정하지 말도록 권장하고 있습니다. 꼭 필요한 경우에만 충분한 테스트를 거쳐서 적용하시기 바랍니다. ** ElasticSearch 에 대량의 데이터를 bulk insert 하는 과정에서  예상했던 값보다 indexing rate가 낮은 경우 데이터를 밀어넣는 클라이언트에 EsRejec">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://nakjunizm.github.io/2017/03/07/Thread_Pool/threadpool1.jpg">
+<meta property="article:published_time" content="2017-03-07T13:19:00.000Z">
+<meta property="article:modified_time" content="2021-10-06T15:33:17.470Z">
+<meta property="article:author" content="NJ SUNG">
+<meta property="article:tag" content="elasticsearch">
+<meta property="article:tag" content="thread pool">
+<meta property="article:tag" content="tuning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nakjunizm.github.io/2017/03/07/Thread_Pool/threadpool1.jpg">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="nakjunizm&#39;s dev note" type="application/atom+xml" />
+    
+
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-112395863-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+    
+    
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/">DevOps</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/Docker/">Docker</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/">Development</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/GraphQL/">GraphQL</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/java/">java</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/node/">node</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/">Operations</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Ansible/">Ansible</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Cloud/">Cloud</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Kafka/">Kafka</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Linux/">Linux</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/RabbitMQ/">RabbitMQ</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Redis/">Redis</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Windows/">Windows</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Zookeeper/">Zookeeper</a></li></ul></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" target="_blank" rel="noopener" href="https://ko.gravatar.com/nakjunizm">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-Thread_Pool" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        Thread pool (tuning point!)
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2017/03/07/Thread_Pool/" class="article-date">
+       <time datetime="2017-03-07T13:19:00.000Z" itemprop="datePublished">2017-03-07</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2017/03/07/Thread_Pool/" class="article-date">
+     <time datetime="2021-10-06T15:33:17.470Z" itemprop="dateModified">2021-10-07</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a>, <a class="tag-link-link" href="/tags/thread-pool/" rel="tag">thread pool</a>, <a class="tag-link-link" href="/tags/tuning/" rel="tag">tuning</a>
+    </div>
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <p><img src="https://nakjunizm.github.io/2017/03/07/Thread_Pool/threadpool1.jpg" alt="threadpool1"></p>
+<p>** 이 포스트에서 수정하는 설정값 들은 elastic에서는 공식적으로 수정하지 말도록 권장하고 있습니다. 꼭 필요한 경우에만 충분한 테스트를 거쳐서 적용하시기 바랍니다. **</p>
+<p><code>ElasticSearch</code> 에 대량의 데이터를 <code>bulk insert</code> 하는 과정에서</p>
+<ol>
+<li>예상했던 값보다 indexing rate가 낮은 경우</li>
+<li>데이터를 밀어넣는 클라이언트에 EsRejectedExecutionException 이 발생 하는 경우</li>
+</ol>
+<p>여러가지 튜닝 포인트가 있겠지만 그중에서도 <code>Thread pool</code> 은 매우 중요한 값인것 같습니다.<br>공식 홈페이지의 문서를 살펴보면</p>
+<p><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-threadpool.html">Thread Pool</a></p>
+<blockquote>
+<p>노드 안에서 효과적으로 쓰레드 메모리를 소비하기 위해서 노드는 여러개의 쓰레드풀을 가지고 있다. 많은 쓰레드 풀들은 큐들을 가지고 있고 그 큐들로 인해 넘치는 요청들이 버려지는 대신 큐에 담겨질 수 있다.</p>
+</blockquote>
+<p>라고 소개되고 있습니다.<br>여러가지 중요한 <code>Thread pool</code> 들이 소개되어 있지만 개인적으로 특히 더 중요하다고 생각되는 <code>Thread</code>는 아래 세개 입니다.</p>
+<p>** index ** : index/delete 연산 용. type은 <code>fixed</code>이고 size는 가용한 프로세서갯수와 동일 합니다. queue_size는 default 200<br>** search ** : count/search/suggest 연산 용. type은 <code>fixed</code> 이고 size는 ((가용한 프로세서갯수 * 3) / 2) + 1 입니다. queue_size는 default 1000<br>** bulk ** : bulk 연산 용. size는 가용한 프로세서갯수와 동일 합니다. queue_size는 default 50<br>여기서 주의 깊게 봐야 할 설정이 바로 <code>queue_size</code> 입니다.</p>
+<p>쓰레드풀 자체의 사이즈는 위에서 설명 한것과 같이 가용한 프로세서의 갯수에 의존성이 있기 때문에 튜닝하기 쉽지 않고, <code>queue_size</code>를 늘려줌으로써 <code>EsRejectedExcutionException</code> 이 나는것을 방지 할 수 있습니다.</p>
+<p><code>elasticsearch.yml</code>에 다음과같이 설정해 놓고 사용할 수 있습니다만</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">threadpool.index.type:</span> <span class="string">fixed</span></span><br><span class="line"><span class="attr">threadpool.index.size:</span> <span class="number">20</span></span><br><span class="line"><span class="attr">threadpool.index.queue_size:</span> <span class="number">1000</span></span><br></pre></td></tr></table></figure>
+<p>운영중인 클러스터에 <code>elasticsearch.yml</code>을 변경하고 순차적으로 재시작 하는 작업은 부담이 가는것은 사실 입니다.<br>** 좋은소식은 ThreadPool 설정은 dynamic setting 이므로 운영중인 클러스터를 재시작 할 필요 없이 api를 날려서 적용 시킬수 있습니다 **</p>
+<p>먼저 내 클러스터의 쓰레드풀 설정을 살펴봅시다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#내 쓰레드풀에 대한 개요</span><br><span class="line">GET _nodes/thread_pool</span><br><span class="line"></span><br><span class="line">#현재 각 쓰레드풀의 상태</span><br><span class="line">GET _nodes/stats/thread_pool</span><br></pre></td></tr></table></figure>
+
+<p>위 명령어는 <code>sense</code> 기준이고 <code>curl</code>로 확인하는 경우 아래와 같이 날려보면 됩니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -XGET &#x27;http://myclusterip:port/_nodes/thread_pool&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>이제 다시 맨 처음의 주제로 돌아와서 내 생각보다 bulk insert 되는 속도가 느린것 같거나 자꾸 익셉션이 발생하는 경우<br>bulk queue가 너무 적은것은 아닌가 의심해 볼 수 있습니다.<br>쓰레드풀의 상태를 봤을 때 <code>rejected</code>된 건수가 많이 보이면 <code>bulk queue</code>를 늘려보는게 좋습니다.<br>벌크 인서트할때도 그렇고, 검색할때도 자꾸 밀리는것 같은 느낌이 들어서 다음과 같이 설정을 변경해 봤습니다.<br>(기존 설정은 default값인 bulk.queue_size는 50, search.queue_size는 1000 이었습니다.)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PUT _cluster/settings</span><br><span class="line">&#123;</span><br><span class="line">    &quot;transient&quot; : &#123;</span><br><span class="line">        &quot;threadpool.bulk.queue_size&quot; : 500,</span><br><span class="line">        &quot;threadpool.search.queue_size&quot; : 4000</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>좀 더 지켜봐야겠지만 위와 같이 변경 하고 나서 클라이언트에서 <code>EsRejectedExecutionException</code> 도 더이상 보이지 않고 클러스터가 훨씬 안정적이게 됐습니다.</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://nakjunizm.com/2017/03/07/Thread_Pool/" data-id="ckugz0jo80005ut3i10k0756b" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "NJ SUNG"
+        },
+        "headline": "Thread pool (tuning point!)",
+        "image": "https://nakjunizm.comhttps://nakjunizm.github.io/2017/03/07/Thread_Pool/threadpool1.jpg",
+        "keywords": "elasticsearch thread pool tuning",
+        "genre": "Operations ElasticSearch",
+        "datePublished": "2017-03-07",
+        "dateCreated": "2017-03-07",
+        "dateModified": "2021-10-07",
+        "url": "https://nakjunizm.com/2017/03/07/Thread_Pool/",
+        "description": "
+** 이 포스트에서 수정하는 설정값 들은 elastic에서는 공식적으로 수정하지 말도록 권장하고 있습니다. 꼭 필요한 경우에만 충분한 테스트를 거쳐서 적용하시기 바랍니다. **
+ElasticSearch 에 대량의 데이터를 bulk insert 하는 과정에서
+
+예상했던 값보다 indexing rate가 낮은 경우
+데이터를 밀어넣는 클라이언트에 EsRejec",
+        "wordCount": 408
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="instagram" href="https://www.instagram.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-instagram"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="https://www.facebook.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/04/21/Map_And_Set/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            Map 과 Set
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2017/02/24/Queue_And_Deque/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">Queue 와 Deque(Double ended queue)</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="title"></a></p>
+                            <p class="item-date"><time datetime="2021-10-04T15:00:00.000Z" itemprop="datePublished">2021-10-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/06/17/Find_Old_Files_And_Delete/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/06/17/Find_Old_Files_And_Delete/mtime1.png)" alt="오래된 (특정 기간 이상 된) 파일 찾아서 지우기 How to find old (aged more than specific days) files and remove" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Linux/">Linux</a></p>
+                            <p class="item-title"><a href="/2020/06/17/Find_Old_Files_And_Delete/" class="title">오래된 (특정 기간 이상 된) 파일 찾아서 지우기 How to find old (aged more than specific days) files and remove</a></p>
+                            <p class="item-date"><time datetime="2020-06-17T12:37:00.000Z" itemprop="datePublished">2020-06-17</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/19/Zookeeper_Cleanup_Transactional_Log/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/05/19/Zookeeper_Cleanup_Transactional_Log/zookeeper1.png)" alt="주키퍼 오래된 스냅샷 및 트랜잭션 로그 삭제하기 zookeeper delete old snapshot and transactional log" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Zookeeper/">Zookeeper</a></p>
+                            <p class="item-title"><a href="/2020/05/19/Zookeeper_Cleanup_Transactional_Log/" class="title">주키퍼 오래된 스냅샷 및 트랜잭션 로그 삭제하기 zookeeper delete old snapshot and transactional log</a></p>
+                            <p class="item-date"><time datetime="2020-05-19T12:14:00.000Z" itemprop="datePublished">2020-05-19</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/03/24/Redis_Monitoring/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/redis1.png)" alt="레디스 모니터링 시 주의사항 (Redis monitoring/single thread)" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Redis/">Redis</a></p>
+                            <p class="item-title"><a href="/2020/03/24/Redis_Monitoring/" class="title">레디스 모니터링 시 주의사항 (Redis monitoring/single thread)</a></p>
+                            <p class="item-date"><time datetime="2020-03-24T13:14:00.000Z" itemprop="datePublished">2020-03-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/02/20/haproxy/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/02/20/haproxy/haproxy2.png)" alt="haproxy &amp; keepalived 로 프록시 구축하기" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/DevOps/">DevOps</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a></p>
+                            <p class="item-title"><a href="/2020/02/20/haproxy/" class="title">haproxy &amp; keepalived 로 프록시 구축하기</a></p>
+                            <p class="item-date"><time datetime="2020-02-20T12:41:00.000Z" itemprop="datePublished">2020-02-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">categories</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/Swarm/">Swarm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/">Development</a><span class="category-list-count">15</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Development/GraphQL/">GraphQL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/java/">java</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/node/">node</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/">Operations</a><span class="category-list-count">21</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Ansible/">Ansible</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Cloud/">Cloud</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Kafka/">Kafka</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/RabbitMQ/">RabbitMQ</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Redis/">Redis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Windows/">Windows</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Zookeeper/">Zookeeper</a><span class="category-list-count">1</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">3</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/6-4-0/" style="font-size: 10px;">6.4.0</a> <a href="/tags/Apollo/" style="font-size: 10px;">Apollo</a> <a href="/tags/ArrayList/" style="font-size: 10px;">ArrayList</a> <a href="/tags/CIDR/" style="font-size: 10px;">CIDR</a> <a href="/tags/Collections/" style="font-size: 10px;">Collections</a> <a href="/tags/Deque/" style="font-size: 10px;">Deque</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/ES-Version-up/" style="font-size: 10px;">ES Version up</a> <a href="/tags/FORBIDDEN-12-index/" style="font-size: 10px;">FORBIDDEN/12/index</a> <a href="/tags/GraphQL/" style="font-size: 10px;">GraphQL</a> <a href="/tags/LinkedList/" style="font-size: 10px;">LinkedList</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/OAuth/" style="font-size: 10px;">OAuth</a> <a href="/tags/Queue/" style="font-size: 10px;">Queue</a> <a href="/tags/SENS/" style="font-size: 10px;">SENS</a> <a href="/tags/Schema/" style="font-size: 10px;">Schema</a> <a href="/tags/Set/" style="font-size: 10px;">Set</a> <a href="/tags/Subnet/" style="font-size: 10px;">Subnet</a> <a href="/tags/Swarm/" style="font-size: 10px;">Swarm</a> <a href="/tags/System-Event-Notification-Service/" style="font-size: 10px;">System Event Notification Service</a> <a href="/tags/allocation/" style="font-size: 10px;">allocation</a> <a href="/tags/allow-delete/" style="font-size: 10px;">allow_delete</a> <a href="/tags/ansible/" style="font-size: 10px;">ansible</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/authentication/" style="font-size: 10px;">authentication</a> <a href="/tags/autopurge/" style="font-size: 10px;">autopurge</a> <a href="/tags/backup/" style="font-size: 10px;">backup</a> <a href="/tags/builder/" style="font-size: 10px;">builder</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/coding-convention/" style="font-size: 10px;">coding convention</a> <a href="/tags/comparable/" style="font-size: 10px;">comparable</a> <a href="/tags/comparator/" style="font-size: 10px;">comparator</a> <a href="/tags/compressedoops/" style="font-size: 10px;">compressedoops</a> <a href="/tags/devops/" style="font-size: 10px;">devops</a> <a href="/tags/disk-flood/" style="font-size: 10px;">disk_flood</a> <a href="/tags/doc-value/" style="font-size: 10px;">doc value</a> <a href="/tags/eager-global-ordinals/" style="font-size: 10px;">eager_global_ordinals</a> <a href="/tags/elasticsearch/" style="font-size: 17.5px;">elasticsearch</a> <a href="/tags/elk/" style="font-size: 12.5px;">elk</a> <a href="/tags/exception/" style="font-size: 10px;">exception</a> <a href="/tags/final/" style="font-size: 10px;">final</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/ha/" style="font-size: 10px;">ha</a> <a href="/tags/haproxy/" style="font-size: 10px;">haproxy</a> <a href="/tags/heap/" style="font-size: 10px;">heap</a> <a href="/tags/hot-thread/" style="font-size: 10px;">hot thread</a> <a href="/tags/ingest-node/" style="font-size: 10px;">ingest_node</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/kafka/" style="font-size: 10px;">kafka</a> <a href="/tags/keepalived/" style="font-size: 10px;">keepalived</a> <a href="/tags/kibana/" style="font-size: 15px;">kibana</a> <a href="/tags/license/" style="font-size: 10px;">license</a> <a href="/tags/log/" style="font-size: 10px;">log</a> <a href="/tags/logstash/" style="font-size: 12.5px;">logstash</a> <a href="/tags/mirror/" style="font-size: 10px;">mirror</a> <a href="/tags/monitoring/" style="font-size: 10px;">monitoring</a> <a href="/tags/mtime/" style="font-size: 10px;">mtime</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node/" style="font-size: 10px;">node</a> <a href="/tags/offset/" style="font-size: 10px;">offset</a> <a href="/tags/ordinals/" style="font-size: 10px;">ordinals</a> <a href="/tags/passport/" style="font-size: 10px;">passport</a> <a href="/tags/pattern/" style="font-size: 12.5px;">pattern</a> <a href="/tags/pending-tasks/" style="font-size: 10px;">pending tasks</a> <a href="/tags/primitive-type/" style="font-size: 10px;">primitive type</a> <a href="/tags/rabbitmq/" style="font-size: 10px;">rabbitmq</a> <a href="/tags/read-only/" style="font-size: 10px;">read-only</a> <a href="/tags/redis/" style="font-size: 12.5px;">redis</a> <a href="/tags/reference-type/" style="font-size: 10px;">reference type</a> <a href="/tags/reroute/" style="font-size: 10px;">reroute</a> <a href="/tags/restore/" style="font-size: 10px;">restore</a> <a href="/tags/serialization/" style="font-size: 10px;">serialization</a> <a href="/tags/shards/" style="font-size: 10px;">shards</a> <a href="/tags/singleton/" style="font-size: 10px;">singleton</a> <a href="/tags/snapRetain/" style="font-size: 10px;">snapRetain</a> <a href="/tags/stringpool/" style="font-size: 10px;">stringpool</a> <a href="/tags/swapoff/" style="font-size: 10px;">swapoff</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/thread-pool/" style="font-size: 10px;">thread pool</a> <a href="/tags/transient/" style="font-size: 10px;">transient</a> <a href="/tags/try-with-resources/" style="font-size: 10px;">try-with-resources</a> <a href="/tags/tuning/" style="font-size: 10px;">tuning</a> <a href="/tags/unassigned/" style="font-size: 12.5px;">unassigned</a> <a href="/tags/versionup/" style="font-size: 10px;">versionup</a> <a href="/tags/visualization/" style="font-size: 12.5px;">visualization</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/watermark/" style="font-size: 10px;">watermark</a> <a href="/tags/windows2012/" style="font-size: 10px;">windows2012</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/zookeeper/" style="font-size: 12.5px;">zookeeper</a> <a href="/tags/%EC%8A%A4%ED%8A%B8%EB%A7%81%ED%92%80/" style="font-size: 10px;">스트링풀</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/nakjunizm">github</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2021 NJ SUNG</p>
+                
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+    </div>
+    
+    
+    <script>
+    var disqus_shortname = 'nakjunizm';
+    
+    
+    var disqus_url = 'https://nakjunizm.com/2017/03/07/Thread_Pool/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>

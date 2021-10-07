@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>GraphQL의 스키마(Schema) | nakjunizm&#39;s dev note</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="GraphQL,Schema,Apollo" />
+    
+    <meta name="description" content="이번 포스트는 apollo docs 의 schema 부분의 일부를 번역 한 포스트 입니다.  원글: https:&#x2F;&#x2F;www.apollographql.com&#x2F;docs&#x2F;apollo-server&#x2F;schema&#x2F;schema&#x2F; Schema Scalar types Object types The Query type The Mutation type Input types">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GraphQL의 스키마(Schema)">
+<meta property="og:url" content="https://nakjunizm.com/2019/10/16/GraphQL_Schema/index.html">
+<meta property="og:site_name" content="nakjunizm&#39;s dev note">
+<meta property="og:description" content="이번 포스트는 apollo docs 의 schema 부분의 일부를 번역 한 포스트 입니다.  원글: https:&#x2F;&#x2F;www.apollographql.com&#x2F;docs&#x2F;apollo-server&#x2F;schema&#x2F;schema&#x2F; Schema Scalar types Object types The Query type The Mutation type Input types">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://nakjunizm.github.io/2019/10/16/GraphQL_Schema/GraphQL_1.png">
+<meta property="article:published_time" content="2019-10-16T06:52:00.000Z">
+<meta property="article:modified_time" content="2021-10-06T15:33:17.418Z">
+<meta property="article:author" content="NJ SUNG">
+<meta property="article:tag" content="GraphQL">
+<meta property="article:tag" content="Schema">
+<meta property="article:tag" content="Apollo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nakjunizm.github.io/2019/10/16/GraphQL_Schema/GraphQL_1.png">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="nakjunizm&#39;s dev note" type="application/atom+xml" />
+    
+
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-112395863-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+    
+    
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/">DevOps</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/Docker/">Docker</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/">Development</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/GraphQL/">GraphQL</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/java/">java</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/node/">node</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/">Operations</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Ansible/">Ansible</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Cloud/">Cloud</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Kafka/">Kafka</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Linux/">Linux</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/RabbitMQ/">RabbitMQ</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Redis/">Redis</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Windows/">Windows</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Zookeeper/">Zookeeper</a></li></ul></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" target="_blank" rel="noopener" href="https://ko.gravatar.com/nakjunizm">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Development/">Development</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Development/GraphQL/">GraphQL</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-GraphQL_Schema" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        GraphQL의 스키마(Schema)
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2019/10/16/GraphQL_Schema/" class="article-date">
+       <time datetime="2019-10-16T06:52:00.000Z" itemprop="datePublished">2019-10-16</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2019/10/16/GraphQL_Schema/" class="article-date">
+     <time datetime="2021-10-06T15:33:17.418Z" itemprop="dateModified">2021-10-07</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Apollo/" rel="tag">Apollo</a>, <a class="tag-link-link" href="/tags/GraphQL/" rel="tag">GraphQL</a>, <a class="tag-link-link" href="/tags/Schema/" rel="tag">Schema</a>
+    </div>
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <blockquote>
+<p>이번 포스트는 apollo docs 의 schema 부분의 일부를 번역 한 포스트 입니다.</p>
+</blockquote>
+<p>원글: <a target="_blank" rel="noopener" href="https://www.apollographql.com/docs/apollo-server/schema/schema/">https://www.apollographql.com/docs/apollo-server/schema/schema/</a></p>
+<h1 id="Schema"><a href="#Schema" class="headerlink" title="Schema"></a>Schema</h1><ul>
+<li>Scalar types</li>
+<li>Object types</li>
+<li>The <code>Query</code> type</li>
+<li>The <code>Mutation</code> type</li>
+<li>Input types</li>
+</ul>
+<h2 id="Scalar-types"><a href="#Scalar-types" class="headerlink" title="Scalar types"></a>Scalar types</h2><p>스칼라 타입은 다른 프로그래밍 언어에서 이야기 하는 기본형 (primitive type)과 유사 합니다.</p>
+<p>GraphQL의 default scalar types</p>
+<ul>
+<li>Int: A signed 32-bit integer</li>
+<li>Float: A signed double-precision floating-point value</li>
+<li>String: A UTF-8 character sequence</li>
+<li>Boolean: true or false</li>
+<li>ID (serialized as a String): A unique identifier that’s often used to refetch an object or as the key for a cache. Although it’s serialized as a String, an ID is not intended to be human-readable.</li>
+</ul>
+<p>Default 스칼라 타입으로 대부분의 경우 커버 가능 하지만, 그렇지 않은 경우에는 Custom scalar types 을 만들어서 사용하는것도 가능 합니다.</p>
+<h2 id="Object-types"><a href="#Object-types" class="headerlink" title="Object types"></a>Object types</h2><p>GraphQL 스카마에 정의된 대부분의 타입은 object 타입 입니다.<br>object는 필드의 컬렉션을 포함 하고 있고, 각 필드는 scalar 타입 이거나, 다른 object 타입 입니다.<br>예를 들면</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">type Book &#123;</span><br><span class="line">  <span class="attr">title</span>: <span class="built_in">String</span></span><br><span class="line">  <span class="attr">author</span>: Author</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Author &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">String</span></span><br><span class="line">  <span class="attr">books</span>: [Book]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="The-Query-type"><a href="#The-Query-type" class="headerlink" title="The Query type"></a>The <code>Query</code> type</h2><p><code>Query</code> 타입은 client에서 호출 할 GraphQL의 정확한 query를 정의 합니다. (read query)<br><code>Query</code> 의 필드는 쿼리 이름과 리턴타입으로 구성 되어 있습니다.</p>
+<p>예를 들면</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type Query &#123;</span><br><span class="line">  <span class="attr">getBooks</span>: [Book]</span><br><span class="line">  <span class="attr">getAuthors</span>: [Author]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>위의 <code>query</code> 타입은 <code>getBooks</code> 와 <code>getAuthors</code> 라는 이름의 두 쿼리를 정의 하고, 각 쿼리는 Book과 Author 의 리스트를 각각 리턴 하는걸 알 수 있습니다.</p>
+<p>이게 REST-based API 였다면 아마도 두개의 다른 endpoints로 만들었겠지요 (예를 들면 /api/books and /api/authors). 하지만 GraphQL은 하나의 endpoint에서 두개의 리소스에 접근 할 수 있는 유연성을 제공 합니다.</p>
+<h4 id="Structuring-a-query"><a href="#Structuring-a-query" class="headerlink" title="Structuring a query"></a>Structuring a query</h4><p>client에서 서버의 data graph에 실행할 쿼리를 만들때, 그 쿼리는 서버의 schema에 정의 된 object types과 일치 해야 합니다.</p>
+<p>지금까지 예로 들은 몇개의 스키마를 예를 들면, client는 다음과 같이 모든 book 과 모든 author 의 이름을 가져오는 쿼리를 할 수 있습니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">query &#123;</span><br><span class="line">  getBooks &#123;</span><br><span class="line">    title</span><br><span class="line">  &#125;</span><br><span class="line">  getAuthors &#123;</span><br><span class="line">    name</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>우리 서버에서는 아래와 비슷하게 응답 해 줄 것 입니다.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;data&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;getBooks&quot;</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">&quot;title&quot;</span>: <span class="string">&quot;Jurassic Park&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      ...</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">&quot;getAuthors&quot;</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;Michael Crichton&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      ...</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>이렇게 두개의 전혀 다른 리스트를 가져오는게 쓸모있는 경우가 있긴 하겠지만,</p>
+<p>client에서는 아마도 author의 이름이 포함 되어있는 하나의 books 리스트를 받기를 선호할것 같습니다.</p>
+<p><code>Book</code> 타입이 <code>Author</code> 타입의 <code>author</code> 필드를 가지고 있으므로, client는 아마 아래와 같이 쿼리 하는것이 더 낫겠네요.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">query &#123;</span><br><span class="line">  getBooks &#123;</span><br><span class="line">    title</span><br><span class="line">    author &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>그러면 서버에서는 아래와 같이 더 깔끔한 결과를 보내 줄 것 입니다.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;data&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;getBooks&quot;</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">&quot;title&quot;</span>: <span class="string">&quot;Jurassic Park&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;author&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;Michael Crichton&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      ...</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="The-Mutation-type"><a href="#The-Mutation-type" class="headerlink" title="The Mutation type"></a>The <code>Mutation</code> type</h2><p><code>Mutation</code> 타입은 <code>Query</code> 타입과 구조적으로 비슷하게 생겼습니다. <code>Query</code> 타입이 데이터를 읽어오는(read) operation 을 정의 한다면,<br><code>Mutation</code> 타입은 데이터를 쓰는 (write) operation을 정의 합니다.</p>
+<p>각 필드는 시그니처와 리턴 타입을 정의 하고, 예를 들면 아래와 같습니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">type Mutation &#123;</span><br><span class="line">  addBook(title: <span class="built_in">String</span>, <span class="attr">author</span>: <span class="built_in">String</span>): Book</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>위 예의 <code>Mutaion</code>타입은 <code>addBook</code> 이라는 하나의 mutation을 정의 했습니다.</p>
+<p><code>addBook</code>은 <code>title</code>과 <code>author</code> 두개의 인자값을 가지고 있으며 <code>Book</code> 타입의 object를 리턴해 준다고 정의 되어 있습니다.</p>
+<p><code>Book</code> 타입은 물론 위의 obejct types의 스키마에 정의된 그 <code>Book</code> 입니다.</p>
+<h4 id="Structuring-a-mutation"><a href="#Structuring-a-mutation" class="headerlink" title="Structuring a mutation"></a>Structuring a mutation</h4><p>쿼리와 마찬가지로, 뮤테이션도 스키마에 정의된 타입과 일치하는 구조를 갖고 있습니다.</p>
+<p>아래 예는 새로운 <code>Book</code> 오브젝트의 생성을 요청하고, 리턴값으로는 방금 생성한 오브젝트의 특정 필드를 반환해 달라고 합니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mutation &#123;</span><br><span class="line">  addBook(title: &quot;Fox in Socks&quot;, author: &quot;Dr. Seuss&quot;) &#123;</span><br><span class="line">    title</span><br><span class="line">    author &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>쿼리의 결과와 마찬가지로 서버에서는 아래와 같이 뮤테이션에서 요청한 필드들을 반환해 줍니다.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;data&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;addBook&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;title&quot;</span>: <span class="string">&quot;Fox in Socks&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;author&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;Dr. Seuss&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>한개의 client 요청에 여러개의 뮤테이션이  들어 있는 경우, 경합을 방지하기 위해 뮤테이션은 순차적으로 처리 됩니다.</p>
+<h2 id="Input-types"><a href="#Input-types" class="headerlink" title="Input types"></a>Input types</h2><p>인풋 타입은 특별한 오브젝트 타입 입니다.</p>
+<p>쿼리와 뮤테이션에 정의된 operation은 인자로 스칼라 타입만 가질 수 있는데, 인풋 타입은 스칼라가 아니지만 인자로 사용할 수 있습니다.</p>
+<p>그래서 인풋 타입은 operation의 시그니처를 깔끔한 상태로 유지할 수 있게 도와 줍니다.</p>
+<p>이건 java에서 paramMap을 넘기거나, javascript에서 options object를 인자로 넘기는게 각 인자를 쭉~ 나열하는것 보다 보기에 깔끔하고, 추후에 인자로 추가 하고 싶은것이 생겼을때</p>
+<p>함수의 시그니처를 변경하지 않아도 되는 장점이 있는것과 동일 합니다.</p>
+<p>아래 뮤테이션이 블로그 포스트를 생성하는 뮤테이션이라고 가정 합시다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">type Mutation &#123;</span><br><span class="line"></span><br><span class="line">  createPost(title: <span class="built_in">String</span>, <span class="attr">body</span>: <span class="built_in">String</span>, <span class="attr">mediaUrls</span>: [<span class="built_in">String</span>]): Post</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>위와 같이 세개의 인자를 받는게 아니라 하나의 인풋 타입의 인자를 받게 바꿔 보겠습니다.</p>
+<p>이렇게 하면 추후에 인자를 더 추가하기로 결정 한 경우, 예를 들면 <code>author</code>같은, 훨씬 간편 합니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">type Mutation &#123;</span><br><span class="line">  createPost(post: PostAndMediaInput): Post</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">input PostAndMediaInput &#123;</span><br><span class="line">  <span class="attr">title</span>: <span class="built_in">String</span></span><br><span class="line">  <span class="attr">body</span>: <span class="built_in">String</span></span><br><span class="line">  <span class="attr">mediaUrls</span>: [<span class="built_in">String</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>이렇게 전달 하면 client에서 <code>PostAndMediaInput</code>은 도대체 뭐 하는 놈인데? 라고 생각 할 수 있는데,</p>
+<p>이런걸 대비해서 GraphQL은 각 필드를 설명하는 annotating fields를 사용 할 수 있게 했습니다.</p>
+<p>GraphQL-enabled 된 툴에서는 해당 설명이 바로 보일 수 있게 말이죠.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">input PostAndMediaInput &#123;</span><br><span class="line">  <span class="string">&quot;A main title for the post&quot;</span></span><br><span class="line">  <span class="attr">title</span>: <span class="built_in">String</span></span><br><span class="line">  <span class="string">&quot;The text body of the post.&quot;</span></span><br><span class="line">  <span class="attr">body</span>: <span class="built_in">String</span></span><br><span class="line">  <span class="string">&quot;A list of URLs to render in the post.&quot;</span></span><br><span class="line">  <span class="attr">mediaUrls</span>: [<span class="built_in">String</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>인풋타입은 가끔 완벽히 동일한 인자를 요구하는 쿼리나 뮤테이션에서 재 사용 하기 위해 사용 되기도 합니다.</p>
+<p>그런데 이런 재사용은 최소한으로 해야 합니다. 왜냐하면 지금은 완벽히 동일한 인자가 필요 하지만 나중에는 아닐수도 있으니까요.</p>
+<p>** 쿼리와 뮤테이션에서 동일한 인풋타입을 사용하지 마세요 **</p>
+<p>뮤테이션에는 required 인 필드가 쿼리에서는 optional인 경우가 굉장히 많기 때문 입니다.</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://nakjunizm.com/2019/10/16/GraphQL_Schema/" data-id="ckugz0jps002but3i7o7sdz8g" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "NJ SUNG"
+        },
+        "headline": "GraphQL의 스키마(Schema)",
+        "image": "https://nakjunizm.comhttps://nakjunizm.github.io/2019/10/16/GraphQL_Schema/GraphQL_1.png",
+        "keywords": "GraphQL Schema Apollo",
+        "genre": "Development GraphQL",
+        "datePublished": "2019-10-16",
+        "dateCreated": "2019-10-16",
+        "dateModified": "2021-10-07",
+        "url": "https://nakjunizm.com/2019/10/16/GraphQL_Schema/",
+        "description": "
+이번 포스트는 apollo docs 의 schema 부분의 일부를 번역 한 포스트 입니다.
+
+원글: https://www.apollographql.com/docs/apollo-server/schema/schema/
+Schema
+Scalar types
+Object types
+The Query type
+The Mutation type
+Input types
+
+",
+        "wordCount": 1296
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="instagram" href="https://www.instagram.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-instagram"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="https://www.facebook.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2019/10/30/RabbitMQ_Cluster/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            RabbitMQ 고가용성(HA) 를 위해 Cluster 하는 방법 (RabbitMQ HA)
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2019/09/18/Passportjs_guide/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">passport.js how to</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="title"></a></p>
+                            <p class="item-date"><time datetime="2021-10-04T15:00:00.000Z" itemprop="datePublished">2021-10-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/06/17/Find_Old_Files_And_Delete/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/06/17/Find_Old_Files_And_Delete/mtime1.png)" alt="오래된 (특정 기간 이상 된) 파일 찾아서 지우기 How to find old (aged more than specific days) files and remove" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Linux/">Linux</a></p>
+                            <p class="item-title"><a href="/2020/06/17/Find_Old_Files_And_Delete/" class="title">오래된 (특정 기간 이상 된) 파일 찾아서 지우기 How to find old (aged more than specific days) files and remove</a></p>
+                            <p class="item-date"><time datetime="2020-06-17T12:37:00.000Z" itemprop="datePublished">2020-06-17</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/19/Zookeeper_Cleanup_Transactional_Log/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/05/19/Zookeeper_Cleanup_Transactional_Log/zookeeper1.png)" alt="주키퍼 오래된 스냅샷 및 트랜잭션 로그 삭제하기 zookeeper delete old snapshot and transactional log" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Zookeeper/">Zookeeper</a></p>
+                            <p class="item-title"><a href="/2020/05/19/Zookeeper_Cleanup_Transactional_Log/" class="title">주키퍼 오래된 스냅샷 및 트랜잭션 로그 삭제하기 zookeeper delete old snapshot and transactional log</a></p>
+                            <p class="item-date"><time datetime="2020-05-19T12:14:00.000Z" itemprop="datePublished">2020-05-19</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/03/24/Redis_Monitoring/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/redis1.png)" alt="레디스 모니터링 시 주의사항 (Redis monitoring/single thread)" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Redis/">Redis</a></p>
+                            <p class="item-title"><a href="/2020/03/24/Redis_Monitoring/" class="title">레디스 모니터링 시 주의사항 (Redis monitoring/single thread)</a></p>
+                            <p class="item-date"><time datetime="2020-03-24T13:14:00.000Z" itemprop="datePublished">2020-03-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/02/20/haproxy/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/02/20/haproxy/haproxy2.png)" alt="haproxy &amp; keepalived 로 프록시 구축하기" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/DevOps/">DevOps</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a></p>
+                            <p class="item-title"><a href="/2020/02/20/haproxy/" class="title">haproxy &amp; keepalived 로 프록시 구축하기</a></p>
+                            <p class="item-date"><time datetime="2020-02-20T12:41:00.000Z" itemprop="datePublished">2020-02-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">categories</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/Swarm/">Swarm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/">Development</a><span class="category-list-count">15</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Development/GraphQL/">GraphQL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/java/">java</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/node/">node</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/">Operations</a><span class="category-list-count">21</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Ansible/">Ansible</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Cloud/">Cloud</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Kafka/">Kafka</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/RabbitMQ/">RabbitMQ</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Redis/">Redis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Windows/">Windows</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Zookeeper/">Zookeeper</a><span class="category-list-count">1</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">3</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/6-4-0/" style="font-size: 10px;">6.4.0</a> <a href="/tags/Apollo/" style="font-size: 10px;">Apollo</a> <a href="/tags/ArrayList/" style="font-size: 10px;">ArrayList</a> <a href="/tags/CIDR/" style="font-size: 10px;">CIDR</a> <a href="/tags/Collections/" style="font-size: 10px;">Collections</a> <a href="/tags/Deque/" style="font-size: 10px;">Deque</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/ES-Version-up/" style="font-size: 10px;">ES Version up</a> <a href="/tags/FORBIDDEN-12-index/" style="font-size: 10px;">FORBIDDEN/12/index</a> <a href="/tags/GraphQL/" style="font-size: 10px;">GraphQL</a> <a href="/tags/LinkedList/" style="font-size: 10px;">LinkedList</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/OAuth/" style="font-size: 10px;">OAuth</a> <a href="/tags/Queue/" style="font-size: 10px;">Queue</a> <a href="/tags/SENS/" style="font-size: 10px;">SENS</a> <a href="/tags/Schema/" style="font-size: 10px;">Schema</a> <a href="/tags/Set/" style="font-size: 10px;">Set</a> <a href="/tags/Subnet/" style="font-size: 10px;">Subnet</a> <a href="/tags/Swarm/" style="font-size: 10px;">Swarm</a> <a href="/tags/System-Event-Notification-Service/" style="font-size: 10px;">System Event Notification Service</a> <a href="/tags/allocation/" style="font-size: 10px;">allocation</a> <a href="/tags/allow-delete/" style="font-size: 10px;">allow_delete</a> <a href="/tags/ansible/" style="font-size: 10px;">ansible</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/authentication/" style="font-size: 10px;">authentication</a> <a href="/tags/autopurge/" style="font-size: 10px;">autopurge</a> <a href="/tags/backup/" style="font-size: 10px;">backup</a> <a href="/tags/builder/" style="font-size: 10px;">builder</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/coding-convention/" style="font-size: 10px;">coding convention</a> <a href="/tags/comparable/" style="font-size: 10px;">comparable</a> <a href="/tags/comparator/" style="font-size: 10px;">comparator</a> <a href="/tags/compressedoops/" style="font-size: 10px;">compressedoops</a> <a href="/tags/devops/" style="font-size: 10px;">devops</a> <a href="/tags/disk-flood/" style="font-size: 10px;">disk_flood</a> <a href="/tags/doc-value/" style="font-size: 10px;">doc value</a> <a href="/tags/eager-global-ordinals/" style="font-size: 10px;">eager_global_ordinals</a> <a href="/tags/elasticsearch/" style="font-size: 17.5px;">elasticsearch</a> <a href="/tags/elk/" style="font-size: 12.5px;">elk</a> <a href="/tags/exception/" style="font-size: 10px;">exception</a> <a href="/tags/final/" style="font-size: 10px;">final</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/ha/" style="font-size: 10px;">ha</a> <a href="/tags/haproxy/" style="font-size: 10px;">haproxy</a> <a href="/tags/heap/" style="font-size: 10px;">heap</a> <a href="/tags/hot-thread/" style="font-size: 10px;">hot thread</a> <a href="/tags/ingest-node/" style="font-size: 10px;">ingest_node</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/kafka/" style="font-size: 10px;">kafka</a> <a href="/tags/keepalived/" style="font-size: 10px;">keepalived</a> <a href="/tags/kibana/" style="font-size: 15px;">kibana</a> <a href="/tags/license/" style="font-size: 10px;">license</a> <a href="/tags/log/" style="font-size: 10px;">log</a> <a href="/tags/logstash/" style="font-size: 12.5px;">logstash</a> <a href="/tags/mirror/" style="font-size: 10px;">mirror</a> <a href="/tags/monitoring/" style="font-size: 10px;">monitoring</a> <a href="/tags/mtime/" style="font-size: 10px;">mtime</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node/" style="font-size: 10px;">node</a> <a href="/tags/offset/" style="font-size: 10px;">offset</a> <a href="/tags/ordinals/" style="font-size: 10px;">ordinals</a> <a href="/tags/passport/" style="font-size: 10px;">passport</a> <a href="/tags/pattern/" style="font-size: 12.5px;">pattern</a> <a href="/tags/pending-tasks/" style="font-size: 10px;">pending tasks</a> <a href="/tags/primitive-type/" style="font-size: 10px;">primitive type</a> <a href="/tags/rabbitmq/" style="font-size: 10px;">rabbitmq</a> <a href="/tags/read-only/" style="font-size: 10px;">read-only</a> <a href="/tags/redis/" style="font-size: 12.5px;">redis</a> <a href="/tags/reference-type/" style="font-size: 10px;">reference type</a> <a href="/tags/reroute/" style="font-size: 10px;">reroute</a> <a href="/tags/restore/" style="font-size: 10px;">restore</a> <a href="/tags/serialization/" style="font-size: 10px;">serialization</a> <a href="/tags/shards/" style="font-size: 10px;">shards</a> <a href="/tags/singleton/" style="font-size: 10px;">singleton</a> <a href="/tags/snapRetain/" style="font-size: 10px;">snapRetain</a> <a href="/tags/stringpool/" style="font-size: 10px;">stringpool</a> <a href="/tags/swapoff/" style="font-size: 10px;">swapoff</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/thread-pool/" style="font-size: 10px;">thread pool</a> <a href="/tags/transient/" style="font-size: 10px;">transient</a> <a href="/tags/try-with-resources/" style="font-size: 10px;">try-with-resources</a> <a href="/tags/tuning/" style="font-size: 10px;">tuning</a> <a href="/tags/unassigned/" style="font-size: 12.5px;">unassigned</a> <a href="/tags/versionup/" style="font-size: 10px;">versionup</a> <a href="/tags/visualization/" style="font-size: 12.5px;">visualization</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/watermark/" style="font-size: 10px;">watermark</a> <a href="/tags/windows2012/" style="font-size: 10px;">windows2012</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/zookeeper/" style="font-size: 12.5px;">zookeeper</a> <a href="/tags/%EC%8A%A4%ED%8A%B8%EB%A7%81%ED%92%80/" style="font-size: 10px;">스트링풀</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/nakjunizm">github</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2021 NJ SUNG</p>
+                
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+    </div>
+    
+    
+    <script>
+    var disqus_shortname = 'nakjunizm';
+    
+    
+    var disqus_url = 'https://nakjunizm.com/2019/10/16/GraphQL_Schema/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>

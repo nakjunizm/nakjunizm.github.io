@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>ElasticSearch Ingest Node | nakjunizm&#39;s dev note</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="elasticsearch,kibana,logstash,elk,visualization,ingest_node" />
+    
+    <meta name="description" content="** 이 포스트는 ELK(+beats)를 이용한 apache log visualization 의 후속 포스트로써 logstash 대신 elasticsearch 의 ingest node 를 사용하는 방법을 소개 합니다. ** filebeat-logstash-elasticsearch stack을 이용하여 kibana에서 대시보드를 구성하는 방법을 알아봤었습니다">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ElasticSearch Ingest Node">
+<meta property="og:url" content="https://nakjunizm.com/2018/03/09/Ingest_Node/index.html">
+<meta property="og:site_name" content="nakjunizm&#39;s dev note">
+<meta property="og:description" content="** 이 포스트는 ELK(+beats)를 이용한 apache log visualization 의 후속 포스트로써 logstash 대신 elasticsearch 의 ingest node 를 사용하는 방법을 소개 합니다. ** filebeat-logstash-elasticsearch stack을 이용하여 kibana에서 대시보드를 구성하는 방법을 알아봤었습니다">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://nakjunizm.github.io/2018/03/09/Ingest_Node/ingest1.png">
+<meta property="article:published_time" content="2018-03-09T00:17:00.000Z">
+<meta property="article:modified_time" content="2021-10-06T15:33:17.453Z">
+<meta property="article:author" content="NJ SUNG">
+<meta property="article:tag" content="elasticsearch">
+<meta property="article:tag" content="kibana">
+<meta property="article:tag" content="logstash">
+<meta property="article:tag" content="elk">
+<meta property="article:tag" content="visualization">
+<meta property="article:tag" content="ingest_node">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nakjunizm.github.io/2018/03/09/Ingest_Node/ingest1.png">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="nakjunizm&#39;s dev note" type="application/atom+xml" />
+    
+
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-112395863-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+    
+    
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/">DevOps</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/Docker/">Docker</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/">Development</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/GraphQL/">GraphQL</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/java/">java</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/node/">node</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/">Operations</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Ansible/">Ansible</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Cloud/">Cloud</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Kafka/">Kafka</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Linux/">Linux</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/RabbitMQ/">RabbitMQ</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Redis/">Redis</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Windows/">Windows</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Zookeeper/">Zookeeper</a></li></ul></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" target="_blank" rel="noopener" href="https://ko.gravatar.com/nakjunizm">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-Ingest_Node" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        ElasticSearch Ingest Node
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2018/03/09/Ingest_Node/" class="article-date">
+       <time datetime="2018-03-09T00:17:00.000Z" itemprop="datePublished">2018-03-09</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2018/03/09/Ingest_Node/" class="article-date">
+     <time datetime="2021-10-06T15:33:17.453Z" itemprop="dateModified">2021-10-07</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a>, <a class="tag-link-link" href="/tags/elk/" rel="tag">elk</a>, <a class="tag-link-link" href="/tags/ingest-node/" rel="tag">ingest_node</a>, <a class="tag-link-link" href="/tags/kibana/" rel="tag">kibana</a>, <a class="tag-link-link" href="/tags/logstash/" rel="tag">logstash</a>, <a class="tag-link-link" href="/tags/visualization/" rel="tag">visualization</a>
+    </div>
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <p>** 이 포스트는 <a target="_blank" rel="noopener" href="https://nakjunizm.github.io/2018/01/01/ELK_Apache_Log_Visualization/">ELK(+beats)를 이용한 apache log visualization</a> 의 후속 포스트로써 logstash 대신 elasticsearch 의 ingest node 를 사용하는 방법을 소개 합니다. **</p>
+<p>filebeat-logstash-elasticsearch stack을 이용하여 kibana에서 대시보드를 구성하는 방법을 알아봤었습니다.<br>5.X 버전에서 소개된 ** ingest node ** 를 이용하면 filebeat 에서 elasticsearch 로만 데이터를 보낼때는 grok <br /><br>등의 전처리 작업이 들어가더라도 logstash 없이 elasticsearch로 바로 데이터를 보낼 수 있습니다.</p>
+<h3 id="ingest-node"><a href="#ingest-node" class="headerlink" title="# ingest node"></a># ingest node</h3><p><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/ingest.html">ingest node</a>를 이용하면 filebeat의 모듈이나 logstash를 이용하지 않고도 indexing 되기 전에 전처리 과정을 넣을 수 있습니다.<br>ingest node는 default로 모든 node는 별도의 설정을 하지 않는 이상 ingest node로 사용 될 수 있으며 전처리의 각 단계라고 볼 수 있는 <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/ingest-processors.html">processor</a>들을 나열한 <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/pipeline.html">pipeline</a>을 정의 함으로써 logstash에서 해주던 것과 비슷하게 전처리를 할 수 있습니다.</p>
+<h3 id="pipeline-정의"><a href="#pipeline-정의" class="headerlink" title="# pipeline 정의"></a># pipeline 정의</h3><p>기존에 logstash의 filter 부분에 넣었던 grok을 processor로 정의하여 아래와 같이 pipeline을 정의 할 수 있습니다. (Dev Tools의 Console에서 작업하는 기준 입니다.) <br /></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PUT _ingest/pipeline/$&#123;파이프라인이름&#125;</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;description&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;processors&quot;</span>[]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>아래는 실제 제가 적용한 pipeline의 예 입니다. <code>grok</code>과 <code>remove</code>의 두가지 processor를 등록 했고 grok의 patterns는 커스텀으로 작성 했습니다.<br>로그 포멧을 custom으로 찍고 있는 경우 (이 포스트에서 다루는 경우와 같은)일일히 체크하면서 pattern을 만들어야 하지만 기본적으로 setting 되어 있는 default 로그 형식을 사용하는 경우에는 pre-defined 되어 있는 값을 사용하면 훨씬 편하게 적용할 수 있습니다. (pre-defined 되어있는 값들은 <a target="_blank" rel="noopener" href="https://github.com/logstash-plugins/logstash-patterns-core/blob/master/patterns/httpd">여기서 확인 가능</a> 합니다.)</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">PUT _ingest/pipeline/ssl_access_log</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;description&quot;</span>: <span class="string">&quot;Ingest pipeline for ssl log&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;processors&quot;</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">&quot;grok&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;field&quot;</span>: <span class="string">&quot;message&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;ignore_failure&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">          <span class="attr">&quot;patterns&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;&quot;</span><span class="string">&quot;(?:%&#123;IP:xff&#125;|-) %&#123;IP:client_ip&#125; %&#123;USER:ident&#125; %&#123;USER:auth&#125; \[%&#123;HTTPDATE:apache_timestamp&#125;\] &quot;</span>%&#123;WORD:method&#125; /%&#123;DATA:request_uri&#125; HTTP/%&#123;NUMBER:http_version&#125;<span class="string">&quot; %&#123;NUMBER:status&#125; %&#123;NUMBER:byte_response&#125; %&#123;NUMBER:byte_received&#125; %&#123;NUMBER:byte_sent&#125; %&#123;NUMBER:response_time_sec&#125;/%&#123;NUMBER:response_time_milisec&#125;&quot;</span><span class="string">&quot;&quot;</span></span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">&quot;remove&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;field&quot;</span>: <span class="string">&quot;message&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2018-05-29-추가"><a href="#2018-05-29-추가" class="headerlink" title="** 2018-05-29 추가 **"></a>** 2018-05-29 추가 **</h4><p>patterns 에 %{패턴:이름} 으로만 정의한 경우 해당 “패턴”에 걸린 값들을 “이름”으로 인덱싱 합니다. </br><br>하지만 인덱스 템플릿과, 맵핑에 integer나 long type으로 정의된 값들도 어떤 이유에서인지 전부 text값으로 들어가는 문제점이 발생하여 다음과 같이<br>%{패턴:이름:인덱싱타입} 으로 정의하게 수정하자 원하는 타입으로 인덱싱 되었습니다.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;patterns&quot;</span>: [</span><br><span class="line">           <span class="string">&quot;&quot;</span><span class="string">&quot;(?:%&#123;IP:xff&#125;|-) %&#123;IP:client_ip&#125; %&#123;USER:ident&#125; %&#123;USER:auth&#125; \[%&#123;HTTPDATE:apache_timestamp&#125;\] &quot;</span>%&#123;WORD:method&#125; /%&#123;DATA:request_uri&#125; HTTP/%&#123;NUMBER:http_version&#125;<span class="string">&quot; %&#123;NUMBER:status:int&#125; %&#123;NUMBER:byte_response:long&#125; %&#123;NUMBER:byte_received:long&#125; %&#123;NUMBER:byte_sent:long&#125; %&#123;NUMBER:response_time_sec:long&#125;/%&#123;NUMBER:response_time_milisec:int&#125;&quot;</span><span class="string">&quot;&quot;</span></span><br><span class="line">         ]</span><br></pre></td></tr></table></figure>
+
+<h3 id="filebeat-설정"><a href="#filebeat-설정" class="headerlink" title="# filebeat 설정"></a># filebeat 설정</h3><p>pipeline을 만들었으니 이제 filebeat-&gt;logstash로 보내지 않고 바로 filebeat-&gt;elasticsearch 로 보내도록 설정 해 보겠습니다.<br>** 일반적으로 elasticsearch 로 보낼때와의 차이점은 pipeline 을 적어 준다는 점 입니다. **</p>
+<p>filebeat에서 자동으로 생성해 주는 index가 아닌 우리가 elasticserach에 만들어 놓은 index로 데이터를 보낼때는 <code>setup.template.name</code>과 <code>setup.template.pattern</code>도 정의해 줘야 합니다.</p>
+<p>** elasticsearch template 생성에 관한 부분은 <a target="_blank" rel="noopener" href="https://nakjunizm.github.io/2018/01/01/ELK_Apache_Log_Visualization/">이 포스트</a>를 참조하세요 **</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">filebeat.yml 내용중 일부</span><br><span class="line"></span><br><span class="line">filebeat.prospectors:</span><br><span class="line">- type: log</span><br><span class="line">  enabled: true</span><br><span class="line">  paths:</span><br><span class="line">    - /data/logs/apache/*access.log*</span><br><span class="line">  exclude_files: [&#x27;.gz$&#x27;]</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">setup.template.name: &quot;ssl_access&quot;</span><br><span class="line">setup.template.pattern: &quot;ssl_access-*&quot;</span><br><span class="line">setup.template.overwrite: false</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">output.elasticsearch:</span><br><span class="line">  # Array of hosts to connect to.</span><br><span class="line">  hosts: [&quot;$&#123;es_host&#125;:$&#123;es_port&#125;&quot;]</span><br><span class="line">  index: &quot;ssl_access-%&#123;+YYYY.MM.dd&#125;&quot;</span><br><span class="line">  pipeline: &quot;ssl_access_log&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="filebeat-실행"><a href="#filebeat-실행" class="headerlink" title="# filebeat 실행"></a># filebeat 실행</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; nakjunizm@filebeat호스트:/nakjunizm/util/filebeat$ ./filebeat -e -c filebeat.yml -d &quot;publish&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="elasticsearch-에서-확인"><a href="#elasticsearch-에서-확인" class="headerlink" title="# elasticsearch 에서 확인"></a># elasticsearch 에서 확인</h3><p>오늘 날짜로 생성된 ssl_access_log 인덱스에 데이터가 정상적으로 인덱싱 됐는지 확인 해 봤습니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET ssl_access-2018.03.08/_search</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;took&quot;</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">&quot;timed_out&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">&quot;_shards&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;total&quot;</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="attr">&quot;successful&quot;</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="attr">&quot;skipped&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">&quot;failed&quot;</span>: <span class="number">0</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;hits&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;total&quot;</span>: <span class="number">485</span>,</span><br><span class="line">    <span class="attr">&quot;max_score&quot;</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">&quot;hits&quot;</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">&quot;_index&quot;</span>: <span class="string">&quot;ssl_access-2018.03.08&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;_type&quot;</span>: <span class="string">&quot;doc&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;_id&quot;</span>: <span class="string">&quot;KYbsBWIBGR2P1wb4_g4m&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;_score&quot;</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">&quot;_source&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;response_time_sec&quot;</span>: <span class="string">&quot;0&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;offset&quot;</span>: <span class="number">28199</span>,</span><br><span class="line">          <span class="attr">&quot;method&quot;</span>: <span class="string">&quot;GET&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;auth&quot;</span>: <span class="string">&quot;-&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;ident&quot;</span>: <span class="string">&quot;-&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;prospector&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;log&quot;</span></span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="attr">&quot;http_version&quot;</span>: <span class="string">&quot;1.1&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;source&quot;</span>: <span class="string">&quot;/data/logs/apache/ssl_access.log.20180308&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;apache_timestamp&quot;</span>: <span class="string">&quot;08/Mar/2018:14:03:54 +0000&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;request_uri&quot;</span>: <span class="string">&quot;/lib/mysite.js&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;byte_response&quot;</span>: <span class="string">&quot;3431&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;byte_sent&quot;</span>: <span class="string">&quot;4212&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;@timestamp&quot;</span>: <span class="string">&quot;2018-03-08T14:03:59.418Z&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;byte_received&quot;</span>: <span class="string">&quot;3061&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;response_time_milisec&quot;</span>: <span class="string">&quot;1316&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;beat&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;hostname&quot;</span>: <span class="string">&quot;host&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;hostname&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;version&quot;</span>: <span class="string">&quot;6.2.2&quot;</span></span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="attr">&quot;client_ip&quot;</span>: <span class="string">&quot;myip&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;status&quot;</span>: <span class="string">&quot;200&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line"></span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p>정상적으로 들어와 있는것을 확인 할 수 있습니다.</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://nakjunizm.com/2018/03/09/Ingest_Node/" data-id="ckugz0jpd001lut3i53oj7zci" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "NJ SUNG"
+        },
+        "headline": "ElasticSearch Ingest Node",
+        "image": "https://nakjunizm.comhttps://nakjunizm.github.io/2018/03/09/Ingest_Node/ingest1.png",
+        "keywords": "elasticsearch kibana logstash elk visualization ingest_node",
+        "genre": "Operations ElasticSearch",
+        "datePublished": "2018-03-09",
+        "dateCreated": "2018-03-09",
+        "dateModified": "2021-10-07",
+        "url": "https://nakjunizm.com/2018/03/09/Ingest_Node/",
+        "description": "** 이 포스트는 ELK(+beats)를 이용한 apache log visualization 의 후속 포스트로써 logstash 대신 elasticsearch 의 ingest node 를 사용하는 방법을 소개 합니다. **
+filebeat-logstash-elasticsearch stack을 이용하여 kibana에서 대시보드를 구성하는 방법을 알아봤었습니다",
+        "wordCount": 1288
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="instagram" href="https://www.instagram.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-instagram"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="https://www.facebook.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/04/23/Kafka_Offset_Reset/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            Kafka Offset 재설정 하는 방법
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2018/03/08/ElasticSearch_License_Update/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">ElasticSearch license update</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="title"></a></p>
+                            <p class="item-date"><time datetime="2021-10-04T15:00:00.000Z" itemprop="datePublished">2021-10-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/06/17/Find_Old_Files_And_Delete/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/06/17/Find_Old_Files_And_Delete/mtime1.png)" alt="오래된 (특정 기간 이상 된) 파일 찾아서 지우기 How to find old (aged more than specific days) files and remove" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Linux/">Linux</a></p>
+                            <p class="item-title"><a href="/2020/06/17/Find_Old_Files_And_Delete/" class="title">오래된 (특정 기간 이상 된) 파일 찾아서 지우기 How to find old (aged more than specific days) files and remove</a></p>
+                            <p class="item-date"><time datetime="2020-06-17T12:37:00.000Z" itemprop="datePublished">2020-06-17</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/19/Zookeeper_Cleanup_Transactional_Log/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/05/19/Zookeeper_Cleanup_Transactional_Log/zookeeper1.png)" alt="주키퍼 오래된 스냅샷 및 트랜잭션 로그 삭제하기 zookeeper delete old snapshot and transactional log" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Zookeeper/">Zookeeper</a></p>
+                            <p class="item-title"><a href="/2020/05/19/Zookeeper_Cleanup_Transactional_Log/" class="title">주키퍼 오래된 스냅샷 및 트랜잭션 로그 삭제하기 zookeeper delete old snapshot and transactional log</a></p>
+                            <p class="item-date"><time datetime="2020-05-19T12:14:00.000Z" itemprop="datePublished">2020-05-19</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/03/24/Redis_Monitoring/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/redis1.png)" alt="레디스 모니터링 시 주의사항 (Redis monitoring/single thread)" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Redis/">Redis</a></p>
+                            <p class="item-title"><a href="/2020/03/24/Redis_Monitoring/" class="title">레디스 모니터링 시 주의사항 (Redis monitoring/single thread)</a></p>
+                            <p class="item-date"><time datetime="2020-03-24T13:14:00.000Z" itemprop="datePublished">2020-03-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/02/20/haproxy/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/02/20/haproxy/haproxy2.png)" alt="haproxy &amp; keepalived 로 프록시 구축하기" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/DevOps/">DevOps</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a></p>
+                            <p class="item-title"><a href="/2020/02/20/haproxy/" class="title">haproxy &amp; keepalived 로 프록시 구축하기</a></p>
+                            <p class="item-date"><time datetime="2020-02-20T12:41:00.000Z" itemprop="datePublished">2020-02-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">categories</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/Swarm/">Swarm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/">Development</a><span class="category-list-count">15</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Development/GraphQL/">GraphQL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/java/">java</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/node/">node</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/">Operations</a><span class="category-list-count">21</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Ansible/">Ansible</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Cloud/">Cloud</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Kafka/">Kafka</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/RabbitMQ/">RabbitMQ</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Redis/">Redis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Windows/">Windows</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Zookeeper/">Zookeeper</a><span class="category-list-count">1</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">3</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/6-4-0/" style="font-size: 10px;">6.4.0</a> <a href="/tags/Apollo/" style="font-size: 10px;">Apollo</a> <a href="/tags/ArrayList/" style="font-size: 10px;">ArrayList</a> <a href="/tags/CIDR/" style="font-size: 10px;">CIDR</a> <a href="/tags/Collections/" style="font-size: 10px;">Collections</a> <a href="/tags/Deque/" style="font-size: 10px;">Deque</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/ES-Version-up/" style="font-size: 10px;">ES Version up</a> <a href="/tags/FORBIDDEN-12-index/" style="font-size: 10px;">FORBIDDEN/12/index</a> <a href="/tags/GraphQL/" style="font-size: 10px;">GraphQL</a> <a href="/tags/LinkedList/" style="font-size: 10px;">LinkedList</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/OAuth/" style="font-size: 10px;">OAuth</a> <a href="/tags/Queue/" style="font-size: 10px;">Queue</a> <a href="/tags/SENS/" style="font-size: 10px;">SENS</a> <a href="/tags/Schema/" style="font-size: 10px;">Schema</a> <a href="/tags/Set/" style="font-size: 10px;">Set</a> <a href="/tags/Subnet/" style="font-size: 10px;">Subnet</a> <a href="/tags/Swarm/" style="font-size: 10px;">Swarm</a> <a href="/tags/System-Event-Notification-Service/" style="font-size: 10px;">System Event Notification Service</a> <a href="/tags/allocation/" style="font-size: 10px;">allocation</a> <a href="/tags/allow-delete/" style="font-size: 10px;">allow_delete</a> <a href="/tags/ansible/" style="font-size: 10px;">ansible</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/authentication/" style="font-size: 10px;">authentication</a> <a href="/tags/autopurge/" style="font-size: 10px;">autopurge</a> <a href="/tags/backup/" style="font-size: 10px;">backup</a> <a href="/tags/builder/" style="font-size: 10px;">builder</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/coding-convention/" style="font-size: 10px;">coding convention</a> <a href="/tags/comparable/" style="font-size: 10px;">comparable</a> <a href="/tags/comparator/" style="font-size: 10px;">comparator</a> <a href="/tags/compressedoops/" style="font-size: 10px;">compressedoops</a> <a href="/tags/devops/" style="font-size: 10px;">devops</a> <a href="/tags/disk-flood/" style="font-size: 10px;">disk_flood</a> <a href="/tags/doc-value/" style="font-size: 10px;">doc value</a> <a href="/tags/eager-global-ordinals/" style="font-size: 10px;">eager_global_ordinals</a> <a href="/tags/elasticsearch/" style="font-size: 17.5px;">elasticsearch</a> <a href="/tags/elk/" style="font-size: 12.5px;">elk</a> <a href="/tags/exception/" style="font-size: 10px;">exception</a> <a href="/tags/final/" style="font-size: 10px;">final</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/ha/" style="font-size: 10px;">ha</a> <a href="/tags/haproxy/" style="font-size: 10px;">haproxy</a> <a href="/tags/heap/" style="font-size: 10px;">heap</a> <a href="/tags/hot-thread/" style="font-size: 10px;">hot thread</a> <a href="/tags/ingest-node/" style="font-size: 10px;">ingest_node</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/kafka/" style="font-size: 10px;">kafka</a> <a href="/tags/keepalived/" style="font-size: 10px;">keepalived</a> <a href="/tags/kibana/" style="font-size: 15px;">kibana</a> <a href="/tags/license/" style="font-size: 10px;">license</a> <a href="/tags/log/" style="font-size: 10px;">log</a> <a href="/tags/logstash/" style="font-size: 12.5px;">logstash</a> <a href="/tags/mirror/" style="font-size: 10px;">mirror</a> <a href="/tags/monitoring/" style="font-size: 10px;">monitoring</a> <a href="/tags/mtime/" style="font-size: 10px;">mtime</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node/" style="font-size: 10px;">node</a> <a href="/tags/offset/" style="font-size: 10px;">offset</a> <a href="/tags/ordinals/" style="font-size: 10px;">ordinals</a> <a href="/tags/passport/" style="font-size: 10px;">passport</a> <a href="/tags/pattern/" style="font-size: 12.5px;">pattern</a> <a href="/tags/pending-tasks/" style="font-size: 10px;">pending tasks</a> <a href="/tags/primitive-type/" style="font-size: 10px;">primitive type</a> <a href="/tags/rabbitmq/" style="font-size: 10px;">rabbitmq</a> <a href="/tags/read-only/" style="font-size: 10px;">read-only</a> <a href="/tags/redis/" style="font-size: 12.5px;">redis</a> <a href="/tags/reference-type/" style="font-size: 10px;">reference type</a> <a href="/tags/reroute/" style="font-size: 10px;">reroute</a> <a href="/tags/restore/" style="font-size: 10px;">restore</a> <a href="/tags/serialization/" style="font-size: 10px;">serialization</a> <a href="/tags/shards/" style="font-size: 10px;">shards</a> <a href="/tags/singleton/" style="font-size: 10px;">singleton</a> <a href="/tags/snapRetain/" style="font-size: 10px;">snapRetain</a> <a href="/tags/stringpool/" style="font-size: 10px;">stringpool</a> <a href="/tags/swapoff/" style="font-size: 10px;">swapoff</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/thread-pool/" style="font-size: 10px;">thread pool</a> <a href="/tags/transient/" style="font-size: 10px;">transient</a> <a href="/tags/try-with-resources/" style="font-size: 10px;">try-with-resources</a> <a href="/tags/tuning/" style="font-size: 10px;">tuning</a> <a href="/tags/unassigned/" style="font-size: 12.5px;">unassigned</a> <a href="/tags/versionup/" style="font-size: 10px;">versionup</a> <a href="/tags/visualization/" style="font-size: 12.5px;">visualization</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/watermark/" style="font-size: 10px;">watermark</a> <a href="/tags/windows2012/" style="font-size: 10px;">windows2012</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/zookeeper/" style="font-size: 12.5px;">zookeeper</a> <a href="/tags/%EC%8A%A4%ED%8A%B8%EB%A7%81%ED%92%80/" style="font-size: 10px;">스트링풀</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/nakjunizm">github</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2021 NJ SUNG</p>
+                
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+    </div>
+    
+    
+    <script>
+    var disqus_shortname = 'nakjunizm';
+    
+    
+    var disqus_url = 'https://nakjunizm.com/2018/03/09/Ingest_Node/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>

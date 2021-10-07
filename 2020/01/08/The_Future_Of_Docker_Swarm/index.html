@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>도커 스웜의 미래 (The Future of Docker Swarm) | nakjunizm&#39;s dev note</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="Swarm,Docker" />
+    
+    <meta name="description" content="원작자인 Bret Fisher에게 허락을 받고 번역&#x2F;포스팅 함을 밝힙니다. 의역을 많이 해서 오역이 있을수 있습니다. 제 의견은 역주: 로 표시 하였습니다. 원문 링크 : https:&#x2F;&#x2F;www.bretfisher.com&#x2F;the-future-of-docker-swarm&#x2F;  도커 스웜의 미래 (The Future of Docker Swarm)지금은 2018년">
+<meta property="og:type" content="article">
+<meta property="og:title" content="도커 스웜의 미래 (The Future of Docker Swarm)">
+<meta property="og:url" content="https://nakjunizm.com/2020/01/08/The_Future_Of_Docker_Swarm/index.html">
+<meta property="og:site_name" content="nakjunizm&#39;s dev note">
+<meta property="og:description" content="원작자인 Bret Fisher에게 허락을 받고 번역&#x2F;포스팅 함을 밝힙니다. 의역을 많이 해서 오역이 있을수 있습니다. 제 의견은 역주: 로 표시 하였습니다. 원문 링크 : https:&#x2F;&#x2F;www.bretfisher.com&#x2F;the-future-of-docker-swarm&#x2F;  도커 스웜의 미래 (The Future of Docker Swarm)지금은 2018년">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://nakjunizm.github.io/2020/01/08/The_Future_Of_Docker_Swarm/BTF1.jpg">
+<meta property="article:published_time" content="2020-01-08T12:45:00.000Z">
+<meta property="article:modified_time" content="2021-10-06T15:33:17.483Z">
+<meta property="article:author" content="NJ SUNG">
+<meta property="article:tag" content="Swarm">
+<meta property="article:tag" content="Docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nakjunizm.github.io/2020/01/08/The_Future_Of_Docker_Swarm/BTF1.jpg">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="nakjunizm&#39;s dev note" type="application/atom+xml" />
+    
+
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-112395863-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+    
+    
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/">DevOps</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/Docker/">Docker</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/">Development</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/GraphQL/">GraphQL</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/java/">java</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/node/">node</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/">Operations</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Ansible/">Ansible</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Cloud/">Cloud</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Kafka/">Kafka</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Linux/">Linux</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/RabbitMQ/">RabbitMQ</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Redis/">Redis</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Windows/">Windows</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Zookeeper/">Zookeeper</a></li></ul></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" target="_blank" rel="noopener" href="https://ko.gravatar.com/nakjunizm">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/DevOps/">DevOps</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/DevOps/Docker/">Docker</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/DevOps/Docker/Swarm/">Swarm</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-The_Future_Of_Docker_Swarm" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        도커 스웜의 미래 (The Future of Docker Swarm)
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2020/01/08/The_Future_Of_Docker_Swarm/" class="article-date">
+       <time datetime="2020-01-08T12:45:00.000Z" itemprop="datePublished">2020-01-08</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2020/01/08/The_Future_Of_Docker_Swarm/" class="article-date">
+     <time datetime="2021-10-06T15:33:17.483Z" itemprop="dateModified">2021-10-07</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Docker/" rel="tag">Docker</a>, <a class="tag-link-link" href="/tags/Swarm/" rel="tag">Swarm</a>
+    </div>
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <p>원작자인 <a target="_blank" rel="noopener" href="https://www.bretfisher.com/author/bret/">Bret Fisher</a>에게 허락을 받고 번역/포스팅 함을 밝힙니다.</p>
+<p>의역을 많이 해서 오역이 있을수 있습니다. 제 의견은 <strong>역주:</strong> 로 표시 하였습니다.</p>
+<p>원문 링크 : <a target="_blank" rel="noopener" href="https://www.bretfisher.com/the-future-of-docker-swarm/">https://www.bretfisher.com/the-future-of-docker-swarm/</a></p>
+<p><img src="https://nakjunizm.github.io/2020/01/08/The_Future_Of_Docker_Swarm/BTF1.jpg" alt="Back to the future image"></p>
+<h1 id="도커-스웜의-미래-The-Future-of-Docker-Swarm"><a href="#도커-스웜의-미래-The-Future-of-Docker-Swarm" class="headerlink" title="도커 스웜의 미래 (The Future of Docker Swarm)"></a>도커 스웜의 미래 (The Future of Docker Swarm)</h1><h4 id="지금은-2018년-10월입니다-저는-도커-스웜의-팬-입니다-저는-스웜을-사용하고-저의-고객들도-스웜을-사용-합니다-저는-심지어-스웜에-대한-세계-최고의-온라강좌-그리고-리얼월드-코스-도-만들었습니다-이-글에서는-스웜의-과거와-현재-그리고-미래에-대해-포괄적으로-리뷰-하였습니다"><a href="#지금은-2018년-10월입니다-저는-도커-스웜의-팬-입니다-저는-스웜을-사용하고-저의-고객들도-스웜을-사용-합니다-저는-심지어-스웜에-대한-세계-최고의-온라강좌-그리고-리얼월드-코스-도-만들었습니다-이-글에서는-스웜의-과거와-현재-그리고-미래에-대해-포괄적으로-리뷰-하였습니다" class="headerlink" title="지금은 2018년 10월입니다. 저는 도커 스웜의 팬 입니다. 저는 스웜을 사용하고, 저의 고객들도 스웜을 사용 합니다. 저는 심지어 스웜에 대한 ** 세계 최고의 온라강좌 ** 그리고 ** 리얼월드 코스 ** 도 만들었습니다.이 글에서는 스웜의 과거와 현재 그리고 미래에 대해 포괄적으로 리뷰 하였습니다."></a>지금은 2018년 10월입니다. 저는 도커 스웜의 팬 입니다. 저는 스웜을 사용하고, 저의 고객들도 스웜을 사용 합니다. 저는 심지어 스웜에 대한 ** <a target="_blank" rel="noopener" href="https://www.bretfisher.com/dockerswarmmastery">세계 최고의 온라강좌</a> ** 그리고 ** <a target="_blank" rel="noopener" href="https://container.training/">리얼월드 코스</a> ** 도 만들었습니다.이 글에서는 스웜의 과거와 현재 그리고 미래에 대해 포괄적으로 리뷰 하였습니다.</h4><blockquote>
+<p>다섯달 전 쯤에 제가 쓴 ** “2018년도, 스웜은 죽었을까?”(<a target="_blank" rel="noopener" href="https://www.bretfisher.com/is-swarm-dead-answered-by-a-docker-captain/">It’s 2018, Is Swarm Dead?</a>)** 를 봤을지는 모르겠지만,<br>그 글에서 저는 “도커가 쿠버네티스를 스웜으로 대체할 것이다” 라는 [틀린] 추측을 했습니다. 실제로는 도커에서 쿠버네티스를 도커의 growing list에 오케스트레이터로 ** 추가 ** 했습니다.</p>
+</blockquote>
+<p>** 2019 업데이트 **: 도커는 도커콘2018 유럽과 도커콘 2019에서 스웜의 미래에 대해 다시한번 확인시켜 줬습니다. 1. 새로운 스웜의 기능들, 2. 도커의 700+ 스웜을 사용하는 고객들의 규모, 3. 스웜팀은 현재 구인중, 4. 작년동안 본 모든 리포트에서 스웜의 사용이 늘어나고 있다고 함</p>
+<p>이제 ** <a target="_blank" rel="noopener" href="https://blog.docker.com/2018/04/announcing-docker-enterprise-edition-2-0/">도커 엔터프라이즈 2.0 with 쿠버네티스 서포트</a> ** 가 릴리즈 되었고, 제 생각에는 스웜킷(<a target="_blank" rel="noopener" href="https://github.com/docker/swarmkit">SwarmKit</a>) 과 libnetwork(<a target="_blank" rel="noopener" href="https://github.com/docker/libnetwork">https://github.com/docker/libnetwork</a>) 프로젝트들을 다시 방문해보고 지난 열두달간 어떤 일이 있었는지 확인 해 볼 시간인것 같습니다.</p>
+<p>이 글은 제가 도커 스웜 엔지니어와 Anshul Pundir(<a target="_blank" rel="noopener" href="https://twitter.com/anshulpundir">https://twitter.com/anshulpundir</a>) 와 인터뷰 하면서 만들었던 도커 스웜의 과거,현재 그리고 미래 유툽 비디오를 바탕으로 작성 하였습니다.</p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=gr5alKBPtzw"><img src="https://img.youtube.com/vi/gr5alKBPtzw/0.jpg" alt="The Future of Swarm Interview with Anshul Pundir"></a></p>
+<blockquote>
+<p>Reminder: “Docker Swarm Mode” 는 우리 모두가 사용하는 Docker CLI 혹은 다양한 GUI’s의 도커 엔진의 기능집합 입니다. 이 기능들은 <a target="_blank" rel="noopener" href="https://github.com/docker/swarmkit">SwarmKit</a> 과 <a target="_blank" rel="noopener" href="https://github.com/docker/libnetwork">libnetwork</a> 두 오픈소스 라이브러리에서 만들어 졌다고 볼 수 있습니다. 그렇기 때문에 우리가 “Docker Engine Release 18.XX,” 에서 확인 할 수 있는 새로운 기능들은 때때로 개발자들이 먼저 그 새로운 기능들을 SwarmKit과 libnetwork 에 먼저 올렸다는 뜻이죠. ** 물론 SwarmKit/libnetwork 에 추가된 기능들이 Docker engine 릴리즈에 합쳐지는데는 몇달 이상씩 걸릴수도 있습니다. **</p>
+</blockquote>
+<h1 id="2017년-하반기와-2018년에-완료된-일들"><a href="#2017년-하반기와-2018년에-완료된-일들" class="headerlink" title="2017년 하반기와 2018년에 완료된 일들"></a>2017년 하반기와 2018년에 완료된 일들</h1><p>지난 열두달 동안 어떤일들이 끝났는지에 대해 이야기 해 봅시다. <strong>주요 영향들은 버그 픽스들, 확장성(scalability)의 향상, 기술 부채 (Technical debt) 그리고 더 쉬운 트러블슈팅과 모니터링</strong> 위주로 이뤄 졌습니다. 아래는 주요 테마 와 관련된 merged 된 pull requests 입니다.</p>
+<ul>
+<li>** 스웜 서비스들 (Swarm services) 의 진짜 중단시간 없는 순차 업데이트를 가능성을 열어줄 ** 일련의 픽스들 (헬스체크와 적절한 앱간의 연결 관리를 한다는 가정 하에). 대부분 <a target="_blank" rel="noopener" href="https://github.com/moby/moby/issues/30321">moby#30321</a> 에서 찾을 수 있고 마지막으로 알려진 이슈(내가 알고있는)는 PR <a target="_blank" rel="noopener" href="https://github.com/moby/moby/pull/36638">moby#36638</a> 로 18.05에 merged 되었습니다.</li>
+<li>위에 언급한 변경 사항들은 하드웨어의 fault-tolerance 는 필요 하지 않지만 여전히 중단 없는 순차 업데이트를 원하는 사람들이 하나의 노드로 동작하는 스웜을 운영할 수 있게 해 줍니다. ** <a target="_blank" rel="noopener" href="https://github.com/BretFisher/ama/issues/8">저는 항상 docker-compose cli 보다는 하나의 노드로 이루어진 스웜(Swarm for single-node Docker setups) 을 추천</a> ** 합니다.</li>
+<li>진단(diagnostic) API 엔드포인트와 cli 클라이언트를 포함한 ** <a target="_blank" rel="noopener" href="https://github.com/docker/libnetwork/blob/master/cmd/diagnostic/README.md">클라이언트/서버에 네트워크 트러블슈팅을 추가하는 툴</a> ** 이 추가 되었습니다.</li>
+<li>스웜킷에 ** 다양한 스웜 객체에 대한 매트릭스가 ** 추가 되었습니다 <a target="_blank" rel="noopener" href="https://github.com/docker/swarmkit/pull/2673">swarmkit#2673</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/moby/moby/pull/37372">moby#37372</a> 를 통한 <strong>VIP 로드 밸런싱의 확장성의 향상/발전</strong> 이 있었습니다. 이로 인해 <a target="_blank" rel="noopener" href="https://github.com/moby/moby/issues/30820">유명한 이슈인 50k 이상 서비스를 가진 스웜의 빠른 확장 시도</a> 가 close 되었습니다. 많은 task 배포시의 ** CPU 성능 향상 **을 포함해서 말이죠 <a target="_blank" rel="noopener" href="https://github.com/docker/swarmkit/pull/2675">swarmkit#2675</a>.</li>
+<li>** Windows server 1709 와 1803에서 이제 <a target="_blank" rel="noopener" href="https://docs.docker.com/ee/engine/release-notes/#18031-ee-1-2018-06-27">full Swarm networking</a>을 지원 합니다 **. (overlay networks, routing mesh 그리고 VIP 를 포함하여). <a target="_blank" rel="noopener" href="https://blogs.technet.microsoft.com/virtualization/2017/09/26/dockers-ingress-routing-mesh-available-with-windows-server-version-1709/">여기 관련된 마이크로소프트의 발표를 확인하세요</a>. Server Core 1709 혹은 더 최신버전의 VM이 필요 하고 Docker 18.03 혹은 최신 버전이 필요함을 알 수 있습니다. 또 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/virtualization/windowscontainers/deploy-containers/version-compatibility">윈도우 컨테이너의 버전별 제약사항</a>을 꼭 확인하세요. 스웜 또한 docker run, swarm create 그리고 stack deploy를 통해 Hyper-V isolation 혹은 Process isolation을 이용하여 task를 생성할 수 있습니다. <a target="_blank" rel="noopener" href="https://github.com/moby/moby/pull/34424">moby#34424</a></li>
+<li><strong>대규모 스웜의 확장성과 성능</strong>을 위해 raft replication에서 streaming snapshot model로의 변경이 있었습니다 <a target="_blank" rel="noopener" href="https://github.com/docker/swarmkit/pull/2458">swarmkit#2458</a></li>
+<li>미국 정부 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/FIPS_140-2">NIST FIPS 140-2</a> 컴퓨터 보안 표준 <a target="_blank" rel="noopener" href="https://blog.docker.com/2018/08/update-docker-fips-140-2-compliance-initiative/">은 진행중</a> 이지만 현재의 최선책은 ** FIPS 표준을 지원하는 도커와 스웜, 즉 최신버전의 Docker Enterprise release 18.03.1 을 사용 할 수 있습니다. <a target="_blank" rel="noopener" href="https://github.com/docker/swarmkit/pulls?utf8=%E2%9C%93&q=FIPS">관련된 PR은 2018년 SwarmKit 진행상황</a>에서 확인 가능 합니다. 그리고 <a target="_blank" rel="noopener" href="https://blog.docker.com/2018/08/update-docker-fips-140-2-compliance-initiative/">도커 블로그 포스트</a>에 따르면 Docker Enterprise 에 포함(Management Plane)되는 쿠버네티스도 결국에는 FIPS 140-2이 유효하게 될 것 입니다.</li>
+<li><strong><a target="_blank" rel="noopener" href="https://github.com/docker/swarmkit/tree/master/design/tla">스웜킷을 위한 TLA+ 지원</a></strong> 이 됩니다. TLA+는 으로써 기본적으로 코드의 품질을 validate 하기 위해 툴들과 함께 테스트 될 수 있는, <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/TLA%2B">동시(concurrent) 시스템을 위한 디자인 스펙</a> 입니다. 이건 저에게는 너무 똑똑한 것 같지만, 확장성과 품질을 향상시키는 작업의 중요한 역할을 한다고 들었습니다.</li>
+<li><strong>Docker CLI를 스웜/쿠버네티스 스택에서 동일하게 사용 할 수 있도록 (Feature parity) 합니다.</strong> Docker CLI를 이용해서 오케스트레이터에서 동일하게 앱 관리를 할 수 있습니다. <a target="_blank" rel="noopener" href="https://github.com/docker/cli/pull/1031">cli#1031</a></li>
+<li>스웜 raft heartbeat와 election waits를 위한 도커 엔진 설정들이 추가 되었습니다; <strong>네트워크 레이턴시가 높은 상황에서의</strong> 복원력을 향상 시키고 “매니저가 바뀌어 버리는 현상 (manager flip/flops)” 을 방지 하기 위한것으로 예상 됩니다. <a target="_blank" rel="noopener" href="https://github.com/moby/moby/pull/36726">moby#36726</a></li>
+<li>스웜 오버레이 네트워크를 지원 하기 위해 SCTP 프로토콜 이 추가 되었습니다. 이건 현재도 지원되고 있는 TCP/UDP/ICMP 프로토콜 보다 어려운 프로토콜 입니다. <a target="_blank" rel="noopener" href="https://github.com/moby/moby/pull/33922">moby#33922</a></li>
+<li>스웜 디버그 로그의 디테일이 향상 되었습니다. <a target="_blank" rel="noopener" href="https://github.com/docker/swarmkit/pull/2486">swarmkit#2486</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.docker.com/engine/reference/commandline/service_create/#create-services-using-templates">서비스 태스크 (컨테이너)를 만들때 노드의 호스트네임을 기반으로 한 커스텀 호스트네임과</a> 다른 스웜 환경변수들 을 가지고 만들수 있습니다 (템플릿을 사용하여) <a target="_blank" rel="noopener" href="https://github.com/moby/moby/pull/34686">moby#34686</a></li>
+</ul>
+<p>지금 까지 나열한 것들이 물론 전부 다는 아닙니다. 좀 더 자세한 정보를 원한다면 <a target="_blank" rel="noopener" href="https://github.com/moby/moby/pulls?q=is:pr+is:closed+label:area/swarm">종료된 전체 관련 PR 리스트</a>를 확인 하세요.</p>
+<h1 id="다른-진행중인-일들-Other-Works-In-Progress-WIP"><a href="#다른-진행중인-일들-Other-Works-In-Progress-WIP" class="headerlink" title="다른 진행중인 일들 Other Works In Progress (WIP)"></a>다른 진행중인 일들 Other Works In Progress (WIP)</h1><p>다음으로, 공개적으로 시작했거나 시작하려고 마음 먹은 일들에 대해서 살펴 보겠습니다.</p>
+<ul>
+<li>스웜 서비스 안의 sysctl (Linux Kernel parameters) 설정. sysctl 의 파라미터는 네트워크 최적화 등을 이유로 주로 변경 해서 사용 합니다. 현재는 <code>docker run</code> 에서 설정 할 수 있지만 보안/커널 관련된 옵션들을 모두 “run”에서 “services” 로 <a target="_blank" rel="noopener" href="https://github.com/moby/moby/issues/25209">옮기려는 노력이 진행중</a>에 있습니다. <code>docker run</code> 에서 <code>docker service create</code> 로 <strong><a target="_blank" rel="noopener" href="https://github.com/moby/moby/issues/25303">옮기려는 모든 기능들의 리스트</a></strong> 는 여기에서 확인 하세요. <a target="_blank" rel="noopener" href="https://github.com/moby/moby/pull/37701">moby#37701</a> <a target="_blank" rel="noopener" href="https://github.com/docker/swarmkit/pull/2729">swarmkit#2729</a> (역주: 확인해 보니 merged 됐네요)</li>
+<li>디바이스 지원: 가장 흔한 유즈 케이스는 GPU 의 지원 일 것 입니다. 이를 통해 여러분은 하나 혹은 이상의 GPU들을 사용하는 서비스를 스케쥴 할 수 있을 것 입니다. 그리고 스웜은 어디에 그 태스크를 스케쥴 해야 하고, 어떻게 그 리소스들을 사용해야 할 지 알게 될 것 입니다. <a target="_blank" rel="noopener" href="https://github.com/docker/swarmkit/issues/2682">swarmkit#2682</a> (역주: 이건 오픈 상태인데 커멘트들을 보면 보류 된 상태로 보입니다)</li>
+<li>스웜 클러스터를 위한 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/community/blob/master/contributors/devel/kubemark-guide.md">Kubemark</a>와 비슷한 성능 테스트와 검증 툴. 우리는 스웜킷에 약간의 새로운 메트릭 들이 추가된 것을 <a target="_blank" rel="noopener" href="https://github.com/docker/swarmkit/pull/2673">swarmkit#2673</a>에서 봤었지만 사용자 관점의 테스팅 툴에 관한 움직임을 한동안 보지 못 했습니다. <strong>스웜 클러스터를 위한 벤치마킹과 테스팅 툴이 있으면 좋겠다는 의견이 몇몇의 엔지니어들에 의해 언급 되었지만, 아직 코드는 작성 된게 없어 보입니다.</strong></li>
+<li>새로운 <a target="_blank" rel="noopener" href="https://github.com/docker/swarmkit/pull/2686">네트워크와 IP 할당자</a>. 모든 서버들이 각각의 버추얼 네트워크를 만들고 서브넷을 생성하고 출동하지 않는 IP들을 생성하는것은 쉬운 일이 아닙니다. 그리고 여러분의 서버에서 매초마다 새로 생겼다가 없어지는 컨테이너들을 가지고 있다면 앞에서 말한 네트워크관련 된 작업의 정확한 상태를 유지 하는것은 굉장히 어렵 습니다. 지난 몇년간 관련된 <a target="_blank" rel="noopener" href="https://github.com/docker/swarmkit/pull/2505">다양한</a> <a target="_blank" rel="noopener" href="https://github.com/docker/libnetwork/pull/2105">이슈들</a><strong>- 제가본 PR들을 보면- 은 지금 해결 되었습니다. 이건 나중의 기능들과 약간의 엣지 케이스들을 위해서 길을 포장하는것 처럼 들립니다.</strong> <a target="_blank" rel="noopener" href="https://github.com/docker/swarmkit/pull/2686">swarmkit#2686</a></li>
+<li><strong>더욱 향상된 로드 밸런싱.</strong> 제 생각에는 이게 스웜의 <a target="_blank" rel="noopener" href="https://docs.docker.com/network/overlay/">오버레이 네트워크 드라이버</a> 의 라우팅 메시(routing mesh)와 VIP 기능들의 사용할 수 있는 다이얼(knobs)를 뜻하는것 같네요. 관련된 스펙은 없습니다.(역주: 다른것들은 github pr이나 issue 넘버가 있는데 이건 없다는 뜻 입니다.)</li>
+<li>클러스터 볼륨(Cluster volumes). 도커에는 이제까지 스웜에서 인식할 수 있는 내장된 볼름 드라이버가 없었습니다. <a target="_blank" rel="noopener" href="https://github.com/moby/moby/issues/31923">이에 대해서는 2017년 초부터 되어 왔습니다.</a> ** 지금은 <a target="_blank" rel="noopener" href="https://rexray.io/">REX-Ray</a> ** 를 사용 하거나 <a target="_blank" rel="noopener" href="https://store.docker.com/search?type=plugin&category=volume">다른</a> 써드파티 도커 플러그인 들을 사용할 수 있습니다. 또한 <a target="_blank" rel="noopener" href="https://docs.docker.com/docker-for-aws/persistent-data-volumes/">도커의 CloudStor</a> 드라이버도 있지만 이들은 모두 아직 오픈소스가 아니거나 빌트인으로 제공 되지 않습니다. ** 스웜킷 팀에서는 클러스터 볼륨에 다시 관심을 갖게 되었고, 아마도 CSI 를 지원** 할것 같습니다. CSI는 <a target="_blank" rel="noopener" href="https://github.com/container-storage-interface/spec">Container Storage Interface</a> 의 약자로 <a target="_blank" rel="noopener" href="https://thenewstack.io/tag/container-storage-interface/">다른 오케스트레이터들도 지원을 합니다</a>.</li>
+<li>현재는 <strong>Custom default IP subnets</strong> 이 bridge networks 에 한하지만 overlay 까지 확장되길 기대 합니다. <a target="_blank" rel="noopener" href="https://github.com/moby/moby/pull/36396">moby#36396</a></li>
+</ul>
+<h1 id="도커-스웜-팀은-지금-구인중-입니다"><a href="#도커-스웜-팀은-지금-구인중-입니다" class="headerlink" title="도커 스웜 팀은 지금 구인중 입니다"></a>도커 스웜 팀은 지금 구인중 입니다</h1><p>위에 있는 제 Anshul 과의 인터뷰 비디오를 보면, 그의 팀은 스웜 엔지니어를 구한다고 언급 했습니다. 보다 자세한 정보는 <a target="_blank" rel="noopener" href="https://www.docker.com/careers/engineering">그들의 구인 페이지</a>에서 “Orchestration Engineers” 를 참조하세요. (역주: 현재 2020년 1월에 확인했을 때는 해당 링크는 존재하지 않습니다.)</p>
+<h1 id="Thanks-To-Docker"><a href="#Thanks-To-Docker" class="headerlink" title="Thanks To Docker"></a>Thanks To Docker</h1><p>도커 팀에게 감사의 말씀을 드립니다. 도커 본사에서 저와 함께 시간을 보내면서 도커 캡틴들이 정보를 공유하고 커뮤니티에 도움을 줄 수 있게 도와준 <a target="_blank" rel="noopener" href="https://twitter.com/anshulpundir">Anshul Pundir</a> 그리고 <a target="_blank" rel="noopener" href="https://twitter.com/ManoMarks">Mano Marks</a> 특히 더 고맙습니다.</p>
+<h1 id="Get-More-Swarm-Education"><a href="#Get-More-Swarm-Education" class="headerlink" title="Get More Swarm Education"></a>Get More Swarm Education</h1><p>제 스웜 마스터리 코스는 <a target="_blank" rel="noopener" href="https://www.bretfisher.com/dockerswarmmastery">인터넷상에서 스웜을 배우는 가장 좋은 방법 입니다</a>! 그리고 도커의 기초 훈련도 제 <a target="_blank" rel="noopener" href="https://www.bretfisher.com/dockermastery">도커 마스터리 코스</a>에서 받을 수 있습니다.</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://nakjunizm.com/2020/01/08/The_Future_Of_Docker_Swarm/" data-id="ckugz0jpw002iut3i4zf25g1o" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "NJ SUNG"
+        },
+        "headline": "도커 스웜의 미래 (The Future of Docker Swarm)",
+        "image": "https://nakjunizm.comhttps://nakjunizm.github.io/2020/01/08/The_Future_Of_Docker_Swarm/BTF1.jpg",
+        "keywords": "Swarm Docker",
+        "genre": "DevOps Docker Swarm",
+        "datePublished": "2020-01-08",
+        "dateCreated": "2020-01-08",
+        "dateModified": "2021-10-07",
+        "url": "https://nakjunizm.com/2020/01/08/The_Future_Of_Docker_Swarm/",
+        "description": "원작자인 Bret Fisher에게 허락을 받고 번역/포스팅 함을 밝힙니다.
+의역을 많이 해서 오역이 있을수 있습니다. 제 의견은 역주: 로 표시 하였습니다.
+원문 링크 : https://www.bretfisher.com/the-future-of-docker-swarm/
+
+도커 스웜의 미래 (The Future of Docker Swarm)지금은 2018년 ",
+        "wordCount": 1374
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="instagram" href="https://www.instagram.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-instagram"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="https://www.facebook.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2020/01/29/Cidr/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            사이더(CIDR) 란 무엇인가?
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2019/10/30/RabbitMQ_Cluster/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">RabbitMQ 고가용성(HA) 를 위해 Cluster 하는 방법 (RabbitMQ HA)</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="title"></a></p>
+                            <p class="item-date"><time datetime="2021-10-04T15:00:00.000Z" itemprop="datePublished">2021-10-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/06/17/Find_Old_Files_And_Delete/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/06/17/Find_Old_Files_And_Delete/mtime1.png)" alt="오래된 (특정 기간 이상 된) 파일 찾아서 지우기 How to find old (aged more than specific days) files and remove" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Linux/">Linux</a></p>
+                            <p class="item-title"><a href="/2020/06/17/Find_Old_Files_And_Delete/" class="title">오래된 (특정 기간 이상 된) 파일 찾아서 지우기 How to find old (aged more than specific days) files and remove</a></p>
+                            <p class="item-date"><time datetime="2020-06-17T12:37:00.000Z" itemprop="datePublished">2020-06-17</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/19/Zookeeper_Cleanup_Transactional_Log/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/05/19/Zookeeper_Cleanup_Transactional_Log/zookeeper1.png)" alt="주키퍼 오래된 스냅샷 및 트랜잭션 로그 삭제하기 zookeeper delete old snapshot and transactional log" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Zookeeper/">Zookeeper</a></p>
+                            <p class="item-title"><a href="/2020/05/19/Zookeeper_Cleanup_Transactional_Log/" class="title">주키퍼 오래된 스냅샷 및 트랜잭션 로그 삭제하기 zookeeper delete old snapshot and transactional log</a></p>
+                            <p class="item-date"><time datetime="2020-05-19T12:14:00.000Z" itemprop="datePublished">2020-05-19</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/03/24/Redis_Monitoring/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/redis1.png)" alt="레디스 모니터링 시 주의사항 (Redis monitoring/single thread)" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Redis/">Redis</a></p>
+                            <p class="item-title"><a href="/2020/03/24/Redis_Monitoring/" class="title">레디스 모니터링 시 주의사항 (Redis monitoring/single thread)</a></p>
+                            <p class="item-date"><time datetime="2020-03-24T13:14:00.000Z" itemprop="datePublished">2020-03-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/02/20/haproxy/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/02/20/haproxy/haproxy2.png)" alt="haproxy &amp; keepalived 로 프록시 구축하기" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/DevOps/">DevOps</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a></p>
+                            <p class="item-title"><a href="/2020/02/20/haproxy/" class="title">haproxy &amp; keepalived 로 프록시 구축하기</a></p>
+                            <p class="item-date"><time datetime="2020-02-20T12:41:00.000Z" itemprop="datePublished">2020-02-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">categories</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/Swarm/">Swarm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/">Development</a><span class="category-list-count">15</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Development/GraphQL/">GraphQL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/java/">java</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/node/">node</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/">Operations</a><span class="category-list-count">21</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Ansible/">Ansible</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Cloud/">Cloud</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Kafka/">Kafka</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/RabbitMQ/">RabbitMQ</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Redis/">Redis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Windows/">Windows</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Zookeeper/">Zookeeper</a><span class="category-list-count">1</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">3</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/6-4-0/" style="font-size: 10px;">6.4.0</a> <a href="/tags/Apollo/" style="font-size: 10px;">Apollo</a> <a href="/tags/ArrayList/" style="font-size: 10px;">ArrayList</a> <a href="/tags/CIDR/" style="font-size: 10px;">CIDR</a> <a href="/tags/Collections/" style="font-size: 10px;">Collections</a> <a href="/tags/Deque/" style="font-size: 10px;">Deque</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/ES-Version-up/" style="font-size: 10px;">ES Version up</a> <a href="/tags/FORBIDDEN-12-index/" style="font-size: 10px;">FORBIDDEN/12/index</a> <a href="/tags/GraphQL/" style="font-size: 10px;">GraphQL</a> <a href="/tags/LinkedList/" style="font-size: 10px;">LinkedList</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/OAuth/" style="font-size: 10px;">OAuth</a> <a href="/tags/Queue/" style="font-size: 10px;">Queue</a> <a href="/tags/SENS/" style="font-size: 10px;">SENS</a> <a href="/tags/Schema/" style="font-size: 10px;">Schema</a> <a href="/tags/Set/" style="font-size: 10px;">Set</a> <a href="/tags/Subnet/" style="font-size: 10px;">Subnet</a> <a href="/tags/Swarm/" style="font-size: 10px;">Swarm</a> <a href="/tags/System-Event-Notification-Service/" style="font-size: 10px;">System Event Notification Service</a> <a href="/tags/allocation/" style="font-size: 10px;">allocation</a> <a href="/tags/allow-delete/" style="font-size: 10px;">allow_delete</a> <a href="/tags/ansible/" style="font-size: 10px;">ansible</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/authentication/" style="font-size: 10px;">authentication</a> <a href="/tags/autopurge/" style="font-size: 10px;">autopurge</a> <a href="/tags/backup/" style="font-size: 10px;">backup</a> <a href="/tags/builder/" style="font-size: 10px;">builder</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/coding-convention/" style="font-size: 10px;">coding convention</a> <a href="/tags/comparable/" style="font-size: 10px;">comparable</a> <a href="/tags/comparator/" style="font-size: 10px;">comparator</a> <a href="/tags/compressedoops/" style="font-size: 10px;">compressedoops</a> <a href="/tags/devops/" style="font-size: 10px;">devops</a> <a href="/tags/disk-flood/" style="font-size: 10px;">disk_flood</a> <a href="/tags/doc-value/" style="font-size: 10px;">doc value</a> <a href="/tags/eager-global-ordinals/" style="font-size: 10px;">eager_global_ordinals</a> <a href="/tags/elasticsearch/" style="font-size: 17.5px;">elasticsearch</a> <a href="/tags/elk/" style="font-size: 12.5px;">elk</a> <a href="/tags/exception/" style="font-size: 10px;">exception</a> <a href="/tags/final/" style="font-size: 10px;">final</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/ha/" style="font-size: 10px;">ha</a> <a href="/tags/haproxy/" style="font-size: 10px;">haproxy</a> <a href="/tags/heap/" style="font-size: 10px;">heap</a> <a href="/tags/hot-thread/" style="font-size: 10px;">hot thread</a> <a href="/tags/ingest-node/" style="font-size: 10px;">ingest_node</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/kafka/" style="font-size: 10px;">kafka</a> <a href="/tags/keepalived/" style="font-size: 10px;">keepalived</a> <a href="/tags/kibana/" style="font-size: 15px;">kibana</a> <a href="/tags/license/" style="font-size: 10px;">license</a> <a href="/tags/log/" style="font-size: 10px;">log</a> <a href="/tags/logstash/" style="font-size: 12.5px;">logstash</a> <a href="/tags/mirror/" style="font-size: 10px;">mirror</a> <a href="/tags/monitoring/" style="font-size: 10px;">monitoring</a> <a href="/tags/mtime/" style="font-size: 10px;">mtime</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node/" style="font-size: 10px;">node</a> <a href="/tags/offset/" style="font-size: 10px;">offset</a> <a href="/tags/ordinals/" style="font-size: 10px;">ordinals</a> <a href="/tags/passport/" style="font-size: 10px;">passport</a> <a href="/tags/pattern/" style="font-size: 12.5px;">pattern</a> <a href="/tags/pending-tasks/" style="font-size: 10px;">pending tasks</a> <a href="/tags/primitive-type/" style="font-size: 10px;">primitive type</a> <a href="/tags/rabbitmq/" style="font-size: 10px;">rabbitmq</a> <a href="/tags/read-only/" style="font-size: 10px;">read-only</a> <a href="/tags/redis/" style="font-size: 12.5px;">redis</a> <a href="/tags/reference-type/" style="font-size: 10px;">reference type</a> <a href="/tags/reroute/" style="font-size: 10px;">reroute</a> <a href="/tags/restore/" style="font-size: 10px;">restore</a> <a href="/tags/serialization/" style="font-size: 10px;">serialization</a> <a href="/tags/shards/" style="font-size: 10px;">shards</a> <a href="/tags/singleton/" style="font-size: 10px;">singleton</a> <a href="/tags/snapRetain/" style="font-size: 10px;">snapRetain</a> <a href="/tags/stringpool/" style="font-size: 10px;">stringpool</a> <a href="/tags/swapoff/" style="font-size: 10px;">swapoff</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/thread-pool/" style="font-size: 10px;">thread pool</a> <a href="/tags/transient/" style="font-size: 10px;">transient</a> <a href="/tags/try-with-resources/" style="font-size: 10px;">try-with-resources</a> <a href="/tags/tuning/" style="font-size: 10px;">tuning</a> <a href="/tags/unassigned/" style="font-size: 12.5px;">unassigned</a> <a href="/tags/versionup/" style="font-size: 10px;">versionup</a> <a href="/tags/visualization/" style="font-size: 12.5px;">visualization</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/watermark/" style="font-size: 10px;">watermark</a> <a href="/tags/windows2012/" style="font-size: 10px;">windows2012</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/zookeeper/" style="font-size: 12.5px;">zookeeper</a> <a href="/tags/%EC%8A%A4%ED%8A%B8%EB%A7%81%ED%92%80/" style="font-size: 10px;">스트링풀</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/nakjunizm">github</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2021 NJ SUNG</p>
+                
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+    </div>
+    
+    
+    <script>
+    var disqus_shortname = 'nakjunizm';
+    
+    
+    var disqus_url = 'https://nakjunizm.com/2020/01/08/The_Future_Of_Docker_Swarm/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>

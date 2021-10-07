@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>ELK(+beats)를 이용한 apache log visualization | nakjunizm&#39;s dev note</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="elasticsearch,kibana,logstash,elk,visualization,apache,log" />
+    
+    <meta name="description" content="file beats+logstash+elasticsearch+kibana를 이용하여apache 로그에서 의미있는 데이터를 시각화 하는 방법을 알아보겠습니다. # 설치Elastic stack 설치는 대부분 압축 해제하고 yml 로 된 설정파일을 수정하는것으로 끝납니다.Elastic Search의 경우 OS 셋팅변경이 필요할 수도 있으니 여기를 참조하세요. #">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELK(+beats)를 이용한 apache log visualization">
+<meta property="og:url" content="https://nakjunizm.com/2018/01/01/ELK_Apache_Log_Visualization/index.html">
+<meta property="og:site_name" content="nakjunizm&#39;s dev note">
+<meta property="og:description" content="file beats+logstash+elasticsearch+kibana를 이용하여apache 로그에서 의미있는 데이터를 시각화 하는 방법을 알아보겠습니다. # 설치Elastic stack 설치는 대부분 압축 해제하고 yml 로 된 설정파일을 수정하는것으로 끝납니다.Elastic Search의 경우 OS 셋팅변경이 필요할 수도 있으니 여기를 참조하세요. #">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://nakjunizm.github.io/2018/01/01/ELK_Apache_Log_Visualization/elk1.png">
+<meta property="article:published_time" content="2018-01-01T02:23:00.000Z">
+<meta property="article:modified_time" content="2021-10-06T15:33:17.493Z">
+<meta property="article:author" content="NJ SUNG">
+<meta property="article:tag" content="elasticsearch">
+<meta property="article:tag" content="kibana">
+<meta property="article:tag" content="logstash">
+<meta property="article:tag" content="elk">
+<meta property="article:tag" content="visualization">
+<meta property="article:tag" content="apache">
+<meta property="article:tag" content="log">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nakjunizm.github.io/2018/01/01/ELK_Apache_Log_Visualization/elk1.png">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="nakjunizm&#39;s dev note" type="application/atom+xml" />
+    
+
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-112395863-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+    
+    
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/">DevOps</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/Docker/">Docker</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/">Development</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/GraphQL/">GraphQL</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/java/">java</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Development/node/">node</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/">Operations</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Ansible/">Ansible</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Cloud/">Cloud</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Kafka/">Kafka</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Linux/">Linux</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/RabbitMQ/">RabbitMQ</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Redis/">Redis</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Windows/">Windows</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Operations/Zookeeper/">Zookeeper</a></li></ul></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" target="_blank" rel="noopener" href="https://ko.gravatar.com/nakjunizm">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-ELK_Apache_Log_Visualization" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        ELK(+beats)를 이용한 apache log visualization
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2018/01/01/ELK_Apache_Log_Visualization/" class="article-date">
+       <time datetime="2018-01-01T02:23:00.000Z" itemprop="datePublished">2018-01-01</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2018/01/01/ELK_Apache_Log_Visualization/" class="article-date">
+     <time datetime="2021-10-06T15:33:17.493Z" itemprop="dateModified">2021-10-07</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/apache/" rel="tag">apache</a>, <a class="tag-link-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a>, <a class="tag-link-link" href="/tags/elk/" rel="tag">elk</a>, <a class="tag-link-link" href="/tags/kibana/" rel="tag">kibana</a>, <a class="tag-link-link" href="/tags/log/" rel="tag">log</a>, <a class="tag-link-link" href="/tags/logstash/" rel="tag">logstash</a>, <a class="tag-link-link" href="/tags/visualization/" rel="tag">visualization</a>
+    </div>
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <p><a target="_blank" rel="noopener" href="https://www.elastic.co/products/beats/filebeat">file beats</a>+<a target="_blank" rel="noopener" href="https://www.elastic.co/kr/products/logstash">logstash</a>+<a target="_blank" rel="noopener" href="https://www.elastic.co/products/elasticsearch">elasticsearch</a>+<a target="_blank" rel="noopener" href="https://www.elastic.co/kr/products/kibana">kibana</a>를 이용하여<br>apache 로그에서 의미있는 데이터를 시각화 하는 방법을 알아보겠습니다.</p>
+<h3 id="설치"><a href="#설치" class="headerlink" title="# 설치"></a># 설치</h3><p>Elastic stack 설치는 대부분 압축 해제하고 yml 로 된 설정파일을 수정하는것으로 끝납니다.<br>Elastic Search의 경우 OS 셋팅변경이 필요할 수도 있으니 <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/system-config.html">여기</a>를 참조하세요.</p>
+<h3 id="File-Beat-설정"><a href="#File-Beat-설정" class="headerlink" title="# File Beat 설정"></a># File Beat 설정</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">filebeat.prospectors:</span><br><span class="line">- type: log</span><br><span class="line">  enabled: true</span><br><span class="line">  paths:</span><br><span class="line">    - /nakjunizm/logs/platform/apache/*access.log*</span><br><span class="line">  exclude_files: [&#x27;.gz$&#x27;]</span><br><span class="line">#----------------------------- Logstash output --------------------------------</span><br><span class="line">output.logstash:</span><br><span class="line">  # The Logstash hosts</span><br><span class="line">  hosts: [&quot;logstash호스트:5043&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>filebeat의 prospector는 수집기 각각을 나타냅니다. 설정 이름은 상당히 직관적 입니다.<br>위 설정대로 저는 /nakjunizm/logs/platform/apache/<em>access.log</em> 를 수집하는데 .gz 파일은 수집하지 않을것 입니다.</p>
+<h3 id="Logstash-설정-part1"><a href="#Logstash-설정-part1" class="headerlink" title="# Logstash 설정 part1"></a># Logstash 설정 part1</h3><p>일단 beats input을 받아서 stdout으로 출력되는 간단한 설정파일 작성해 보겠습니다.<br /><br>logstash home 에 filebeat-pipeline 이라는 설정파일을 하나 만들어서 아래 값을 넣습니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nakjunizm@logstash호스트:/nakjunizm/util/logstash$ vi filebeat-pipeline.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">   beats &#123;</span><br><span class="line">       port =&gt; <span class="string">&quot;5043&quot;</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">#filter &#123;</span><br><span class="line">#&#125;</span><br><span class="line">output &#123;</span><br><span class="line">   stdout &#123; codec =&gt; rubydebug &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>기본적으로 logstash의 설정파일은 위의 구조를 가지고 있습니다<br>input : input source로 db, file, beats 등등 많은 형식을 source로 가질 수 있습니다. <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/logstash/current/input-plugins.html">여기</a>로 가보시면 엄청나게 많은 input plugin이 있는것을 확인하실수 있습니다.</p>
+<ul>
+<li>filter : logstash의 강력한 기능중의 하나 입니다. input으로 들어온 데이터를 aggregate, mutate, grok 등 각각의 이벤트에 수정을 가할 수 있습니다.</li>
+<li>output : filter까지 마친 데이터를 output plugin을 통해 보낼 수 있습니다. 제 목표는 Elastic Search 로 보내는 것 입니다. 지금은 확인을 위해 console에 결과를 출력하도록 stdout 플러그인을 사용하겠습니다.</li>
+</ul>
+<h3 id="beats-logstash-정상동작-확인"><a href="#beats-logstash-정상동작-확인" class="headerlink" title="# beats-logstash 정상동작 확인"></a># beats-logstash 정상동작 확인</h3><p>위와같이 간단히 설정을 마치고 난 뒤 정상적으로 beat에서 데이터를 보내주는지 확인해 봅시다.<br>저는 logstash와 filebeat를 각각 다른 호스트에 설치하였고 아래와깉이 logstash를 구동시켜서 정상적으로 떴는지 확인 한 후 filebeat호스트에서 filebeat를 실행 시켰습니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nakjunizm@logstash호스트:/nakjunizm/util/logstash$ bin/logstash -f filebeat-pipeline.conf</span><br><span class="line">nakjunizm@filebeat호스트:/nakjunizm/util/filebeat$ ./filebeat -e -c filebeat.yml -d &quot;publish&quot;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;beat&quot;</span> =&gt; &#123;</span><br><span class="line">    <span class="string">&quot;hostname&quot;</span> =&gt; <span class="string">&quot;filebeat호스트&quot;</span>,</span><br><span class="line">    <span class="string">&quot;version&quot;</span> =&gt; <span class="string">&quot;6.1.0&quot;</span>,</span><br><span class="line">    <span class="string">&quot;name&quot;</span> =&gt; <span class="string">&quot;filebeat호스트&quot;</span></span><br><span class="line">&#125;,</span><br><span class="line"><span class="string">&quot;host&quot;</span> =&gt; <span class="string">&quot;filebeat호스트&quot;</span>,</span><br><span class="line"><span class="string">&quot;message&quot;</span> =&gt; <span class="string">&quot;- some.remote.ip.19 - - [22/Dec/2017:10:57:14 +0000] \&quot;POST /api1/v1/auth/token HTTP/1.1\&quot; 200 104 4742 5189 0/14987&quot;</span>,</span><br><span class="line"><span class="string">&quot;@version&quot;</span> =&gt; <span class="string">&quot;1&quot;</span>,</span><br><span class="line"><span class="string">&quot;offset&quot;</span> =&gt; <span class="number">520032</span>,</span><br><span class="line"><span class="string">&quot;tags&quot;</span> =&gt; [</span><br><span class="line">    [<span class="number">0</span>] <span class="string">&quot;beats_input_codec_plain_applied&quot;</span></span><br><span class="line">],</span><br><span class="line"><span class="string">&quot;@timestamp&quot;</span> =&gt; <span class="number">2017</span>-<span class="number">12</span>-26T02:<span class="number">17</span>:<span class="number">56.</span>028Z,</span><br><span class="line"><span class="string">&quot;prospector&quot;</span> =&gt; &#123;</span><br><span class="line">    <span class="string">&quot;type&quot;</span> =&gt; <span class="string">&quot;log&quot;</span></span><br><span class="line">&#125;,</span><br><span class="line"><span class="string">&quot;source&quot;</span> =&gt; <span class="string">&quot;/nakjunizm/logs/platform/apache/ssl_access.log.20171222&quot;</span></span><br></pre></td></tr></table></figure>
+<p>정상적으로 출력되는것을 확인할 수 있습니다</p>
+<h3 id="Logstash-설정-part2"><a href="#Logstash-설정-part2" class="headerlink" title="# Logstash 설정 part2"></a># Logstash 설정 part2</h3><p>** filebeat ** 와 ** logstash ** 가 정상적으로 연결되었고 동작하는것을 확인 했으니 이제 filter를 추가해서 로그파일과 ES index mapping 간의 관계를 설정 해 주겠습니다.<br>위의 결과에서 보면 message에 로그 한줄이 그대로 들어가 있는걸 확인할 수 있는데 그 message를 각각의 필드로 쪼개서 맵핑하는 작업입니다. <br /> %{패턴:맵핑} 구조로 되어 있고 대부분의 로그는 패턴으로 이미 정의되어 있으니 <a target="_blank" rel="noopener" href="https://github.com/elastic/logstash/blob/v1.4.2/patterns/grok-patterns">링크</a>를 확인 해 보시고 혹시라도 내가 직접 만든 어플리케이션 로그라서 패턴이 전혀 정의되어 있지 않는 경우에는 regex로 직접 정의할 수도 있습니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nakjunizm@logstash호스트:/nakjunizm/util/logstash$ vi filebeat-pipeline.conf</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">    beats &#123;</span><br><span class="line">        port =&gt; <span class="string">&quot;5043&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">filter &#123;</span><br><span class="line">  grok &#123;</span><br><span class="line">    match =&gt; [ <span class="string">&quot;message&quot;</span>, <span class="string">&#x27;(?:%&#123;IP:xff&#125;|-) %&#123;IP:client_ip&#125; %&#123;USER:ident&#125; %&#123;USER:auth&#125; \[%&#123;HTTPDATE:apache_timestamp&#125;\] \&quot;%&#123;WORD:method&#125; /%&#123;DATA:request_uri&#125; HTTP/%&#123;NUMBER:http_version&#125;\&quot; %&#123;NUMBER:status&#125; %&#123;NUMBER:byte_response&#125; %&#123;NUMBER:byte_received&#125; %&#123;NUMBER:byte_sent&#125; %&#123;NUMBER:response_time_sec&#125;/%&#123;NUMBER:response_time_milisec&#125;&#x27;</span> ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output &#123;</span><br><span class="line">    stdout &#123; codec =&gt; rubydebug &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://grokdebug.herokuapp.com/">https://grokdebug.herokuapp.com</a> 에서 한단어씩 끊어가면서 제대로 체크 되는지 확인하는데, grokdebug 홈페이지에서 더블쿼테이션은 이스케이프 해줘야(&quot;) 정상적으로 동작하니 주의하세요!<br>** 확인을 마치고 실제로  filter에 적용할 때는 내용안에 더블쿼테이션이 있으므로 싱글쿼테이션으로 감싸줘 합니다.**<br>저는 apache로그에 x-forwarded-for라던지 응답시간 초/밀리초 등을 추가해서 위와같은 삽질을 좀 했는데,<br>** default apache로그 설정을 사용하는 시스템 ** 에서는</p>
+<ol>
+<li>간단히 아래와 같이 코어 패턴으로 처리하거나<br>(%{COMBINEDAPACHELOG}등과 같이 미리 정의된 코어 패턴들은 <a target="_blank" rel="noopener" href="https://github.com/logstash-plugins/logstash-patterns-core/tree/master/patterns">여기</a>에서 확인 가능합니다.)<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">match =&gt; &#123; &quot;message&quot; =&gt; &quot;%&#123;COMBINEDAPACHELOG&#125;&quot; &#125;</span><br></pre></td></tr></table></figure></li>
+<li>filebeat에서 logstash로 보내는 과정을 생략하고!! ** filebeat의 apache2모듈 ** 을 사용해서 바로 elasticsearch로 로그데이터를 보낼수도 있으니 아래 링크들을 참조해 보시면 좋을것 같습니다. 심지어 filebeat의 apache2모듈은 kibana에 기본적인 시각화 차트들과 대쉬보드까지 제공해주는 강력한 모듈 입니다. apache2이외에도 많은 filebeat 모듈들이 존재하니 확인해보세요!!<br><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-module-apache2.html">https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-module-apache2.html</a></li>
+</ol>
+<h3 id="filter-가-잘-적용-됐는지-확인"><a href="#filter-가-잘-적용-됐는지-확인" class="headerlink" title="# filter 가 잘 적용 됐는지 확인"></a># filter 가 잘 적용 됐는지 확인</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nakjunizm@logstash호스트:/nakjunizm/util/logstash-6.1.1$ bin/logstash -f filebeat-pipeline.conf</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;ident&quot;</span> =&gt; <span class="string">&quot;-&quot;</span>,</span><br><span class="line">  <span class="string">&quot;request_uri&quot;</span> =&gt; <span class="string">&quot;api2/v1/notification?type=UNREAD&quot;</span>,</span><br><span class="line">  <span class="string">&quot;byte_received&quot;</span> =&gt; <span class="string">&quot;2100&quot;</span>,</span><br><span class="line">  <span class="string">&quot;byte_response&quot;</span> =&gt; <span class="string">&quot;55&quot;</span>,</span><br><span class="line">  <span class="string">&quot;offset&quot;</span> =&gt; <span class="number">222231</span>,</span><br><span class="line">  <span class="string">&quot;method&quot;</span> =&gt; <span class="string">&quot;GET&quot;</span>,</span><br><span class="line">  <span class="string">&quot;http_version&quot;</span> =&gt; <span class="string">&quot;1.1&quot;</span>,</span><br><span class="line">  <span class="string">&quot;source&quot;</span> =&gt; <span class="string">&quot;/nakjunizm/logs/platform/apache/ssl_access.log.20171218&quot;</span>,</span><br><span class="line">  <span class="string">&quot;@timestamp&quot;</span> =&gt; <span class="number">2017</span>-<span class="number">12</span>-26T08:<span class="number">21</span>:<span class="number">15.</span>686Z,</span><br><span class="line">  <span class="string">&quot;auth&quot;</span> =&gt; <span class="string">&quot;-&quot;</span>,</span><br><span class="line">  <span class="string">&quot;prospector&quot;</span> =&gt; &#123;</span><br><span class="line">    <span class="string">&quot;type&quot;</span> =&gt; <span class="string">&quot;log&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;response_time_milisec&quot;</span> =&gt; <span class="string">&quot;13303&quot;</span>,</span><br><span class="line">  <span class="string">&quot;response_time_sec&quot;</span> =&gt; <span class="string">&quot;0&quot;</span>,</span><br><span class="line">  <span class="string">&quot;beat&quot;</span> =&gt; &#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span> =&gt; <span class="string">&quot;filebeat호스트&quot;</span>,</span><br><span class="line">    <span class="string">&quot;version&quot;</span> =&gt; <span class="string">&quot;6.1.0&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hostname&quot;</span> =&gt; <span class="string">&quot;filebeat호스트&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;tags&quot;</span> =&gt; [</span><br><span class="line">        [<span class="number">0</span>] <span class="string">&quot;beats_input_codec_plain_applied&quot;</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;apache_timestamp&quot;</span> =&gt; <span class="string">&quot;18/Dec/2017:06:40:18 +0000&quot;</span>,</span><br><span class="line">  <span class="string">&quot;host&quot;</span> =&gt; <span class="string">&quot;filebeat호스트&quot;</span>,</span><br><span class="line">  <span class="string">&quot;byte_sent&quot;</span> =&gt; <span class="string">&quot;885&quot;</span>,</span><br><span class="line">  <span class="string">&quot;message&quot;</span> =&gt; <span class="string">&quot;- some.remote.ip.171 - - [18/Dec/2017:06:40:18 +0000] \&quot;GET /api2/v1/notification?type=UNREAD HTTP/1.1\&quot; 200 55 2100 885 0/13303&quot;</span>,</span><br><span class="line">  <span class="string">&quot;status&quot;</span> =&gt; <span class="string">&quot;200&quot;</span>,</span><br><span class="line">  <span class="string">&quot;@version&quot;</span> =&gt; <span class="string">&quot;1&quot;</span>,</span><br><span class="line">  <span class="string">&quot;client_ip&quot;</span> =&gt; <span class="string">&quot;some.remote.ip.171&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>filter를 설정하기 전에 message에 모든 내용이 다 들어오던것과는 달리, message 의 내용을 각각 정의한대로 잘 쪼개서 출력해 주는것을 확인 할 수 있습니다.</p>
+<h3 id="ElasticSearch-로-보내도록-output-plugin-설정"><a href="#ElasticSearch-로-보내도록-output-plugin-설정" class="headerlink" title="# ElasticSearch 로 보내도록 output plugin 설정"></a># ElasticSearch 로 보내도록 output plugin 설정</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nakjunizm@logstash호스트:/nakjunizm/util/logstash$ vi filebeat-pipeline.conf</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">    beats &#123;</span><br><span class="line">        port =&gt; <span class="string">&quot;5043&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">filter &#123;</span><br><span class="line">  grok &#123;</span><br><span class="line">    match =&gt; [ <span class="string">&quot;message&quot;</span>, <span class="string">&#x27;(?:%&#123;IP:xff&#125;|-) %&#123;IP:client_ip&#125; %&#123;USER:ident&#125; %&#123;USER:auth&#125; \[%&#123;HTTPDATE:apache_timestamp&#125;\] \&quot;%&#123;WORD:method&#125; /%&#123;DATA:request_uri&#125; HTTP/%&#123;NUMBER:http_version&#125;\&quot; %&#123;NUMBER:status&#125; %&#123;NUMBER:byte_response&#125; %&#123;NUMBER:byte_received&#125; %&#123;NUMBER:byte_sent&#125; %&#123;NUMBER:response_time_sec&#125;/%&#123;NUMBER:response_time_milisec&#125;&#x27;</span> ]</span><br><span class="line">    remove_field =&gt; [ message ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output &#123;</span><br><span class="line">    elasticsearch &#123;</span><br><span class="line">        hosts =&gt; <span class="string">&quot;elasticsearch호스트:9200</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>message 필드는 더이상 필요없으니 remove_field 했고, output은 elasticsearch로 보내도록 설정했습니다.<br>이 설정 그대로 실행시켜보면 elasticsearch 에 logstash-* 로 자동으로 인덱스가 생성 되고 데이터가 잘 들어가는것을 확인 할 수 있습니다.</p>
+<h3 id="ElasticSearch-Template-생성"><a href="#ElasticSearch-Template-생성" class="headerlink" title="# ElasticSearch Template 생성"></a># ElasticSearch Template 생성</h3><p>자동으로 생성된 logstash-* 인덱스를 살펴보면 불필요하게 대부분의 필드를 인덱싱 하는것을 확인할 수 있습니다. 키워드 검색의 용도로 저장하는것이 아니기 때문에 각각의 필드를 형태소 분석기에 돌릴 필요는 없으니 template을 생성해 보겠습니다.</p>
+<h3 id="kibana의-devtool에서-현재-mapping-상태-확인"><a href="#kibana의-devtool에서-현재-mapping-상태-확인" class="headerlink" title="# kibana의 devtool에서 현재 mapping 상태 확인"></a># kibana의 devtool에서 현재 mapping 상태 확인</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET logstash-2017.12.26/_mappings</span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">....</span><br><span class="line"><span class="string">&quot;apache_timestamp&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;text&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;norms&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">&quot;fields&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;keyword&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;ignore_above&quot;</span>: <span class="number">256</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<p>logstash-yyyy.MM.dd index에 doc type과 _default type 두가지의 type이 생성되어 있는것을 확인할 수 있고,<br>대부분의 필드는 위와같은 형식으로 되어있음을 확인할 수 있습니다.<br>doc type에 있는값 들 중에서 제가 분석하고 싶은 field들을 먼저 뽑아보면</p>
+<ul>
+<li>request_uri</li>
+<li>client_ip</li>
+<li>response_time_sec/response_time_milisec</li>
+<li>status</li>
+<li>host</li>
+</ul>
+<p>정도가 있을것 같은데. 위 필드를 제외한 나머지 필드는 인덱싱 하지 않거나<br>keyword 검색정도만 가능하게 설정 하겠습니다.</p>
+<p>ES2.X 에서는 아래와같이 “type” : “string”, “index” : “not_analyzed” 를 이용하였지만<br>5.X 이상부터는 “type” : “keyword”, “index” : true 를 통해 설정 가능합니다.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ES2.x</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;foo&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;type&quot;</span> : <span class="string">&quot;string&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;index&quot;</span>: <span class="string">&quot;not_analyzed&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ES5.x 이상</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;foo&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;index&quot;</span>: <span class="literal">true</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>위 조건을 모두 충족시키는 템플릿을 아래와 같이 만들어 봤습니다.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;order&quot;</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">&quot;index_patterns&quot;</span>: <span class="string">&quot;ssl_access-*&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;settings&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;index&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;analysis&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;filter&quot;</span>: &#123;&#125;,</span><br><span class="line">        <span class="attr">&quot;analyzer&quot;</span>: &#123;&#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;mappings&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;doc&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;properties&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;@timestamp&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;date&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;@version&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;apache_timestamp&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;date&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;format&quot;</span>: <span class="string">&quot;dd/MMM/yyyy:HH:mm:ss Z&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;auth&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;index&quot;</span>: <span class="literal">true</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;beat&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;properties&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;hostname&quot;</span>: &#123;</span><br><span class="line">              <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span>,</span><br><span class="line">              <span class="attr">&quot;index&quot;</span>: <span class="literal">true</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: &#123;</span><br><span class="line">              <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span>,</span><br><span class="line">              <span class="attr">&quot;index&quot;</span>: <span class="literal">true</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">&quot;version&quot;</span>: &#123;</span><br><span class="line">              <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span>,</span><br><span class="line">              <span class="attr">&quot;index&quot;</span>: <span class="literal">true</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;byte_received&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;integer&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;byte_response&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;integer&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;byte_sent&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;integer&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;client_ip&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;ip&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;geoip&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;dynamic&quot;</span>: <span class="string">&quot;true&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;properties&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;ip&quot;</span>: &#123;</span><br><span class="line">              <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;ip&quot;</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">&quot;latitude&quot;</span>: &#123;</span><br><span class="line">              <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;half_float&quot;</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">&quot;location&quot;</span>: &#123;</span><br><span class="line">              <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;geo_point&quot;</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">&quot;longitude&quot;</span>: &#123;</span><br><span class="line">              <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;half_float&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;host&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;index&quot;</span>: <span class="literal">true</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;http_version&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;half_float&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;ident&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;index&quot;</span>: <span class="literal">true</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;message&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;index&quot;</span>: <span class="literal">false</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;method&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;index&quot;</span>: <span class="literal">true</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;offset&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;long&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;prospector&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;properties&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;type&quot;</span>: &#123;</span><br><span class="line">              <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span>,</span><br><span class="line">              <span class="attr">&quot;index&quot;</span>: <span class="literal">true</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;request_uri&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;index&quot;</span>: <span class="literal">true</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;response_time_milisec&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;integer&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;response_time_sec&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;integer&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;source&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;index&quot;</span>: <span class="literal">true</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;status&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;integer&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;tags&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;text&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;norms&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">          <span class="attr">&quot;fields&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;keyword&quot;</span>: &#123;</span><br><span class="line">              <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span>,</span><br><span class="line">              <span class="attr">&quot;ignore_above&quot;</span>: <span class="number">256</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;xff&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;ip&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="작성한-템플릿-ES에-등록"><a href="#작성한-템플릿-ES에-등록" class="headerlink" title="# 작성한 템플릿 ES에 등록"></a># 작성한 템플릿 ES에 등록</h3><p>위에서 작성한 json을 file로 만들어서 아래와 같이 실행해도 되지만 (ssl_access 라는 이름으로 템플릿 생성)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -XPUT elastic호스트:포트/_template/ssl_access -d@ssl_access.json</span><br></pre></td></tr></table></figure>
+
+<p>저는 일단 kibana의 DevTools에서 직접 돌렸습니다.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;order&quot;</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">&quot;index_patterns&quot;</span>: <span class="string">&quot;ssl_access-*&quot;</span>,</span><br><span class="line">  .... 위에 작성한 내용과 동일 ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="logstash-설정-part3"><a href="#logstash-설정-part3" class="headerlink" title="# logstash 설정 part3"></a># logstash 설정 part3</h3><p>이제 모든 준비를 완료 했으니 logstash의 설정을 마지막으로 바꿔보겠습니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nakjunizm@logstash호스트:/nakjunizm/util/logstash$ vi filebeat-pipeline.conf</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">    beats &#123;</span><br><span class="line">        port =&gt; <span class="string">&quot;5043&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">filter &#123;</span><br><span class="line">  grok &#123;</span><br><span class="line">    match =&gt; [ <span class="string">&quot;message&quot;</span>, <span class="string">&#x27;(?:%&#123;IP:xff&#125;|-) %&#123;IP:client_ip&#125; %&#123;USER:ident&#125; %&#123;USER:auth&#125; \[%&#123;HTTPDATE:apache_timestamp&#125;\] \&quot;%&#123;WORD:method&#125; /%&#123;DATA:request_uri&#125; HTTP/%&#123;NUMBER:http_version&#125;\&quot; %&#123;NUMBER:status&#125; %&#123;NUMBER:byte_response&#125; %&#123;NUMBER:byte_received&#125; %&#123;NUMBER:byte_sent&#125; %&#123;NUMBER:response_time_sec&#125;/%&#123;NUMBER:response_time_milisec&#125;&#x27;</span> ]</span><br><span class="line">    remove_field =&gt; [ message ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output &#123;</span><br><span class="line">    elasticsearch &#123;</span><br><span class="line">        hosts =&gt; <span class="string">&quot;elasticsearch호스트:9200&quot;</span></span><br><span class="line">        index =&gt; <span class="string">&quot;ssl_access-%&#123;+YYYY.MM.dd&#125;&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="잘-동작하는지-확인"><a href="#잘-동작하는지-확인" class="headerlink" title="# 잘 동작하는지 확인"></a># 잘 동작하는지 확인</h3><p>앞의 모든 설정을 마친 상태로 logstash를 구동하고, filebeat의 data폴더아래있는 데이터를 삭제한 후 (offset정보등이 들어있는)<br>filebeat재구동해서 ElasticSeach에 데이터를 넣고 잘 동작하는지 확인 합니다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET ssl_access-2017.12.26/_search</span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;took&quot;</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">&quot;timed_out&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">&quot;_shards&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;total&quot;</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="attr">&quot;successful&quot;</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="attr">&quot;skipped&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">&quot;failed&quot;</span>: <span class="number">0</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;hits&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;total&quot;</span>: <span class="number">25259</span>,</span><br><span class="line">    <span class="attr">&quot;max_score&quot;</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">&quot;hits&quot;</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">&quot;_index&quot;</span>: <span class="string">&quot;ssl_access-2017.12.27&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;_type&quot;</span>: <span class="string">&quot;doc&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;_id&quot;</span>: <span class="string">&quot;6AorlmAB1NCOl3BsnBUx&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;_score&quot;</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">&quot;_source&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;method&quot;</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;ident&quot;</span>: <span class="string">&quot;-&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;apache_timestamp&quot;</span>: <span class="string">&quot;04/Dec/2017:03:18:45 +0000&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;byte_received&quot;</span>: <span class="string">&quot;4710&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;response_time_sec&quot;</span>: <span class="string">&quot;0&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;client_ip&quot;</span>: <span class="string">&quot;some.remote.ip.19&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;beat&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;version&quot;</span>: <span class="string">&quot;6.1.0&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;filebeat호스트&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;hostname&quot;</span>: <span class="string">&quot;filebeat호스트&quot;</span></span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="attr">&quot;response_time_milisec&quot;</span>: <span class="string">&quot;3457&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;byte_response&quot;</span>: <span class="string">&quot;66&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;status&quot;</span>: <span class="string">&quot;200&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;source&quot;</span>: <span class="string">&quot;/nakjunizm/logs/platform/apache/ssl_access.log.20171204&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;byte_sent&quot;</span>: <span class="string">&quot;4996&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;prospector&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;log&quot;</span></span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="attr">&quot;@version&quot;</span>: <span class="string">&quot;1&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;http_version&quot;</span>: <span class="string">&quot;1.1&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;offset&quot;</span>: <span class="number">61270</span>,</span><br><span class="line">          <span class="attr">&quot;tags&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;beats_input_codec_plain_applied&quot;</span></span><br><span class="line">          ],</span><br><span class="line">          <span class="attr">&quot;request_uri&quot;</span>: <span class="string">&quot;api1/v1/auth/token&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;@timestamp&quot;</span>: <span class="string">&quot;2017-12-27T04:12:07.575Z&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;auth&quot;</span>: <span class="string">&quot;-&quot;</span>,</span><br><span class="line">          <span class="attr">&quot;host&quot;</span>: <span class="string">&quot;filebeat호스트&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      .....</span><br></pre></td></tr></table></figure>
+
+<h3 id="Kibana-에서-시각화-하기"><a href="#Kibana-에서-시각화-하기" class="headerlink" title="# Kibana 에서 시각화 하기"></a># Kibana 에서 시각화 하기</h3><p>ElasticSearch에 내가 원하는 형태로 데이터가 들어오고 있다면 kibana를 이용해서 데이터를 시각화 하는 부분은 상대적으로 쉽습니다. 저는 Y-Axis에 response_time_sec의 평균과 최대값을 넣고, X-Axis에 request_uri를 넣어서 그래프를 그려보니<br>request_uri별로 응답속도의 평균값과 최대값이 나와서 평균대비 max가 높은 uri들은 어떤게 있는지 한눈에 알아볼 수 있는 그래프를 만들어 봤습니다.<br>이 부분은 각자의 데이터와 분석하려는 목적에 따라 판이하게 달라질 수 있으니 kibana 홈페이지에서 참조하세요<br><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/kibana/current/index.html">https://www.elastic.co/guide/en/kibana/current/index.html</a></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://nakjunizm.com/2018/01/01/ELK_Apache_Log_Visualization/" data-id="ckugz0jp30015ut3ideeq0g34" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "NJ SUNG"
+        },
+        "headline": "ELK(+beats)를 이용한 apache log visualization",
+        "image": "https://nakjunizm.comhttps://nakjunizm.github.io/2018/01/01/ELK_Apache_Log_Visualization/elk1.png",
+        "keywords": "elasticsearch kibana logstash elk visualization apache log",
+        "genre": "Operations ElasticSearch",
+        "datePublished": "2018-01-01",
+        "dateCreated": "2018-01-01",
+        "dateModified": "2021-10-07",
+        "url": "https://nakjunizm.com/2018/01/01/ELK_Apache_Log_Visualization/",
+        "description": "file beats+logstash+elasticsearch+kibana를 이용하여apache 로그에서 의미있는 데이터를 시각화 하는 방법을 알아보겠습니다.
+# 설치Elastic stack 설치는 대부분 압축 해제하고 yml 로 된 설정파일을 수정하는것으로 끝납니다.Elastic Search의 경우 OS 셋팅변경이 필요할 수도 있으니 여기를 참조하세요.
+#",
+        "wordCount": 4276
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="instagram" href="https://www.instagram.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-instagram"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="https://www.facebook.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/nakjunizm" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/01/05/Singleton_Pattern/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            Singleton Pattern
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2017/12/31/Builder_Pattern/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">Builder Pattern</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2021/10/05/Minikube_ExternalIP_Pending/" class="title"></a></p>
+                            <p class="item-date"><time datetime="2021-10-04T15:00:00.000Z" itemprop="datePublished">2021-10-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/06/17/Find_Old_Files_And_Delete/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/06/17/Find_Old_Files_And_Delete/mtime1.png)" alt="오래된 (특정 기간 이상 된) 파일 찾아서 지우기 How to find old (aged more than specific days) files and remove" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Linux/">Linux</a></p>
+                            <p class="item-title"><a href="/2020/06/17/Find_Old_Files_And_Delete/" class="title">오래된 (특정 기간 이상 된) 파일 찾아서 지우기 How to find old (aged more than specific days) files and remove</a></p>
+                            <p class="item-date"><time datetime="2020-06-17T12:37:00.000Z" itemprop="datePublished">2020-06-17</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/19/Zookeeper_Cleanup_Transactional_Log/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/05/19/Zookeeper_Cleanup_Transactional_Log/zookeeper1.png)" alt="주키퍼 오래된 스냅샷 및 트랜잭션 로그 삭제하기 zookeeper delete old snapshot and transactional log" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Zookeeper/">Zookeeper</a></p>
+                            <p class="item-title"><a href="/2020/05/19/Zookeeper_Cleanup_Transactional_Log/" class="title">주키퍼 오래된 스냅샷 및 트랜잭션 로그 삭제하기 zookeeper delete old snapshot and transactional log</a></p>
+                            <p class="item-date"><time datetime="2020-05-19T12:14:00.000Z" itemprop="datePublished">2020-05-19</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/03/24/Redis_Monitoring/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2017/10/10/Redis_Backup_And_Restore/redis1.png)" alt="레디스 모니터링 시 주의사항 (Redis monitoring/single thread)" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Operations/">Operations</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Operations/Redis/">Redis</a></p>
+                            <p class="item-title"><a href="/2020/03/24/Redis_Monitoring/" class="title">레디스 모니터링 시 주의사항 (Redis monitoring/single thread)</a></p>
+                            <p class="item-date"><time datetime="2020-03-24T13:14:00.000Z" itemprop="datePublished">2020-03-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/02/20/haproxy/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://nakjunizm.github.io/2020/02/20/haproxy/haproxy2.png)" alt="haproxy &amp; keepalived 로 프록시 구축하기" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/DevOps/">DevOps</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a></p>
+                            <p class="item-title"><a href="/2020/02/20/haproxy/" class="title">haproxy &amp; keepalived 로 프록시 구축하기</a></p>
+                            <p class="item-date"><time datetime="2020-02-20T12:41:00.000Z" itemprop="datePublished">2020-02-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">categories</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/">Docker</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/Docker/Swarm/">Swarm</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/LoadBalancing/">LoadBalancing</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/">Development</a><span class="category-list-count">15</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Development/GraphQL/">GraphQL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/java/">java</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Development/node/">node</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/">Operations</a><span class="category-list-count">21</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Ansible/">Ansible</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Cloud/">Cloud</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/ElasticSearch/">ElasticSearch</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Kafka/">Kafka</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/RabbitMQ/">RabbitMQ</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Redis/">Redis</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Windows/">Windows</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operations/Zookeeper/">Zookeeper</a><span class="category-list-count">1</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">3</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/6-4-0/" style="font-size: 10px;">6.4.0</a> <a href="/tags/Apollo/" style="font-size: 10px;">Apollo</a> <a href="/tags/ArrayList/" style="font-size: 10px;">ArrayList</a> <a href="/tags/CIDR/" style="font-size: 10px;">CIDR</a> <a href="/tags/Collections/" style="font-size: 10px;">Collections</a> <a href="/tags/Deque/" style="font-size: 10px;">Deque</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/ES-Version-up/" style="font-size: 10px;">ES Version up</a> <a href="/tags/FORBIDDEN-12-index/" style="font-size: 10px;">FORBIDDEN/12/index</a> <a href="/tags/GraphQL/" style="font-size: 10px;">GraphQL</a> <a href="/tags/LinkedList/" style="font-size: 10px;">LinkedList</a> <a href="/tags/Map/" style="font-size: 10px;">Map</a> <a href="/tags/OAuth/" style="font-size: 10px;">OAuth</a> <a href="/tags/Queue/" style="font-size: 10px;">Queue</a> <a href="/tags/SENS/" style="font-size: 10px;">SENS</a> <a href="/tags/Schema/" style="font-size: 10px;">Schema</a> <a href="/tags/Set/" style="font-size: 10px;">Set</a> <a href="/tags/Subnet/" style="font-size: 10px;">Subnet</a> <a href="/tags/Swarm/" style="font-size: 10px;">Swarm</a> <a href="/tags/System-Event-Notification-Service/" style="font-size: 10px;">System Event Notification Service</a> <a href="/tags/allocation/" style="font-size: 10px;">allocation</a> <a href="/tags/allow-delete/" style="font-size: 10px;">allow_delete</a> <a href="/tags/ansible/" style="font-size: 10px;">ansible</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/authentication/" style="font-size: 10px;">authentication</a> <a href="/tags/autopurge/" style="font-size: 10px;">autopurge</a> <a href="/tags/backup/" style="font-size: 10px;">backup</a> <a href="/tags/builder/" style="font-size: 10px;">builder</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/coding-convention/" style="font-size: 10px;">coding convention</a> <a href="/tags/comparable/" style="font-size: 10px;">comparable</a> <a href="/tags/comparator/" style="font-size: 10px;">comparator</a> <a href="/tags/compressedoops/" style="font-size: 10px;">compressedoops</a> <a href="/tags/devops/" style="font-size: 10px;">devops</a> <a href="/tags/disk-flood/" style="font-size: 10px;">disk_flood</a> <a href="/tags/doc-value/" style="font-size: 10px;">doc value</a> <a href="/tags/eager-global-ordinals/" style="font-size: 10px;">eager_global_ordinals</a> <a href="/tags/elasticsearch/" style="font-size: 17.5px;">elasticsearch</a> <a href="/tags/elk/" style="font-size: 12.5px;">elk</a> <a href="/tags/exception/" style="font-size: 10px;">exception</a> <a href="/tags/final/" style="font-size: 10px;">final</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/ha/" style="font-size: 10px;">ha</a> <a href="/tags/haproxy/" style="font-size: 10px;">haproxy</a> <a href="/tags/heap/" style="font-size: 10px;">heap</a> <a href="/tags/hot-thread/" style="font-size: 10px;">hot thread</a> <a href="/tags/ingest-node/" style="font-size: 10px;">ingest_node</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/kafka/" style="font-size: 10px;">kafka</a> <a href="/tags/keepalived/" style="font-size: 10px;">keepalived</a> <a href="/tags/kibana/" style="font-size: 15px;">kibana</a> <a href="/tags/license/" style="font-size: 10px;">license</a> <a href="/tags/log/" style="font-size: 10px;">log</a> <a href="/tags/logstash/" style="font-size: 12.5px;">logstash</a> <a href="/tags/mirror/" style="font-size: 10px;">mirror</a> <a href="/tags/monitoring/" style="font-size: 10px;">monitoring</a> <a href="/tags/mtime/" style="font-size: 10px;">mtime</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/node/" style="font-size: 10px;">node</a> <a href="/tags/offset/" style="font-size: 10px;">offset</a> <a href="/tags/ordinals/" style="font-size: 10px;">ordinals</a> <a href="/tags/passport/" style="font-size: 10px;">passport</a> <a href="/tags/pattern/" style="font-size: 12.5px;">pattern</a> <a href="/tags/pending-tasks/" style="font-size: 10px;">pending tasks</a> <a href="/tags/primitive-type/" style="font-size: 10px;">primitive type</a> <a href="/tags/rabbitmq/" style="font-size: 10px;">rabbitmq</a> <a href="/tags/read-only/" style="font-size: 10px;">read-only</a> <a href="/tags/redis/" style="font-size: 12.5px;">redis</a> <a href="/tags/reference-type/" style="font-size: 10px;">reference type</a> <a href="/tags/reroute/" style="font-size: 10px;">reroute</a> <a href="/tags/restore/" style="font-size: 10px;">restore</a> <a href="/tags/serialization/" style="font-size: 10px;">serialization</a> <a href="/tags/shards/" style="font-size: 10px;">shards</a> <a href="/tags/singleton/" style="font-size: 10px;">singleton</a> <a href="/tags/snapRetain/" style="font-size: 10px;">snapRetain</a> <a href="/tags/stringpool/" style="font-size: 10px;">stringpool</a> <a href="/tags/swapoff/" style="font-size: 10px;">swapoff</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/thread-pool/" style="font-size: 10px;">thread pool</a> <a href="/tags/transient/" style="font-size: 10px;">transient</a> <a href="/tags/try-with-resources/" style="font-size: 10px;">try-with-resources</a> <a href="/tags/tuning/" style="font-size: 10px;">tuning</a> <a href="/tags/unassigned/" style="font-size: 12.5px;">unassigned</a> <a href="/tags/versionup/" style="font-size: 10px;">versionup</a> <a href="/tags/visualization/" style="font-size: 12.5px;">visualization</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/watermark/" style="font-size: 10px;">watermark</a> <a href="/tags/windows2012/" style="font-size: 10px;">windows2012</a> <a href="/tags/zabbix/" style="font-size: 10px;">zabbix</a> <a href="/tags/zookeeper/" style="font-size: 12.5px;">zookeeper</a> <a href="/tags/%EC%8A%A4%ED%8A%B8%EB%A7%81%ED%92%80/" style="font-size: 10px;">스트링풀</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/nakjunizm">github</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2021 NJ SUNG</p>
+                
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+    </div>
+    
+    
+    <script>
+    var disqus_shortname = 'nakjunizm';
+    
+    
+    var disqus_url = 'https://nakjunizm.com/2018/01/01/ELK_Apache_Log_Visualization/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>
